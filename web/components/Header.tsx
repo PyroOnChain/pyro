@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
-import { robinhoodChain } from '@/lib/chain';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useCorrectChain } from '@/lib/useCorrectChain';
 import { short } from '@/lib/format';
 import { LINKS } from '@/lib/links';
 
@@ -13,9 +13,7 @@ export function Header() {
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const chainId = useChainId();
-  const { switchChain } = useSwitchChain();
-  const wrongChain = isConnected && chainId !== robinhoodChain.id;
+  const { wrongChain, switching, switchToPyro, walletChainId } = useCorrectChain();
 
   const nav = [
     { href: '/clubs', label: 'Clubs' },
@@ -76,13 +74,13 @@ export function Header() {
           </a>
           {wrongChain ? (
             <button className="chip btn-primary" style={{ padding: '10px 16px', fontSize: 13 }}
-              onClick={() => switchChain({ chainId: robinhoodChain.id })}>
-              SWITCH TO ROBINHOOD CHAIN
+              disabled={switching} onClick={switchToPyro}>
+              {switching ? 'CHECK WALLET…' : 'WRONG NETWORK — SWITCH'}
             </button>
           ) : (
             <span className="chip mono hide-sm"
               style={{ border: '1px solid var(--line)', background: 'var(--bg)', padding: '9px 13px', fontSize: 12, color: 'var(--dim)' }}>
-              4663
+              {isConnected ? walletChainId : 4663}
             </span>
           )}
 

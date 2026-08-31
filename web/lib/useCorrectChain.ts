@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { robinhoodChain } from './chain';
 
 /**
@@ -12,13 +12,17 @@ import { robinhoodChain } from './chain';
  * usually is not, since Robinhood Chain is not built into any wallet by default.
  */
 export function useCorrectChain() {
-  const { isConnected } = useAccount();
-  const chainId = useChainId();
+  // useAccount().chainId is the chain the CONNECTED WALLET is actually on.
+  // useChainId() is the config's active chain, which with a single chain configured is
+  // always Robinhood Chain no matter where the wallet sits - so it can never detect a
+  // mismatch. Using it here is what let a wallet on Ethereum reach a signing prompt.
+  const { isConnected, chainId: walletChainId } = useAccount();
   const { switchChain, isPending } = useSwitchChain();
 
-  const wrongChain = isConnected && chainId !== robinhoodChain.id;
+  const wrongChain = isConnected && walletChainId !== robinhoodChain.id;
 
   return {
+    walletChainId,
     wrongChain,
     switching: isPending,
     switchToPyro: () => switchChain({ chainId: robinhoodChain.id }),
