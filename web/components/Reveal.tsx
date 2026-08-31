@@ -53,12 +53,21 @@ export function Reveal({
     );
     obs.observe(el);
 
-    // If the observer never fires - a background tab, an odd embedded browser,
-    // anything unexpected - show the content regardless. An animation failing
-    // must never mean the page stays blank.
-    const failsafe = window.setTimeout(() => { setShown(true); obs.disconnect(); }, 1600);
+    // Failsafe for when IntersectionObserver never fires (background tab, odd
+    // embedded browser). It must only rescue elements that are actually on
+    // screen: revealing the whole page on a timer means everything below the
+    // fold has already animated before the visitor scrolls to it.
+    const failsafe = window.setInterval(() => {
+      const r = el.getBoundingClientRect();
+      const onScreen = r.top < window.innerHeight * 0.92 && r.bottom > 0;
+      if (onScreen) {
+        setShown(true);
+        obs.disconnect();
+        window.clearInterval(failsafe);
+      }
+    }, 400);
 
-    return () => { obs.disconnect(); window.clearTimeout(failsafe); };
+    return () => { obs.disconnect(); window.clearInterval(failsafe); };
   }, []);
 
   return (

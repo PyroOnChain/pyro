@@ -4,6 +4,9 @@ import { Footer } from '@/components/Footer';
 import { STOCKS } from '@/lib/addresses';
 import { Reveal } from '@/components/Reveal';
 import { CountUp } from '@/components/CountUp';
+import { Marquee } from '@/components/Marquee';
+import { Magnetic } from '@/components/Magnetic';
+import { Parallax } from '@/components/Parallax';
 
 const STEPS = [
   {
@@ -35,6 +38,10 @@ export default function LandingPage() {
       <section style={{ position: 'relative', overflow: 'hidden' }}>
         <div className="ember-glow" style={{ position: 'absolute', left: 0, top: 0, width: 760, height: 620,
           background: 'radial-gradient(ellipse at 20% 30%, rgba(255,90,31,0.13), transparent 68%)', pointerEvents: 'none' }} />
+        <Parallax amount={0.12} style={{ position: 'absolute', right: -120, top: 40, pointerEvents: 'none', zIndex: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pyro-logo-dark.png" alt="" style={{ width: 720, opacity: 0.05 }} />
+        </Parallax>
         <div className="shell" style={{ padding: '96px 40px 88px', position: 'relative', zIndex: 2 }}>
           <div className="grid-12">
             <div className="col-7">
@@ -60,12 +67,16 @@ export default function LandingPage() {
               </Reveal>
 
               <Reveal className="row" delay={600} style={{ gap: 14, marginBottom: 36, flexWrap: 'wrap' }}>
-                <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 34px', fontSize: 16 }}>
-                  OPEN A CLUB
-                </Link>
-                <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 30px', fontSize: 16, color: 'var(--ink)' }}>
-                  SEE THE CLUBS
-                </Link>
+                <Magnetic>
+                  <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 34px', fontSize: 16 }}>
+                    OPEN A CLUB
+                  </Link>
+                </Magnetic>
+                <Magnetic>
+                  <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 30px', fontSize: 16, color: 'var(--ink)' }}>
+                    SEE THE CLUBS
+                  </Link>
+                </Magnetic>
               </Reveal>
 
               <div className="row mono" style={{ gap: 26, fontSize: 12.5, color: 'var(--dim)', flexWrap: 'wrap' }}>
@@ -105,16 +116,16 @@ export default function LandingPage() {
       </section>
 
       <div style={{ borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', background: 'var(--band)' }}>
-        <div className="shell" style={{ padding: '0 40px' }}>
-          <div className="ticker-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))' }}>
-            {STOCKS.map((s, i) => (
-              <Reveal key={s.symbol} delay={i * 90} className="lift" style={{ padding: '26px 0', display: 'flex', alignItems: 'baseline', gap: 12, borderRight: '1px solid var(--line-soft)' }}>
-                <span className="display" style={{ fontSize: 17, letterSpacing: '0.06em' }}>{s.symbol}</span>
-                <span className="mono" style={{ fontSize: 12, color: 'var(--dim)' }}>graduates at {s.graduation}</span>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+        <Marquee speed={38}>
+          {[...STOCKS, ...STOCKS].map((s, i) => (
+            <div key={`${s.symbol}-${i}`}
+              style={{ padding: '26px 40px', display: 'flex', alignItems: 'baseline', gap: 12, whiteSpace: 'nowrap' }}>
+              <span className="display" style={{ fontSize: 17, letterSpacing: '0.06em' }}>{s.symbol}</span>
+              <span className="mono" style={{ fontSize: 12, color: 'var(--dim)' }}>graduates at {s.graduation}</span>
+              <span aria-hidden="true" style={{ marginLeft: 28, color: 'var(--stroke)' }}>/</span>
+            </div>
+          ))}
+        </Marquee>
       </div>
 
       <section className="shell" style={{ padding: '104px 40px 96px' }}>
@@ -186,15 +197,21 @@ export default function LandingPage() {
       </section>
 
       <section style={{ position: 'relative', borderTop: '1px solid var(--line)', overflow: 'hidden' }}>
-        <div className="ember-glow" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 120%, rgba(255,90,31,0.15), transparent 62%)' }} />
+        <Parallax amount={0.08} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+          <div className="ember-glow" style={{ position: 'absolute', inset: '-20% 0', background: 'radial-gradient(ellipse at 50% 100%, rgba(255,90,31,0.18), transparent 62%)' }} />
+        </Parallax>
         <div className="shell" style={{ padding: '104px 40px 96px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
           <Reveal as="h2" variant="wipe" className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>LIGHT ONE UP.</Reveal>
           <Reveal as="p" delay={140} style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 480 }}>
             Pick a ticker, seed the jar, let the mascot go to work.
           </Reveal>
           <Reveal className="row" delay={250} style={{ justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 38px', fontSize: 16 }}>OPEN A CLUB</Link>
-            <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 32px', fontSize: 16, color: 'var(--ink)' }}>BROWSE CLUBS</Link>
+            <Magnetic strength={0.34}>
+              <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 38px', fontSize: 16 }}>OPEN A CLUB</Link>
+            </Magnetic>
+            <Magnetic strength={0.34}>
+              <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 32px', fontSize: 16, color: 'var(--ink)' }}>BROWSE CLUBS</Link>
+            </Magnetic>
           </Reveal>
         </div>
       </section>

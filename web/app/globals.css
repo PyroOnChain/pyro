@@ -230,3 +230,76 @@ tbody tr:last-child td { border-bottom: none; }
   .btn-primary, .btn-ghost, .lift { transition: none !important; }
   .btn-primary:hover, .btn-ghost:hover, .lift:hover { transform: none !important; }
 }
+
+/* ---------------------------------------------------------------- marquee */
+.marquee { overflow: hidden; position: relative; }
+.marquee-track { display: flex; width: max-content; animation: marqueeSlide var(--marquee-duration, 34s) linear infinite; }
+.marquee-group { display: flex; flex-shrink: 0; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marqueeSlide {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+/* Soft edges so items enter and leave rather than being cut off. */
+.marquee::before, .marquee::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 90px; z-index: 2; pointer-events: none;
+}
+.marquee::before { left: 0;  background: linear-gradient(to right, var(--band), transparent); }
+.marquee::after  { right: 0; background: linear-gradient(to left,  var(--band), transparent); }
+
+/* ---------------------------------------------------------------- cursor */
+.cursor-glow {
+  position: fixed; top: 0; left: 0; z-index: 90;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgba(255, 90, 31, 0.55);
+  background: rgba(255, 90, 31, 0.07);
+  pointer-events: none; opacity: 0;
+  transition: width 0.26s var(--ease-out), height 0.26s var(--ease-out),
+              background 0.26s linear, border-color 0.26s linear, opacity 0.3s linear;
+  mix-blend-mode: multiply;
+}
+.cursor-glow.over {
+  width: 54px; height: 54px;
+  background: rgba(255, 90, 31, 0.13);
+  border-color: rgba(255, 90, 31, 0.8);
+}
+@media (hover: none) { .cursor-glow { display: none; } }
+
+/* ---------------------------------------------------------------- magnetic */
+.magnetic { display: inline-block; transition: transform 0.34s var(--ease-snap); will-change: transform; }
+
+/* ---------------------------------------------------------------- progress */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 100;
+  background: var(--ember); transform: scaleX(0); transform-origin: left;
+  will-change: transform;
+}
+
+/* ------------------------------------------------- richer hover states */
+/* Cards tilt very slightly toward the pointer side and lift. */
+.lift { transform-style: preserve-3d; }
+.lift:hover { transform: translateY(-4px) scale(1.008); }
+
+/* Table rows slide a touch and grow an ember edge. */
+tbody tr { transition: background 0.2s linear, transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out); }
+tbody tr:hover { transform: translateX(3px); box-shadow: inset 3px 0 0 var(--ember); }
+
+/* Nav and footer links draw an underline from the left. */
+header nav a, footer a { position: relative; }
+header nav a::after, footer a::after {
+  content: ''; position: absolute; left: 0; bottom: -4px; height: 1px; width: 100%;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.26s var(--ease-out);
+}
+header nav a:hover::after, footer a:hover::after { transform: scaleX(1); }
+
+/* The step number ticks up a shade on card hover. */
+.slab-lg.lift:hover .mono { color: var(--ember-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none !important; }
+  .cursor-glow { display: none !important; }
+  .magnetic { transition: none !important; transform: none !important; }
+  .scroll-progress { display: none !important; }
+  tbody tr:hover { transform: none !important; }
+}

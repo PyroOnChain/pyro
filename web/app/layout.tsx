@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Chakra_Petch, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
+import { CursorGlow } from '@/components/CursorGlow';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import './globals.css';
 
 const display = Chakra_Petch({ subsets: ['latin'], weight: ['600', '700'], variable: '--font-display' });
@@ -45,6 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <ScrollProgress />
+        <CursorGlow />
         <Providers>{children}</Providers>
       </body>
     </html>
