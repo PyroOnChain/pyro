@@ -166,7 +166,7 @@ export default function CreatePage() {
         </p>
 
         <div className="grid-12" style={{ gap: 24 }}>
-          <div className="col-7" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="col-7" style={{ display: 'flex', flexDirection: 'column', gap: 30, paddingTop: 22 }}>
             <Step n="01" title="PICK THE STOCK">
               <div className="grid-4" style={{ gap: 11 }}>
                 {STOCKS.map((s) => {
@@ -246,7 +246,7 @@ export default function CreatePage() {
             </Step>
           </div>
 
-          <div className="col-5">
+          <div className="col-5" style={{ alignSelf: 'start', position: 'sticky', top: 20, paddingTop: 22 }}>
             <div className="slab card" style={{ padding: '26px 28px', marginBottom: 18 }}>
               <div className="label" style={{ marginBottom: 20 }}>WHAT GETS DEPLOYED</div>
               <div className="stack" style={{ gap: 15, fontSize: 14 }}>
@@ -317,11 +317,9 @@ export default function CreatePage() {
 
 function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
-    <div className="slab card" style={{ padding: '26px 28px' }}>
-      <div className="row" style={{ alignItems: 'baseline', gap: 11, marginBottom: 20 }}>
-        <span className="mono" style={{ fontSize: 12, color: 'var(--accent-ink)' }}>{n}</span>
-        <span className="display" style={{ fontSize: 18, letterSpacing: '0.04em' }}>{title}</span>
-      </div>
+    <div className="card step-card">
+      <div className="step-num display">{n}</div>
+      <div className="display" style={{ fontSize: 20, letterSpacing: '0.03em', marginBottom: 20 }}>{title}</div>
       {children}
     </div>
   );

@@ -90,7 +90,7 @@ function ClubBody({ v }: { v: Address }) {
     <>
       <Header />
 
-      <div style={{ background: 'var(--card)', borderBottom: '1px solid var(--line)' }}>
+      <div style={{ background: 'var(--band)', borderBottom: '3px solid var(--ink)' }}>
         <div className="shell" style={{ padding: '26px 40px 30px' }}>
           <div className="mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 18 }}>
             <Link href="/clubs">Clubs</Link> / {sym} /{' '}
@@ -100,10 +100,10 @@ function ClubBody({ v }: { v: Address }) {
           <div className="between stack-sm" style={{ alignItems: 'flex-end', gap: 24 }}>
             <div className="row" style={{ gap: 22, alignItems: 'center' }}>
               <div
-                className="slab lift"
+                className="lift"
                 style={{
-                  width: 104, height: 104, flexShrink: 0,
-                  border: '1px solid var(--line)',
+                  width: 112, height: 112, flexShrink: 0,
+                  border: '3px solid var(--ink)', boxShadow: '5px 5px 0 var(--gold)',
                   background: meta?.logo
                     ? `center / cover no-repeat url("${meta.logo}")`
                     : 'var(--ink)',
@@ -161,24 +161,25 @@ function ClubBody({ v }: { v: Address }) {
         </div>
       </div>
 
-      <div className="shell grid-12" style={{ gap: 24, padding: '30px 40px 48px' }}>
+      <div className="shell" style={{ padding: '28px 40px 0' }}>
+        <div className="hotbar hotbar-3">
+          <Metric
+            label="IN THE VAULT" value={fmtCompact(club.totalAssets)} sub={sym}
+            hint={`All the ${sym} this club is holding for its members.`}
+          />
+          <Metric
+            label="PER SHARE" value={nav !== undefined ? fmt(nav, 18, 4) : '—'} sub={`${sym} per share`}
+            hint="What one share is worth today. It only goes up, as fees arrive."
+          />
+          <Metric
+            label="UNDRIPPED" value={fmt(club.lockedProfit, 18, 4)} sub="still releasing" subColor="var(--gain)"
+            hint="Fees already collected, released into the vault over 24 hours so nobody can time it."
+          />
+        </div>
+      </div>
+
+      <div className="shell grid-12" style={{ gap: 24, padding: '24px 40px 48px' }}>
         <div className="col-8" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div className="slab card" style={{ padding: '28px' }}>
-            <div className="grid-3" style={{ gap: 24 }}>
-              <Metric
-                label="IN THE VAULT" value={fmtCompact(club.totalAssets)} sub={sym}
-                hint={`All the ${sym} this club is holding for its members.`}
-              />
-              <Metric
-                label="PER SHARE" value={nav !== undefined ? fmt(nav, 18, 4) : '—'} sub={`${sym} per share`}
-                hint="What one share is worth today. It only goes up, as fees arrive."
-              />
-              <Metric
-                label="UNDRIPPED" value={fmt(club.lockedProfit, 18, 4)} sub="still releasing" subColor="var(--gain)"
-                hint="Fees already collected, released into the vault over 24 hours so nobody can time it."
-              />
-            </div>
-          </div>
 
           {grad && !grad.graduated && (
             <div className="slab card" style={{ padding: '26px 28px' }}>
