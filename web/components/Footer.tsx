@@ -1,3 +1,5 @@
+import { LINKS } from '@/lib/links';
+
 export function Footer() {
   return (
     <footer style={{ borderTop: '1px solid var(--line)', background: 'var(--band)' }}>
@@ -12,7 +14,7 @@ export function Footer() {
             <span>[PYRO.XX]</span>
             <span>[@PYRO_X]</span>
             <span>Docs</span>
-            <span>GitHub</span>
+            <a href={LINKS.github} target="_blank" rel="noreferrer noopener">GitHub</a>
           </div>
         </div>
         <p className="mono" style={{ fontSize: 11.5, lineHeight: 1.75, color: 'var(--dim)', margin: 0, maxWidth: 900 }}>
