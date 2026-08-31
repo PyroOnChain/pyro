@@ -11,23 +11,23 @@ import { Parallax } from '@/components/Parallax';
 const STEPS = [
   {
     n: '01', title: 'DEPOSIT', h: 268, accent: false, foot: null,
-    body: 'Put NVDA in, get share tokens back. Own a tenth of the jar and you own a tenth of the shares. Walk out whenever you want.',
+    body: 'Put NVDA in, get share tokens back. Own a tenth of the vault and you own a tenth of the shares. Walk out whenever you want.',
   },
   {
     n: '02', title: 'LAUNCH', h: 330, accent: false, foot: 'one club, one mascot',
     body: 'The club fires exactly one mascot on Pons, priced in NVDA. It graduates once 41.6 NVDA has moved through the curve. That is the whole supply schedule.',
   },
   {
-    n: '03', title: 'HARVEST', h: 392, accent: true, foot: 'harvest() → jar',
-    body: 'Creator fees stack up as NVDA. Anyone can call harvest and keep 0.25% for their trouble. The jar gets fatter, so your slice gets fatter. Nobody sold anything to make that happen.',
+    n: '03', title: 'HARVEST', h: 392, accent: true, foot: 'harvest() → vault',
+    body: 'Creator fees stack up as NVDA. Anyone can call harvest and keep 0.25% for their trouble. The vault gets fatter, so your slice gets fatter. Nobody sold anything to make that happen.',
   },
 ];
 
 const HONEST = [
-  { t: 'Stock, not hopium.', b: "The jar only ever holds NVDA. The vault never buys the mascot, never holds it, never counts it as an asset. If the mascot rugs at 3am, the jar doesn't move." },
+  { t: 'Stock, not hopium.', b: "The vault only ever holds NVDA. It never buys the mascot, never holds it, never counts it as an asset. If the mascot rugs at 3am, the vault doesn't move." },
   { t: 'Harvests drip for 24h.', b: "Fees don't land in one block. They release over 24 hours, so depositing a second before a harvest and leaving right after loses money. There's a test named after that exact attack." },
   { t: '0% protocol fee.', b: 'We take nothing today. The contract can never take more than 10% of a harvest, and that ceiling is compiled in, not a governance vote we promise to lose.' },
-  { t: 'Exit fees stay in the jar.', b: 'Leave and half a percent of your slice stays behind. It does not come to us. It goes to whoever is still holding.' },
+  { t: 'Exit fees stay in the vault.', b: 'Leave and half a percent of your slice stays behind. It does not come to us. It goes to whoever is still holding.' },
 ];
 
 export default function LandingPage() {
@@ -36,17 +36,13 @@ export default function LandingPage() {
       <Header />
 
       <section style={{ position: 'relative', overflow: 'hidden' }}>
-        <div className="ember-glow" style={{ position: 'absolute', left: 0, top: 0, width: 760, height: 620,
-          background: 'radial-gradient(ellipse at 20% 30%, rgba(255,90,31,0.13), transparent 68%)', pointerEvents: 'none' }} />
-        <Parallax amount={0.12} style={{ position: 'absolute', right: -120, top: 40, pointerEvents: 'none', zIndex: 0 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/pyro-logo-dark.png" alt="" style={{ width: 720, opacity: 0.05 }} />
-        </Parallax>
+        <div className="sun-glow" style={{ position: 'absolute', left: 0, top: 0, width: 760, height: 620,
+          background: 'radial-gradient(ellipse at 20% 30%, rgba(255, 214, 150, 0.55), transparent 68%)', pointerEvents: 'none' }} />
         <div className="shell" style={{ padding: '96px 40px 88px', position: 'relative', zIndex: 2 }}>
           <div className="grid-12">
             <div className="col-7">
               <Reveal className="row" style={{ gap: 10, marginBottom: 30 }}>
-                <span className="pulse-dot" style={{ width: 7, height: 7, background: 'var(--ember)', display: 'block' }} />
+                <span className="pulse-dot" style={{ width: 7, height: 7, background: 'var(--accent)', display: 'block' }} />
                 <span className="mono" style={{ fontSize: 12, letterSpacing: '0.18em', color: 'var(--muted)' }}>
                   LIVE ON ROBINHOOD CHAIN
                 </span>
@@ -55,12 +51,12 @@ export default function LandingPage() {
               <h1 className="display h-hero" style={{ lineHeight: 0.94, letterSpacing: '-0.02em', margin: '0 0 28px' }}>
                 <Reveal as="span" variant="wipe" delay={80} style={{ display: 'block' }}>YOUR MEME</Reveal>
                 <Reveal as="span" variant="wipe" delay={190} style={{ display: 'block' }}>BUYS YOUR</Reveal>
-                <Reveal as="span" variant="wipe" delay={300} style={{ display: 'block', color: 'var(--ember-ink)' }}>STOCK.</Reveal>
+                <Reveal as="span" variant="wipe" delay={300} style={{ display: 'block', color: 'var(--accent-ink)' }}>STOCK.</Reveal>
               </h1>
 
               <Reveal as="p" delay={420} style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--body)', margin: '0 0 20px', maxWidth: 620, textWrap: 'pretty' }}>
-                Put tokenized NVDA in the jar. Pyro launches one mascot coin for the club, priced in NVDA instead of ETH.
-                Every time somebody trades that mascot, the creator fee lands back in the jar as more NVDA.
+                Put tokenized NVDA in the vault. VaultTube launches one mascot coin for the club, priced in NVDA instead of ETH.
+                Every time somebody trades that mascot, the creator fee lands back in the vault as more NVDA.
               </Reveal>
               <Reveal as="p" delay={520} style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--ink)', margin: '0 0 40px', maxWidth: 620, fontWeight: 500 }}>
                 Mascot goes to zero? You still own the stock.
@@ -95,17 +91,17 @@ export default function LandingPage() {
                   <span className="display" style={{ fontSize: 19, letterSpacing: '0.06em' }}>NVDA CLUB</span>
                   <span className="chip mono" style={{ fontSize: 10, letterSpacing: '0.1em', color: 'var(--dim)', border: '1px solid var(--stroke)', padding: '5px 9px' }}>SAMPLE</span>
                 </div>
-                <div className="label" style={{ marginBottom: 8 }}>IN THE JAR</div>
+                <div className="label" style={{ marginBottom: 8 }}>IN THE VAULT</div>
                 <div className="stat" style={{ fontSize: 42, marginBottom: 4 }}><CountUp value={1284.06} /></div>
                 <div className="mono" style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 26 }}>NVDA</div>
                 <div style={{ height: 1, background: 'var(--line)', marginBottom: 22 }} />
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 20 }}>
                   <div>
                     <div className="label" style={{ marginBottom: 7 }}>MASCOT</div>
-                    <div className="display" style={{ fontSize: 20, color: 'var(--ember-ink)' }}>$GPU</div>
+                    <div className="display" style={{ fontSize: 20, color: 'var(--accent-ink)' }}>$GPU</div>
                   </div>
                   <div>
-                    <div className="label" style={{ marginBottom: 7 }}>FEES → JAR</div>
+                    <div className="label" style={{ marginBottom: 7 }}>FEES → VAULT</div>
                     <div className="stat" style={{ fontSize: 20 }}>10.0%</div>
                   </div>
                 </div>
@@ -132,7 +128,7 @@ export default function LandingPage() {
       <section className="shell" style={{ padding: '104px 40px 96px' }}>
         <div className="between stack-sm" style={{ alignItems: 'baseline', marginBottom: 56 }}>
           <div>
-            <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 10px' }}>HOW THE JAR FILLS</Reveal>
+            <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 10px' }}>HOW THE VAULT FILLS</Reveal>
             <Reveal as="p" delay={120} style={{ fontSize: 16, color: 'var(--muted)', margin: 0, maxWidth: 560, textWrap: 'pretty' }}>
               A club is a shared pot of one stock. This is the whole thing, start to finish.
             </Reveal>
@@ -143,14 +139,14 @@ export default function LandingPage() {
           {STEPS.map((s, i) => (
             <Reveal key={s.n} variant="rise" delay={i * 130} className="slab-lg card lift"
               style={{ padding: '34px 30px', height: s.h, display: 'flex', flexDirection: 'column',
-                justifyContent: 'space-between', borderColor: s.accent ? 'var(--ember)' : 'var(--line)' }}>
+                justifyContent: 'space-between', borderColor: s.accent ? 'var(--accent)' : 'var(--line)' }}>
               <div>
-                <div className="mono" style={{ fontSize: 13, color: 'var(--ember-ink)', marginBottom: 18 }}>{s.n}</div>
+                <div className="mono" style={{ fontSize: 13, color: 'var(--accent-ink)', marginBottom: 18 }}>{s.n}</div>
                 <div className="display" style={{ fontSize: 27, letterSpacing: '0.02em', marginBottom: 14 }}>{s.title}</div>
                 <p style={{ fontSize: 15, lineHeight: 1.6, color: s.accent ? 'var(--body)' : 'var(--muted)', margin: 0, textWrap: 'pretty' }}>{s.body}</p>
               </div>
               {s.foot && (
-                <div className="mono" style={{ fontSize: 12, color: s.accent ? 'var(--ember-ink)' : 'var(--dim)' }}>{s.foot}</div>
+                <div className="mono" style={{ fontSize: 12, color: s.accent ? 'var(--accent-ink)' : 'var(--dim)' }}>{s.foot}</div>
               )}
             </Reveal>
           ))}
@@ -165,7 +161,7 @@ export default function LandingPage() {
                 <Reveal as="span" variant="wipe" style={{ display: 'block' }}>THERE IS</Reveal>
                 <Reveal as="span" variant="wipe" delay={130} style={{ display: 'block' }}>NO SWAP.</Reveal>
               </h2>
-              <Reveal delay={300} style={{ width: 62, height: 3, background: 'var(--ember)', marginBottom: 22 }}><span /></Reveal>
+              <Reveal delay={300} style={{ width: 62, height: 3, background: 'var(--accent)', marginBottom: 22 }}><span /></Reveal>
               <Reveal as="p" delay={380} style={{ fontSize: 16, color: 'var(--muted)', margin: 0, maxWidth: 380, textWrap: 'pretty' }}>
                 Skip this part if you like. It only matters if you have seen this idea done badly before.
               </Reveal>
@@ -176,13 +172,13 @@ export default function LandingPage() {
                 route, a price oracle, slippage, and a sandwich bot sitting on every harvest you ever call.
               </p>
               <p style={{ fontSize: 18, lineHeight: 1.62, color: 'var(--ink)', margin: '0 0 30px', textWrap: 'pretty' }}>
-                Pyro prices the mascot against NVDA itself. The fees arrive as NVDA already. Nothing to swap means nothing to skim.
+                VaultTube prices the mascot against NVDA itself. The fees arrive as NVDA already. Nothing to swap means nothing to skim.
               </p>
               <Reveal variant="rise" delay={160} className="chip mono lift" style={{ background: 'var(--bg)', border: '1px solid var(--line)', padding: '18px 20px', fontSize: 13, lineHeight: 1.7, color: 'var(--dim)' }}>
                 <span style={{ color: 'var(--stroke)' }}>$</span> pairTokenEconomics(<span style={{ color: 'var(--ink)' }}>NVDA</span>)<br />
-                <span style={{ color: 'var(--stroke)' }}>→</span> phantom <span style={{ color: 'var(--ember-ink)' }}>16.64</span>{'  '}
-                threshold <span style={{ color: 'var(--ember-ink)' }}>41.6</span>{'  '}
-                decimals <span style={{ color: 'var(--ember-ink)' }}>18</span><br />
+                <span style={{ color: 'var(--stroke)' }}>→</span> phantom <span style={{ color: 'var(--accent-ink)' }}>16.64</span>{'  '}
+                threshold <span style={{ color: 'var(--accent-ink)' }}>41.6</span>{'  '}
+                decimals <span style={{ color: 'var(--accent-ink)' }}>18</span><br />
                 <span style={{ color: 'var(--dim)' }}>{'// verified on mainnet, not a whitepaper claim'}</span>
               </Reveal>
             </div>
@@ -208,10 +204,10 @@ export default function LandingPage() {
 
       <section style={{ position: 'relative', borderTop: '1px solid var(--line)', overflow: 'hidden' }}>
         <Parallax amount={0.08} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          <div className="ember-glow" style={{ position: 'absolute', inset: '-20% 0', background: 'radial-gradient(ellipse at 50% 100%, rgba(255,90,31,0.18), transparent 62%)' }} />
+          <div className="sun-glow" style={{ position: 'absolute', inset: '-20% 0', background: 'radial-gradient(ellipse at 50% 100%, rgba(255, 206, 140, 0.6), transparent 62%)' }} />
         </Parallax>
         <div className="shell" style={{ padding: '104px 40px 96px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
-          <Reveal as="h2" variant="wipe" className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>LIGHT ONE UP.</Reveal>
+          <Reveal as="h2" variant="wipe" className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>OPEN ONE UP.</Reveal>
           <Reveal as="p" delay={140} style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 520, textWrap: 'pretty' }}>
             Opening a club takes one transaction and a few dollars. Joining someone else&apos;s takes
             one signature.

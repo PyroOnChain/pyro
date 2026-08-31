@@ -67,7 +67,7 @@ export function SetMascotImage({
         onClick={() => setOpen(true)}
         className="chip"
         style={{
-          border: '1px dashed var(--stroke)', background: 'var(--bg)', color: 'var(--ember-ink)',
+          border: '1px dashed var(--stroke)', background: 'var(--bg)', color: 'var(--accent-ink)',
           padding: '9px 14px', fontSize: 12.5,
         }}
       >

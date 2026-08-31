@@ -21,7 +21,7 @@ const PONS_LAUNCH_FEE = parseEther('0.0005'); // launchFee() on the Pons factory
 export default function CreatePage() {
   const router = useRouter();
   const { address } = useAccount();
-  const { wrongChain, switching, switchToPyro } = useCorrectChain();
+  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
   const [stock, setStock] = useState(STOCKS[0]);
   const [mascotName, setMascotName] = useState('');
   const [mascotSymbol, setMascotSymbol] = useState('');
@@ -173,8 +173,8 @@ export default function CreatePage() {
                   const on = s.symbol === stock.symbol;
                   return (
                     <button key={s.symbol} onClick={() => setStock(s)} className="chip"
-                      style={{ textAlign: 'left', padding: '15px 14px', background: on ? '#FFF7F3' : 'var(--card)',
-                        border: on ? '2px solid var(--ember)' : '1px solid var(--line)' }}>
+                      style={{ textAlign: 'left', padding: '15px 14px', background: on ? 'var(--accent-wash)' : 'var(--card)',
+                        border: on ? '2px solid var(--accent)' : '1px solid var(--line)' }}>
                       <div className="display" style={{ fontSize: 17, marginBottom: 4 }}>{s.symbol}</div>
                       <div className="mono" style={{ fontSize: 11, color: 'var(--dim)' }}>grad {s.graduation}</div>
                     </button>
@@ -228,10 +228,10 @@ export default function CreatePage() {
                 value={creatorTaxBps} max={1000} onChange={setCreatorTaxBps} note="Pons caps this at 10%" />
               <div style={{ height: 24 }} />
               <Slider label="Your cut of each harvest"
-                value={creatorFeeBps} max={2000} onChange={setCreatorFeeBps} note="the rest goes to the jar" />
+                value={creatorFeeBps} max={2000} onChange={setCreatorFeeBps} note="the rest goes to the vault" />
             </Step>
 
-            <Step n="04" title="SEED THE JAR">
+            <Step n="04" title="SEED THE VAULT">
               <div className="chip between" style={{ border: '1px solid var(--stroke)', background: 'var(--bg)', padding: '15px 16px' }}>
                 <input className="field-amount" inputMode="decimal" placeholder="0.00" value={seed}
                   onChange={(e) => setSeed(e.target.value.replace(/[^0-9.]/g, ''))} />
@@ -262,7 +262,7 @@ export default function CreatePage() {
                 <div style={{ height: 1, background: 'var(--line-soft)' }} />
                 <Row k="Pons launch fee" v="0.0005 ETH" />
                 <Row k="Seed deposit" v={`${seed || '0'} ${stock.symbol}`} />
-                <Row k="Pyro fee" v="0.00" />
+                <Row k="VaultTube fee" v="0.00" />
                 <Row
                   k="Transactions"
                   v={((allowance.data as bigint | undefined) ?? 0n) >= seedWei && seedWei > 0n ? '1' : '2 (approve, then open)'}
@@ -270,13 +270,13 @@ export default function CreatePage() {
               </div>
               {wrongChain ? (
                 <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
-                  disabled={switching} onClick={switchToPyro}>
+                  disabled={switching} onClick={switchToVaultTube}>
                   {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
                 </button>
               ) : (
                 <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
                   disabled={!ready} onClick={submit}>
-                  {busy ? busy.toUpperCase() + '…' : !logoOk ? 'ADD AN IMAGE FIRST' : 'LIGHT IT UP'}
+                  {busy ? busy.toUpperCase() + '…' : !logoOk ? 'ADD AN IMAGE FIRST' : 'OPEN THE CLUB'}
                 </button>
               )}
               {wrongChain && (
@@ -319,7 +319,7 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   return (
     <div className="slab card" style={{ padding: '26px 28px' }}>
       <div className="row" style={{ alignItems: 'baseline', gap: 11, marginBottom: 20 }}>
-        <span className="mono" style={{ fontSize: 12, color: 'var(--ember-ink)' }}>{n}</span>
+        <span className="mono" style={{ fontSize: 12, color: 'var(--accent-ink)' }}>{n}</span>
         <span className="display" style={{ fontSize: 18, letterSpacing: '0.04em' }}>{title}</span>
       </div>
       {children}
@@ -356,7 +356,7 @@ function Slider({ label, value, max, onChange, note }: {
       </div>
       <input type="range" min={0} max={max} step={25} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        style={{ width: '100%', accentColor: 'var(--ember)' }} />
+        style={{ width: '100%', accentColor: 'var(--accent)' }} />
       <div className="between mono" style={{ fontSize: 11, color: 'var(--dim)', marginTop: 4 }}>
         <span>0%</span><span>{note}</span><span>{(max / 100).toFixed(0)}% max</span>
       </div>

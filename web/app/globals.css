@@ -1,71 +1,187 @@
+/* ============================================================================
+   VaultTube design system.
+
+   Blocky, pixel-art, sunset-pastel. Everything is built from square blocks with
+   a heavy ink outline and a hard offset shadow - no blur, no rounded corners,
+   because a soft edge reads as a different genre entirely. Colours are sampled
+   straight out of the logo and banner: a lavender-to-cream sunset ramp with a
+   charcoal outline and a gold drop shadow.
+   ========================================================================== */
+
 :root {
-  --bg: #FBF9F6;
-  --band: #F3EEE7;
-  --card: #FFFFFF;
-  --line: #E7E0D5;
-  --line-soft: #F2ECE3;
-  --stroke: #CFC5B6;
-  --ink: #1A1614;
-  --body: #514842;
-  --muted: #6E645C;
-  --dim: #726860;
-  --ember: #FF5A1F;
-  --ember-ink: #C4400B;
-  --ember-wash: #FFF0E8;
-  --gain: #177F47;
-  --loss: #B3261E;
+  /* the sunset ramp, top of sky down to the sand */
+  --sky-1: #C6ACE0;
+  --sky-2: #E4B4D2;
+  --sky-3: #F8BAAD;
+  --sky-4: #FFCA9C;
+  --sky-5: #FFE6C4;
+
+  --bg: #FFF3E4;
+  --band: #FFE8CF;
+  --card: #FFFBF3;
+  --line: #E8D2BC;
+  --line-soft: #F5E4D1;
+  --stroke: #2E2A32;
+
+  --ink: #2E2A32;
+  --body: #56495A;
+  --muted: #7A6A7C;
+  --dim: #8B7A8C;
+
+  --accent: #7C5BC7;
+  --accent-ink: #5B3EA0;
+  --accent-wash: #EFE6FB;
+  --gold: #F5C98A;
+  --berry: #E0568F;
+
+  --gain: #2E9E5B;
+  --loss: #D1495B;
+  --loss-wash: #FFE9EC;
+
+  /* content sitting on the dark ink panel */
+  --on-ink: #FFF3E4;
+  --on-ink-dim: #AB9CAD;
+  --on-ink-accent: #F5C98A;
+  --on-ink-loss: #FF9DA8;
+  --ink-chip: rgba(255, 243, 228, 0.12);
+
+  --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
+  --ease-snap: cubic-bezier(0.22, 1.2, 0.36, 1);
+
+  /* one knob for the whole blocky language */
+  --px: 3px;
+  --drop: 5px;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+
 body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
-a { color: var(--ember-ink); text-decoration: none; }
-a:hover { color: var(--ember); }
+
+/* ---------------------------------------------------------------------------
+   The sky. A fixed sunset behind everything, with two layers of pixel clouds
+   drifting at different speeds so the background has depth without parallax JS.
+   -------------------------------------------------------------------------*/
+.sky {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(120% 62% at 50% 78%, rgba(255, 236, 190, 0.95) 0%, rgba(255, 236, 190, 0) 62%),
+    linear-gradient(180deg,
+      var(--sky-1) 0%, var(--sky-2) 22%, var(--sky-3) 44%,
+      var(--sky-4) 65%, var(--sky-5) 82%, var(--bg) 100%);
+}
+.sky::before, .sky::after {
+  content: ''; position: absolute; inset: 0;
+  background-repeat: repeat-x;
+  will-change: background-position;
+}
+.sky::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='12' viewBox='0 0 30 12'%3E%3Cg fill='%23ffffff' fill-opacity='0.62'%3E%3Crect x='7' y='2' width='11' height='2'/%3E%3Crect x='5' y='4' width='16' height='2'/%3E%3Crect x='3' y='6' width='21' height='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 360px 144px;
+  background-position: 0 90px;
+  animation: drift 150s linear infinite;
+}
+.sky::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10' viewBox='0 0 24 10'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Crect x='5' y='2' width='9' height='2'/%3E%3Crect x='3' y='4' width='14' height='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 100px;
+  background-position: 0 300px;
+  animation: drift 95s linear infinite reverse;
+}
+@keyframes drift { to { background-position-x: 1200px; } }
+
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { color: var(--accent); }
 button { font-family: inherit; cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: 0.5; }
+/* A dimmed dark block just reads as mud on this palette, so disabled buttons
+   become an empty trough instead. */
+.btn-primary:disabled, .btn-ghost:disabled, .chip.btn-primary:disabled {
+  opacity: 1; background: var(--band); color: var(--dim);
+  border-color: var(--line); box-shadow: none; transform: none;
+}
+img { image-rendering: pixelated; }
 
-/* the logo's clipped-corner motif, applied consistently */
-.slab { clip-path: polygon(0 100%, 0 24px, 24px 0, 100% 0, 100% 100%); }
-.slab-lg { clip-path: polygon(0 100%, 0 34px, 34px 0, 100% 0, 100% 100%); }
-.btn { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%); }
-.chip { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%); }
+/* ---------------------------------------------------------------------------
+   Blocks. The old build clipped a diagonal off every panel; this one keeps
+   everything square and does the work with weight instead. These class names
+   are unchanged so the markup did not have to move.
+   -------------------------------------------------------------------------*/
+.slab, .slab-lg, .btn, .chip { clip-path: none; }
 
-.display { font-family: var(--font-display), system-ui, sans-serif; font-weight: 700; }
+.display { font-family: var(--font-display), system-ui, sans-serif; font-weight: 600; letter-spacing: 0.01em; }
 .mono { font-family: var(--font-mono), ui-monospace, monospace; }
 
-.card { background: var(--card); border: 1px solid var(--line); }
+.card {
+  background: var(--card);
+  border: var(--px) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 rgba(46, 42, 50, 0.16);
+}
+
 .shell { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
 
+/* Minecraft-ish buttons: a solid block that lifts off its shadow on hover and
+   is pressed flat into it on click. */
 .btn-primary {
-  background: var(--ember); color: var(--ink); border: none;
-  font-family: var(--font-display), sans-serif; font-weight: 700;
-  letter-spacing: 0.05em; padding: 15px 26px; font-size: 15px;
+  background: var(--ink); color: var(--bg);
+  border: var(--px) solid var(--ink);
+  font-family: var(--font-display), sans-serif; font-weight: 600;
+  letter-spacing: 0.06em; padding: 14px 26px; font-size: 16px;
+  box-shadow: var(--drop) var(--drop) 0 var(--gold);
 }
-.btn-primary:hover:not(:disabled) { background: #FF6E38; }
+.btn-primary:hover:not(:disabled) { background: #3D3742; }
 .btn-ghost {
-  background: transparent; color: var(--ink); border: 1px solid var(--stroke);
-  font-weight: 500; padding: 14px 24px; font-size: 15px;
+  background: var(--card); color: var(--ink);
+  border: var(--px) solid var(--ink);
+  font-family: var(--font-display), sans-serif; font-weight: 600;
+  letter-spacing: 0.04em; padding: 14px 24px; font-size: 16px;
+  box-shadow: var(--drop) var(--drop) 0 rgba(46, 42, 50, 0.2);
 }
-.btn-ghost:hover:not(:disabled) { border-color: var(--ink); }
+.btn-ghost:hover:not(:disabled) { background: var(--accent-wash); }
 
-.label { font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.13em; color: var(--dim); }
+.chip {
+  border: 2px solid var(--ink);
+  background: var(--card);
+  box-shadow: 3px 3px 0 rgba(46, 42, 50, 0.18);
+  font-weight: 700;
+}
+/* .chip sets its own background, so a chip that is also a primary button has to
+   be told again or it renders cream-on-cream and disappears. */
+.chip.btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip.btn-primary:hover:not(:disabled) { background: #3D3742; }
+
+.label {
+  font-family: var(--font-mono), monospace; font-size: 11px;
+  letter-spacing: 0.13em; color: var(--muted); text-transform: uppercase;
+}
 .stat { font-family: var(--font-mono), monospace; font-weight: 700; letter-spacing: -0.02em; }
 
 .field {
-  width: 100%; border: 1px solid var(--stroke); background: var(--bg);
-  padding: 15px 16px; font-size: 15px; color: var(--ink); font-family: inherit;
+  width: 100%; border: var(--px) solid var(--ink); background: var(--card);
+  padding: 14px 15px; font-size: 15px; color: var(--ink); font-family: inherit; font-weight: 600;
+  box-shadow: inset 2px 2px 0 rgba(46, 42, 50, 0.08);
 }
-.field:focus { outline: none; border-color: var(--ember); }
+.field:focus { outline: none; border-color: var(--accent); box-shadow: inset 2px 2px 0 rgba(124, 91, 199, 0.14); }
 .field-amount {
   font-family: var(--font-mono), monospace; font-weight: 700; font-size: 25px;
   border: none; background: transparent; width: 100%; padding: 0; color: var(--ink);
+  box-shadow: none;
 }
-.field-amount:focus { outline: none; }
+.field-amount:focus { outline: none; box-shadow: none; }
+
+/* A pixel rule, for dividing sections without a hairline that would look out of
+   place next to 3px borders. */
+.pxrule {
+  height: 6px; border: 0;
+  background-image: linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px);
+  background-size: 12px 6px; background-repeat: repeat-x;
+  opacity: 0.5;
+}
 
 .row { display: flex; align-items: center; }
 .between { display: flex; align-items: center; justify-content: space-between; }
@@ -73,10 +189,10 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
 
 table { width: 100%; border-collapse: collapse; }
 th { text-align: left; font-family: var(--font-mono), monospace; font-size: 10.5px;
-     letter-spacing: 0.12em; color: var(--dim); font-weight: 500;
-     padding: 15px 26px; background: var(--bg); border-bottom: 1px solid var(--line); }
-td { padding: 18px 26px; border-bottom: 1px solid var(--line-soft); font-size: 14px; vertical-align: middle; }
-tbody tr:hover { background: #FDFBF9; }
+     letter-spacing: 0.12em; color: var(--muted); font-weight: 700; text-transform: uppercase;
+     padding: 15px 26px; background: var(--band); border-bottom: var(--px) solid var(--ink); }
+td { padding: 18px 26px; border-bottom: 2px solid var(--line-soft); font-size: 14px; vertical-align: middle; }
+tbody tr:hover { background: var(--accent-wash); }
 tbody tr:last-child td { border-bottom: none; }
 
 /* Layout utilities. These live in CSS rather than inline styles precisely so the media
@@ -94,10 +210,10 @@ tbody tr:last-child td { border-bottom: none; }
 .table-scroll table { min-width: 760px; }
 
 /* Fluid display type: the hero has to survive a 375px viewport without clipping. */
-.h-hero { font-size: clamp(44px, 11vw, 82px); }
-.h-1 { font-size: clamp(32px, 6vw, 52px); }
-.h-2 { font-size: clamp(28px, 5vw, 46px); }
-.h-3 { font-size: clamp(30px, 7vw, 62px); }
+.h-hero { font-size: clamp(40px, 10vw, 76px); line-height: 1.02; }
+.h-1 { font-size: clamp(30px, 5.6vw, 48px); }
+.h-2 { font-size: clamp(26px, 4.8vw, 42px); }
+.h-3 { font-size: clamp(28px, 6.4vw, 56px); }
 
 @media (max-width: 1100px) {
   .grid-3 { grid-template-columns: 1fr; }
@@ -115,6 +231,7 @@ tbody tr:last-child td { border-bottom: none; }
   .stack-sm { flex-direction: column; align-items: flex-start !important; gap: 14px; }
   .ticker-strip { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .ticker-strip > * { border-right: none !important; }
+  :root { --drop: 4px; }
 }
 
 @media (max-width: 520px) {
@@ -123,124 +240,102 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* ============================================================================
    Motion.
-   The brand's whole visual language is a diagonal clip, so reveals wipe along
-   that same angle rather than fading. Easing is snappy rather than floaty:
-   this is a degen product, not a meditation app.
-   Everything below collapses to "already visible" under prefers-reduced-motion.
+   Blocks step rather than glide: reveals snap up in whole pixels, buttons press
+   into their own shadow. Everything collapses to "already visible" under
+   prefers-reduced-motion, and none of it exists until the .motion class is set,
+   so the page is never blank when JS fails.
    ========================================================================== */
 
-:root {
-  --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
-  --ease-snap: cubic-bezier(0.22, 1.2, 0.36, 1);
-}
-
-/* Scroll reveal.
-   The hidden state is scoped behind .motion, which a tiny inline script sets on
-   <html> before paint. If JavaScript is off, fails, or the visitor asked for
-   reduced motion, .motion is never set and everything renders plainly visible.
-   Content must never depend on an animation running. */
 .motion .reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.62s var(--ease-out), transform 0.62s var(--ease-out);
   transition-delay: var(--d, 0ms);
-  will-change: opacity, transform;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
 .motion .reveal.in { opacity: 1; transform: none; }
 
-/* Headline lines wipe in along the logo's diagonal. */
 .motion .wipe {
-  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-  opacity: 0;
-  transition: clip-path 0.78s var(--ease-out), opacity 0.4s linear;
   transition-delay: var(--d, 0ms);
+  opacity: 0; clip-path: inset(0 100% 0 0);
+  transition: opacity 0.42s linear, clip-path 0.62s steps(12, end);
 }
-.motion .wipe.in {
-  clip-path: polygon(0 0, 118% 0, 100% 100%, 0 100%);
-  opacity: 1;
-}
+.motion .wipe.in { opacity: 1; clip-path: inset(0 0 0 0); }
 
-/* Cards rise and settle with a touch of overshoot. */
 .motion .rise {
-  opacity: 0;
-  transform: translateY(34px) scale(0.985);
-  transition: opacity 0.5s var(--ease-out), transform 0.66s var(--ease-snap);
   transition-delay: var(--d, 0ms);
+  opacity: 0; transform: translateY(22px) scale(0.985);
+  transition: opacity 0.52s var(--ease-out), transform 0.52s var(--ease-snap);
 }
 .motion .rise.in { opacity: 1; transform: none; }
 
-/* Buttons: lift, and the clipped corner opens up slightly on hover. */
-.btn-primary, .btn-ghost {
-  transition: transform 0.18s var(--ease-out), background 0.18s linear,
-              border-color 0.18s linear, box-shadow 0.22s var(--ease-out),
-              clip-path 0.22s var(--ease-out);
+.btn-primary, .btn-ghost, .chip {
+  transition: transform 0.14s var(--ease-snap), box-shadow 0.14s var(--ease-snap),
+              background-color 0.18s linear, border-color 0.18s linear;
 }
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px -10px rgba(255, 90, 31, 0.75);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 17px), calc(100% - 17px) 100%, 0 100%);
+.btn-primary:hover:not(:disabled), .btn-ghost:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--drop) + 2px) calc(var(--drop) + 2px) 0 var(--gold);
 }
-.btn-primary:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
 .btn-ghost:hover:not(:disabled) {
-  transform: translateY(-2px);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 17px), calc(100% - 17px) 100%, 0 100%);
+  box-shadow: calc(var(--drop) + 2px) calc(var(--drop) + 2px) 0 rgba(46, 42, 50, 0.24);
 }
-.btn-ghost:active:not(:disabled) { transform: translateY(0); }
+.btn-primary:active:not(:disabled), .btn-ghost:active:not(:disabled) {
+  transform: translate(var(--drop), var(--drop)); box-shadow: none;
+}
 
-/* Cards lift a little when pointed at. */
-.lift { transition: transform 0.24s var(--ease-out), border-color 0.24s linear, box-shadow 0.24s var(--ease-out); }
+.lift { transition: transform 0.2s var(--ease-snap), box-shadow 0.2s var(--ease-snap), border-color 0.2s linear; }
 .lift:hover {
-  transform: translateY(-3px);
-  border-color: var(--stroke);
-  box-shadow: 0 14px 34px -22px rgba(26, 22, 20, 0.5);
+  transform: translate(-3px, -3px);
+  box-shadow: calc(var(--drop) + 3px) calc(var(--drop) + 3px) 0 rgba(46, 42, 50, 0.22);
 }
 
-/* The ember glow breathes, slowly enough that you feel it rather than watch it. */
-@keyframes emberBreathe {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50%      { opacity: 1;    transform: scale(1.06); }
+@keyframes sunBreathe {
+  0%, 100% { opacity: 0.82; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.04); }
 }
-.ember-glow { animation: emberBreathe 7.5s ease-in-out infinite; }
+.sun-glow { animation: sunBreathe 7.5s ease-in-out infinite; }
 
-/* The little square beside LIVE ON ROBINHOOD CHAIN. */
-@keyframes emberPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 90, 31, 0.55); }
-  70%      { opacity: 0.72; box-shadow: 0 0 0 7px rgba(255, 90, 31, 0); }
+/* A live dot that blinks in steps rather than fading, to stay in the pixel idiom. */
+@keyframes pixelPulse {
+  0%, 45%  { opacity: 1; }
+  50%, 95% { opacity: 0.28; }
+  100%     { opacity: 1; }
 }
-.pulse-dot { animation: emberPulse 2.4s ease-out infinite; }
+.pulse-dot { animation: pixelPulse 1.8s steps(1, end) infinite; }
 
-/* Underline that draws in on hover, for the proof row and nav. */
 .draw { position: relative; }
 .draw::after {
-  content: ''; position: absolute; left: 0; bottom: -3px; height: 1px; width: 100%;
-  background: var(--ember); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.28s var(--ease-out);
+  content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 3px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.26s var(--ease-out);
 }
 .draw:hover::after { transform: scaleX(1); }
 
-/* Numbers that tick up shouldn't reflow the layout as digits change width. */
-.tabular { font-variant-numeric: tabular-nums; }
-
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .wipe, .rise {
-    opacity: 1 !important; transform: none !important;
-    clip-path: none !important; transition: none !important;
-  }
-  .ember-glow, .pulse-dot { animation: none !important; }
-  .btn-primary, .btn-ghost, .lift { transition: none !important; }
-  .btn-primary:hover, .btn-ghost:hover, .lift:hover { transform: none !important; }
+  .sky::before, .sky::after { animation: none; }
+  .motion .reveal, .motion .wipe, .motion .rise {
+  transition-delay: var(--d, 0ms); opacity: 1; transform: none; clip-path: none; transition: none; }
+  .btn-primary, .btn-ghost, .chip, .lift { transition: none; }
+  .sun-glow, .pulse-dot { animation: none; }
 }
+
+/* ============================================================================
+   Utilities the components depend on.
+   ========================================================================== */
+
+.tabular { font-variant-numeric: tabular-nums; }
 
 /* ---------------------------------------------------------------- marquee */
 .marquee { overflow: hidden; position: relative; }
-.marquee-track { display: flex; width: max-content; animation: marqueeSlide var(--marquee-duration, 34s) linear infinite; }
+.marquee-track {
+  display: flex; width: max-content;
+  animation: marqueeSlide var(--marquee-duration, 34s) linear infinite;
+}
 .marquee-group { display: flex; flex-shrink: 0; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marqueeSlide {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
 }
-/* Soft edges so items enter and leave rather than being cut off. */
 .marquee::before, .marquee::after {
   content: ''; position: absolute; top: 0; bottom: 0; width: 90px; z-index: 2; pointer-events: none;
 }
@@ -248,58 +343,49 @@ tbody tr:last-child td { border-bottom: none; }
 .marquee::after  { right: 0; background: linear-gradient(to left,  var(--band), transparent); }
 
 /* ---------------------------------------------------------------- cursor */
+/* Square rather than round, so the pointer reads as one more block. */
 .cursor-glow {
   position: fixed; top: 0; left: 0; z-index: 90;
-  width: 26px; height: 26px; border-radius: 50%;
-  border: 1px solid rgba(255, 90, 31, 0.55);
-  background: rgba(255, 90, 31, 0.07);
+  width: 22px; height: 22px;
+  border: 2px solid rgba(124, 91, 199, 0.55);
+  background: rgba(124, 91, 199, 0.08);
   pointer-events: none; opacity: 0;
-  transition: width 0.26s var(--ease-out), height 0.26s var(--ease-out),
+  transition: width 0.2s steps(4, end), height 0.2s steps(4, end),
               background 0.26s linear, border-color 0.26s linear, opacity 0.3s linear;
   mix-blend-mode: multiply;
 }
 .cursor-glow.over {
-  width: 54px; height: 54px;
-  background: rgba(255, 90, 31, 0.13);
-  border-color: rgba(255, 90, 31, 0.8);
+  width: 48px; height: 48px;
+  background: rgba(124, 91, 199, 0.14);
+  border-color: rgba(124, 91, 199, 0.85);
 }
-@media (hover: none) { .cursor-glow { display: none; } }
 
-/* ---------------------------------------------------------------- magnetic */
 .magnetic { display: inline-block; transition: transform 0.34s var(--ease-snap); will-change: transform; }
 
 /* ---------------------------------------------------------------- progress */
 .scroll-progress {
-  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 100;
-  background: var(--ember); transform: scaleX(0); transform-origin: left;
+  position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 100;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
   will-change: transform;
 }
 
-/* ------------------------------------------------- richer hover states */
-/* Cards tilt very slightly toward the pointer side and lift. */
-.lift { transform-style: preserve-3d; }
-.lift:hover { transform: translateY(-4px) scale(1.008); }
-
-/* Table rows slide a touch and grow an ember edge. */
-tbody tr { transition: background 0.2s linear, transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out); }
-tbody tr:hover { transform: translateX(3px); box-shadow: inset 3px 0 0 var(--ember); }
-
-/* Nav and footer links draw an underline from the left. */
-header nav a, footer a { position: relative; }
-header nav a::after, footer a::after {
-  content: ''; position: absolute; left: 0; bottom: -4px; height: 1px; width: 100%;
-  background: currentColor; transform: scaleX(0); transform-origin: left;
-  transition: transform 0.26s var(--ease-out);
-}
-header nav a:hover::after, footer a:hover::after { transform: scaleX(1); }
-
-/* The step number ticks up a shade on card hover. */
-.slab-lg.lift:hover .mono { color: var(--ember-ink); }
-
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none !important; }
-  .cursor-glow { display: none !important; }
-  .magnetic { transition: none !important; transform: none !important; }
-  .scroll-progress { display: none !important; }
-  tbody tr:hover { transform: none !important; }
+  .marquee-track { animation: none; }
+  .cursor-glow { display: none; }
+  .magnetic { transition: none; }
+}
+
+/* An XP-style bar: a thick outlined trough with a segmented fill, so progress
+   reads as blocks rather than a smooth sliver. */
+.pxbar {
+  height: 18px; position: relative; overflow: hidden;
+  background: var(--band); border: 3px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(46, 42, 50, 0.14);
+}
+.pxbar-fill {
+  position: absolute; inset: 0;
+  background-color: var(--accent);
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0 6px, transparent 6px 12px);
+  background-size: 12px 100%;
+  transition: right 0.7s steps(16, end);
 }

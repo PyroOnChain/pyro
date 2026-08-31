@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-/** Thin ember bar across the top showing how far down the page you are. */
+/** Thin accent bar across the top showing how far down the page you are. */
 export function ScrollProgress() {
   const ref = useRef<HTMLDivElement | null>(null);
 

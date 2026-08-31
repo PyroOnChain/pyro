@@ -123,8 +123,8 @@ export function ImagePicker({
           style={{
             flexGrow: 1, cursor: 'pointer', display: 'flex', alignItems: 'center',
             justifyContent: 'center', textAlign: 'center', padding: '14px 16px',
-            border: `1px dashed ${drag ? 'var(--ember)' : 'var(--stroke)'}`,
-            background: drag ? '#FFF7F3' : 'var(--bg)',
+            border: `1px dashed ${drag ? 'var(--accent)' : 'var(--stroke)'}`,
+            background: drag ? 'var(--accent-wash)' : 'var(--bg)',
             transition: 'border-color 0.18s linear, background 0.18s linear',
           }}
         >

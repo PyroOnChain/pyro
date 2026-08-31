@@ -60,7 +60,7 @@ function InvalidClub({ value }: { value: string }) {
 
 function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
-  const { wrongChain, switching, switchToPyro } = useCorrectChain();
+  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const meta = useClubMeta(v, club.creator);
@@ -123,14 +123,14 @@ function ClubBody({ v }: { v: Address }) {
                     {club.mascotName?.trim() || club.name || 'Club'}
                   </span>
                   {club.mascotSymbol && (
-                    <span className="display" style={{ fontSize: 22, color: 'var(--ember-ink)' }}>
+                    <span className="display" style={{ fontSize: 22, color: 'var(--accent-ink)' }}>
                       ${club.mascotSymbol}
                     </span>
                   )}
                 </div>
                 <div style={{ fontSize: 14, color: 'var(--muted)', maxWidth: 520 }}>
                   {meta?.description?.trim()
-                    || `A ${sym} club. Every trade of the mascot sends fees back to the jar as more ${sym}.`}
+                    || `A ${sym} club. Every trade of the mascot sends fees back to the vault as more ${sym}.`}
                 </div>
                 <div className="mono" style={{ fontSize: 12, color: 'var(--dim)', marginTop: 7 }}>
                   opened by {short(club.creator)} · creator takes{' '}
@@ -166,7 +166,7 @@ function ClubBody({ v }: { v: Address }) {
           <div className="slab card" style={{ padding: '28px' }}>
             <div className="grid-3" style={{ gap: 24 }}>
               <Metric
-                label="IN THE JAR" value={fmtCompact(club.totalAssets)} sub={sym}
+                label="IN THE VAULT" value={fmtCompact(club.totalAssets)} sub={sym}
                 hint={`All the ${sym} this club is holding for its members.`}
               />
               <Metric
@@ -175,7 +175,7 @@ function ClubBody({ v }: { v: Address }) {
               />
               <Metric
                 label="UNDRIPPED" value={fmt(club.lockedProfit, 18, 4)} sub="still releasing" subColor="var(--gain)"
-                hint="Fees already collected, released into the jar over 24 hours so nobody can time it."
+                hint="Fees already collected, released into the vault over 24 hours so nobody can time it."
               />
             </div>
           </div>
@@ -189,11 +189,8 @@ function ClubBody({ v }: { v: Address }) {
                 <span className="stat" style={{ fontSize: 19 }}>{(grad.progress * 100).toFixed(1)}%</span>
               </div>
 
-              <div style={{ height: 8, background: 'var(--line-soft)', marginBottom: 12, position: 'relative' }}>
-                <div style={{
-                  position: 'absolute', inset: 0, right: `${100 - grad.progress * 100}%`,
-                  background: 'var(--ember)', transition: 'right 0.6s var(--ease-out)',
-                }} />
+              <div className="pxbar" style={{ marginBottom: 12 }}>
+                <div className="pxbar-fill" style={{ right: `${100 - grad.progress * 100}%` }} />
               </div>
 
               <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 16 }}>
@@ -203,8 +200,8 @@ function ClubBody({ v }: { v: Address }) {
 
               <p style={{ fontSize: 13.5, lineHeight: 1.65, color: 'var(--muted)', margin: 0 }}>
                 While a mascot is still on its bonding curve, what buyers pay stays on the curve.
-                Creator fees only start flowing to this jar once it graduates onto a pool. Until
-                then the jar holds exactly what members put in, and nothing more.
+                Creator fees only start flowing to this vault once it graduates onto a pool. Until
+                then the vault holds exactly what members put in, and nothing more.
               </p>
             </div>
           )}
@@ -212,7 +209,7 @@ function ClubBody({ v }: { v: Address }) {
           <div className="slab card lift" style={{ padding: '26px 28px' }}>
             <div className="between" style={{ marginBottom: 18, flexWrap: 'wrap', gap: 14 }}>
               <div className="display" style={{ fontSize: 17, letterSpacing: '0.04em' }}>
-                THE MASCOT PAYS THE JAR
+                THE MASCOT PAYS THE VAULT
               </div>
               {club.mascot && club.mascot !== '0x0000000000000000000000000000000000000000' && (
                 <a href={ponsTokenUrl(club.mascot)} target="_blank" rel="noreferrer noopener"
@@ -222,12 +219,12 @@ function ClubBody({ v }: { v: Address }) {
               )}
             </div>
             <p style={{ fontSize: 14.5, lineHeight: 1.65, color: 'var(--muted)', margin: '0 0 14px' }}>
-              The mascot is priced in {sym}, so its creator fees arrive as {sym} and go straight into this jar.
+              The mascot is priced in {sym}, so its creator fees arrive as {sym} and go straight into this vault.
               Nothing is swapped, so there is no route, no oracle and no slippage between a trade and your slice.
             </p>
             <p style={{ fontSize: 14.5, lineHeight: 1.65, color: 'var(--muted)', margin: 0 }}>
               Harvested fees do not land in one block. They release over 24 hours, which is why the undripped number
-              above is not yet counted in the jar.
+              above is not yet counted in the vault.
             </p>
           </div>
         </div>
@@ -261,34 +258,34 @@ function ClubBody({ v }: { v: Address }) {
 
           <div className="slab" style={{ background: 'var(--ink)', padding: 24 }}>
             <div className="between" style={{ marginBottom: 14 }}>
-              <span className="mono" style={{ fontSize: 11, letterSpacing: '0.13em', color: '#A79C90' }}>SITTING IN ESCROW</span>
+              <span className="mono" style={{ fontSize: 11, letterSpacing: '0.13em', color: 'var(--on-ink-dim)' }}>SITTING IN ESCROW</span>
               {pendingFees !== undefined && pendingFees > 0n && (
-                <span className="chip mono" style={{ fontSize: 10, padding: '4px 8px', background: '#33291F', color: '#FF8A55' }}>CLAIMABLE</span>
+                <span className="chip mono" style={{ fontSize: 10, padding: '4px 8px', background: 'var(--ink-chip)', color: 'var(--on-ink-accent)' }}>CLAIMABLE</span>
               )}
             </div>
             <div className="stat" style={{ fontSize: 30, color: 'var(--bg)', marginBottom: 4 }}>{fmt(pendingFees)}</div>
-            <div className="mono" style={{ fontSize: 12.5, color: '#A79C90', marginBottom: 18 }}>
+            <div className="mono" style={{ fontSize: 12.5, color: 'var(--on-ink-dim)', marginBottom: 18 }}>
               {sym} of {club.mascotSymbol ? `$${club.mascotSymbol}` : 'mascot'} creator fees
             </div>
             <button className="btn btn-primary" style={{ width: '100%', padding: 14, textAlign: 'center', fontSize: 14 }}
               disabled={wrongChain ? switching : (isPending || !pendingFees || pendingFees === 0n)}
-              onClick={wrongChain ? switchToPyro : harvest}>
+              onClick={wrongChain ? switchToVaultTube : harvest}>
               {wrongChain ? (switching ? 'CHECK YOUR WALLET…' : 'SWITCH NETWORK')
                 : isPending ? 'HARVESTING…'
                 : pendingFees && pendingFees > 0n ? `HARVEST · KEEP ${fmt(bounty)}` : 'NOTHING TO HARVEST'}
             </button>
-            <div style={{ fontSize: 11.5, color: '#A79C90', lineHeight: 1.6, marginTop: 12 }}>
+            <div style={{ fontSize: 11.5, color: 'var(--on-ink-dim)', lineHeight: 1.6, marginTop: 12 }}>
               Anyone can call this. Whoever does keeps {club.harvestBountyBps !== undefined ? (club.harvestBountyBps / 100).toFixed(2) : '0.25'}%.
-              The rest drips into the jar over the next 24 hours.
+              The rest drips into the vault over the next 24 hours.
             </div>
             {hash && (
               <div style={{ fontSize: 11.5, marginTop: 10 }}>
-                <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: '#FF8A55' }}>
+                <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: 'var(--on-ink-accent)' }}>
                   {receipt.isLoading ? 'Confirming…' : 'View transaction'}
                 </a>
               </div>
             )}
-            {err && <div style={{ fontSize: 11.5, color: '#FF9A8A', marginTop: 10 }}>{err}</div>}
+            {err && <div style={{ fontSize: 11.5, color: 'var(--on-ink-loss)', marginTop: 10 }}>{err}</div>}
           </div>
         </div>
       </div>

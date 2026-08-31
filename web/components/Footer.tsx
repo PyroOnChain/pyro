@@ -2,13 +2,13 @@ import { footerLinks } from '@/lib/links';
 
 export function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid var(--line)', background: 'var(--band)' }}>
+    <footer style={{ borderTop: '3px solid var(--ink)', background: 'var(--band)' }}>
       <div className="shell" style={{ padding: '44px 40px 52px' }}>
         <div className="between" style={{ marginBottom: 34, gap: 60, flexWrap: 'wrap' }}>
           <div className="row" style={{ gap: 11 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/pyro-logo-dark.png" alt="Pyro" style={{ height: 18, width: 'auto', opacity: 0.85 }} />
-            <span className="display" style={{ fontSize: 16, letterSpacing: '0.14em', color: 'var(--muted)' }}>PYRO</span>
+            <img src="/vaulttube-mark.png" alt="VaultTube" style={{ height: 26, width: 26, border: '2px solid var(--ink)' }} />
+            <span className="display" style={{ fontSize: 18, letterSpacing: '0.05em', color: 'var(--ink)' }}>VaultTube</span>
           </div>
           <div className="row" style={{ gap: 40, fontSize: 14, flexWrap: 'wrap' }}>
             {footerLinks().map((l) => (
@@ -22,7 +22,7 @@ export function Footer() {
           Tokenized stocks on Robinhood Chain are issued by Robinhood Assets (Jersey) Limited and are debt securities
           tracking the underlying. They do not grant ownership or voting rights in the company. They may not be offered,
           sold or delivered to US persons, and are additionally restricted in the United Kingdom, Canada, Switzerland
-          and the UAE. Pyro is unaudited software and you should treat it that way. Nothing here is investment advice.
+          and the UAE. VaultTube is unaudited software and you should treat it that way. Nothing here is investment advice.
         </p>
       </div>
     </footer>

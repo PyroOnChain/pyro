@@ -12,7 +12,7 @@ export type ClubMeta = {
 
 /** The message a club creator signs to claim their club's metadata. */
 export function metaMessage(vault: string, logo: string) {
-  return `Pyro club metadata\nvault: ${vault.toLowerCase()}\nlogo: ${logo}`;
+  return `VaultTube club metadata\nvault: ${vault.toLowerCase()}\nlogo: ${logo}`;
 }
 
 /** Where to buy a mascot. Verified: this route returns 200 on the launchpad. */

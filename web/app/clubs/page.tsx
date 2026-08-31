@@ -29,7 +29,7 @@ export default function ClubsPage() {
             <h1 className="display h-2" style={{ letterSpacing: '0.01em', margin: '0 0 8px' }}>CLUBS</h1>
             <p style={{ fontSize: 15, color: 'var(--muted)', margin: 0, maxWidth: 620, textWrap: 'pretty' }}>
               Every club holds one stock and runs one mascot. Join a club by putting that stock in
-              its jar, and every trade of the mascot sends fees back to the jar as more stock.
+              its vault, and every trade of the mascot sends fees back to the vault as more stock.
               Anyone can open another.
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function ClubsPage() {
         </div>
 
         <div className="grid-4" style={{ marginBottom: 28 }}>
-          <Stat label="STOCK IN ALL JARS" value={fmtCompact(totalStock)} />
+          <Stat label="STOCK IN ALL VAULTS" value={fmtCompact(totalStock)} />
           <Stat label="OPEN CLUBS" value={String(clubs.length)} />
           <Stat label="PROTOCOL FEE" value="0%" />
           <Stat label="CHAIN" value="4663" />
@@ -49,7 +49,7 @@ export default function ClubsPage() {
           <table>
             <thead>
               <tr>
-                <th>CLUB</th><th>MASCOT</th><th>IN THE JAR</th>
+                <th>CLUB</th><th>MASCOT</th><th>IN THE VAULT</th>
                 <th>CREATOR CUT</th><th>UNDRIPPED</th><th />
               </tr>
             </thead>
@@ -98,7 +98,7 @@ export default function ClubsPage() {
                     <td>
                       {c.mascot && c.mascot !== '0x0000000000000000000000000000000000000000' ? (
                         <a href={ponsTokenUrl(c.mascot)} target="_blank" rel="noreferrer noopener"
-                           title={`Trade $${c.mascotSymbol ?? ''} on Pons`} style={{ color: 'var(--ember-ink)' }}>
+                           title={`Trade $${c.mascotSymbol ?? ''} on Pons`} style={{ color: 'var(--accent-ink)' }}>
                           <span className="display" style={{ fontSize: 15, letterSpacing: '0.03em' }}>
                             ${c.mascotSymbol ?? '…'}
                           </span>
@@ -128,7 +128,7 @@ export default function ClubsPage() {
             <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
           </svg>
           <span style={{ fontSize: 13, color: 'var(--body)' }}>
-            Undripped is harvested fees still releasing into the jar over 24 hours. A club with a dead mascot still holds
+            Undripped is harvested fees still releasing into the vault over 24 hours. A club with a dead mascot still holds
             its stock, so a flat column is not a broken club.
           </span>
         </div>

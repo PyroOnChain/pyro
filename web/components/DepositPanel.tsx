@@ -29,7 +29,7 @@ export function DepositPanel(p: Props) {
 
   const { address } = useAccount();
   const chainId = useChainId();
-  const { wrongChain, switching, switchToPyro } = useCorrectChain();
+  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
   const { signTypedDataAsync } = useSignTypedData();
   const { writeContractAsync, data: hash, reset } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
@@ -132,7 +132,7 @@ export function DepositPanel(p: Props) {
               background: 'none', border: 'none', fontSize: 15, letterSpacing: '0.04em',
               padding: '0 0 11px', marginRight: 24,
               color: tab === t ? 'var(--ink)' : 'var(--dim)',
-              borderBottom: tab === t ? '2px solid var(--ember)' : '2px solid transparent',
+              borderBottom: tab === t ? '2px solid var(--accent)' : '2px solid transparent',
             }}>
             {t.toUpperCase()}
           </button>
@@ -141,13 +141,13 @@ export function DepositPanel(p: Props) {
 
       {tab === 'deposit' && (
         <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--muted)', margin: '0 0 18px' }}>
-          Put {p.symbol} in the jar and you own a slice of it. Every trade of the mascot sends fees
+          Put {p.symbol} in the vault and you own a slice of it. Every trade of the mascot sends fees
           back here as more {p.symbol}, so your slice grows. Leave whenever you like.
         </p>
       )}
       {tab === 'withdraw' && (
         <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--muted)', margin: '0 0 18px' }}>
-          Take out your share of the jar. Half a percent stays behind for the people still in it.
+          Take out your share of the vault. Half a percent stays behind for the people still in it.
         </p>
       )}
 
@@ -161,7 +161,7 @@ export function DepositPanel(p: Props) {
           value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))} />
         <div className="row" style={{ gap: 10 }}>
           <button className="chip mono" onClick={() => max !== undefined && setAmount(fmt(max, STOCK_DECIMALS, 6).replace(/,/g, ''))}
-            style={{ fontSize: 10.5, padding: '4px 8px', border: '1px solid var(--line)', color: 'var(--ember-ink)', background: 'none' }}>
+            style={{ fontSize: 10.5, padding: '4px 8px', border: '1px solid var(--line)', color: 'var(--accent-ink)', background: 'none' }}>
             MAX
           </button>
           <span className="display" style={{ fontSize: 15 }}>{p.symbol}</span>
@@ -176,14 +176,14 @@ export function DepositPanel(p: Props) {
       </div>
 
       {p.assetPaused && (
-        <div className="chip" style={{ background: '#FFF4F3', border: '1px solid #F3C8C4', padding: '12px 14px', fontSize: 12.5, color: 'var(--loss)', marginBottom: 12 }}>
+        <div className="chip" style={{ background: 'var(--loss-wash)', border: '2px solid var(--loss)', padding: '12px 14px', fontSize: 12.5, color: 'var(--loss)', marginBottom: 12 }}>
           The issuer has paused {p.symbol} transfers. Deposits and withdrawals will revert until that lifts.
         </div>
       )}
 
       {wrongChain ? (
         <button className="btn btn-primary" style={{ width: '100%', padding: 16, textAlign: 'center' }}
-          disabled={switching} onClick={switchToPyro}>
+          disabled={switching} onClick={switchToVaultTube}>
           {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
         </button>
       ) : (
@@ -196,7 +196,7 @@ export function DepositPanel(p: Props) {
       )}
       {wrongChain && (
         <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>
-          Your wallet is on another network. Pyro only exists on Robinhood Chain.
+          Your wallet is on another network. VaultTube only exists on Robinhood Chain.
         </div>
       )}
 
@@ -211,7 +211,7 @@ export function DepositPanel(p: Props) {
 
       {tab === 'deposit' && !err && (
         <div style={{ fontSize: 12, color: 'var(--dim)', marginTop: 12, lineHeight: 1.55 }}>
-          One signature. Pyro uses the token&apos;s permit, so there is no separate approval transaction.
+          One signature. VaultTube uses the token&apos;s permit, so there is no separate approval transaction.
         </div>
       )}
     </div>

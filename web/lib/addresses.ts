@@ -8,7 +8,7 @@ import type { Address } from 'viem';
 export const PONS_FACTORY = '0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e' as Address;
 export const PONS_ESCROW  = '0xd3AFEB2a57f70eF218Aa82451c51B2fb0416Ac9e' as Address;
 
-/** Pyro's own factory. Set once deployed. */
+/** VaultTube's own factory. Set once deployed. */
 export const CLUB_FACTORY = (process.env.NEXT_PUBLIC_CLUB_FACTORY || '') as Address | '';
 
 export type StockToken = {

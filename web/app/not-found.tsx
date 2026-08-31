@@ -11,7 +11,7 @@ export default function NotFound() {
           404
         </div>
         <h1 className="display h-1" style={{ margin: '0 0 16px', lineHeight: 1.05 }}>
-          NOTHING IN THIS JAR.
+          NOTHING IN THIS VAULT.
         </h1>
         <p style={{ fontSize: 17, color: 'var(--muted)', margin: '0 auto 34px', maxWidth: 420 }}>
           That page does not exist. The clubs that do are one click away.

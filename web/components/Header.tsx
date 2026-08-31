@@ -12,7 +12,7 @@ export function Header() {
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { wrongChain, switching, switchToPyro, walletChainId } = useCorrectChain();
+  const { wrongChain, switching, switchToVaultTube, walletChainId } = useCorrectChain();
 
   const nav = [
     { href: '/clubs', label: 'Clubs' },
@@ -20,12 +20,13 @@ export function Header() {
   ];
 
   return (
-    <header style={{ background: 'var(--card)', borderBottom: '1px solid var(--line)' }}>
+    <header style={{ background: 'var(--card)', borderBottom: '3px solid var(--ink)' }}>
       <div className="shell between" style={{ padding: '18px 40px' }}>
         <div className="row" style={{ gap: 34 }}>
           <Link href="/" className="row" style={{ gap: 10, color: 'var(--ink)' }}>
-            <Image src="/pyro-logo-dark.png" alt="Pyro" width={40} height={27} style={{ height: 19, width: 'auto' }} priority />
-            <span className="display" style={{ fontSize: 18, letterSpacing: '0.14em' }}>PYRO</span>
+            <Image src="/vaulttube-mark.png" alt="VaultTube" width={128} height={128}
+              style={{ height: 30, width: 30, border: '2px solid var(--ink)', boxShadow: '3px 3px 0 var(--gold)' }} priority />
+            <span className="display" style={{ fontSize: 20, letterSpacing: '0.06em' }}>VaultTube</span>
           </Link>
           <nav className="row hide-sm" style={{ gap: 24, fontSize: 14, fontWeight: 500 }}>
             {nav.map((n) => {
@@ -36,7 +37,7 @@ export function Header() {
                   href={n.href}
                   style={{
                     color: active ? 'var(--ink)' : 'var(--muted)',
-                    borderBottom: active ? '2px solid var(--ember)' : '2px solid transparent',
+                    borderBottom: active ? '2px solid var(--accent)' : '2px solid transparent',
                     paddingBottom: 3,
                   }}
                 >
@@ -50,7 +51,7 @@ export function Header() {
         <div className="row" style={{ gap: 10 }}>
           {wrongChain ? (
             <button className="chip btn-primary" style={{ padding: '10px 16px', fontSize: 13 }}
-              disabled={switching} onClick={switchToPyro}>
+              disabled={switching} onClick={switchToVaultTube}>
               {switching ? 'CHECK WALLET…' : 'WRONG NETWORK — SWITCH'}
             </button>
           ) : (
