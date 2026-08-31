@@ -46,6 +46,15 @@ export default function CreatePage() {
     args: address ? [address] : undefined, query: { enabled: Boolean(address) },
   });
 
+  // If the factory can already move enough of this token there is no reason to
+  // ask for another approval. Sending one anyway costs a transaction, a wallet
+  // prompt, and a chance to fail on a flaky RPC for no benefit.
+  const allowance = useReadContract({
+    address: stock.address, abi: stockTokenAbi, functionName: 'allowance',
+    args: address ? [address, CLUB_FACTORY as Address] : undefined,
+    query: { enabled: Boolean(address && factoryDeployed()) },
+  });
+
   if (!factoryDeployed()) return (<><Header /><NotDeployed /></>);
 
   let seedWei = 0n;
@@ -63,11 +72,14 @@ export default function CreatePage() {
     if (!address) return;
     setErr(null);
     try {
-      setBusy('Approving the seed deposit');
-      await writeContractAsync({
-        address: stock.address, abi: stockTokenAbi, functionName: 'approve',
-        args: [CLUB_FACTORY as Address, maxUint256],
-      });
+      const current = (allowance.data as bigint | undefined) ?? 0n;
+      if (current < seedWei) {
+        setBusy('Approving the seed deposit');
+        await writeContractAsync({
+          address: stock.address, abi: stockTokenAbi, functionName: 'approve',
+          args: [CLUB_FACTORY as Address, maxUint256],
+        });
+      }
 
       setBusy('Opening the club');
       const salt = toHex(crypto.getRandomValues(new Uint8Array(32)));
@@ -219,6 +231,10 @@ export default function CreatePage() {
                 <Row k="Pons launch fee" v="0.0005 ETH" />
                 <Row k="Seed deposit" v={`${seed || '0'} ${stock.symbol}`} />
                 <Row k="Pyro fee" v="0.00" />
+                <Row
+                  k="Transactions"
+                  v={((allowance.data as bigint | undefined) ?? 0n) >= seedWei && seedWei > 0n ? '1' : '2 (approve, then open)'}
+                />
               </div>
               {wrongChain ? (
                 <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
