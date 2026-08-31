@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { parseUnits, parseEther, maxUint256, toHex, type Address } from 'viem';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSignMessage, usePublicClient } from 'wagmi';
+import { parseEventLogs } from 'viem';
 import { Header } from '@/components/Header';
 import { NotDeployed } from '@/components/NotDeployed';
 import { STOCKS, CLUB_FACTORY } from '@/lib/addresses';
@@ -11,6 +12,7 @@ import { clubfactoryAbi, stockTokenAbi } from '@/lib/abis';
 import { factoryDeployed } from '@/lib/clubs';
 import { fmt, STOCK_DECIMALS } from '@/lib/format';
 import { explorerTx } from '@/lib/chain';
+import { metaMessage } from '@/lib/clubMeta';
 import { useCorrectChain } from '@/lib/useCorrectChain';
 import { ImagePicker } from '@/components/ImagePicker';
 
@@ -34,6 +36,8 @@ export default function CreatePage() {
   const [err, setErr] = useState<string | null>(null);
 
   const { writeContractAsync, data: hash } = useWriteContract();
+  const { signMessageAsync } = useSignMessage();
+  const publicClient = usePublicClient();
   const receipt = useWaitForTransactionReceipt({ hash });
 
   const minSeed = useReadContract({
@@ -83,7 +87,7 @@ export default function CreatePage() {
 
       setBusy('Opening the club');
       const salt = toHex(crypto.getRandomValues(new Uint8Array(32)));
-      await writeContractAsync({
+      const txHash = await writeContractAsync({
         address: CLUB_FACTORY as Address,
         abi: clubfactoryAbi,
         functionName: 'createClub',
@@ -115,6 +119,34 @@ export default function CreatePage() {
           0n, // launchConfigId
         ],
       });
+
+      // The launchpad keeps mascot pictures off-chain and exposes no getter, so
+      // we record ours against the new vault. Signed by the creator, which the
+      // endpoint checks against creator() on the vault.
+      try {
+        setBusy('Saving the mascot picture');
+        const receipt = await publicClient!.waitForTransactionReceipt({ hash: txHash });
+        const events = parseEventLogs({
+          abi: clubfactoryAbi,
+          eventName: 'ClubCreated',
+          logs: receipt.logs,
+        });
+        const vault = (events[0] as { args?: { vault?: string } })?.args?.vault;
+        if (vault) {
+          const signature = await signMessageAsync({ message: metaMessage(vault, logo.trim()) });
+          await fetch('/api/club-meta', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              vault, logo: logo.trim(), signature,
+              twitter: twitter.trim(), website: website.trim(), description: blurb.trim(),
+            }),
+          });
+        }
+      } catch {
+        // The club exists either way. A missing picture is fixable from the club page.
+      }
+
       router.push('/clubs');
     } catch (e) {
       setErr(e instanceof Error ? e.message.split('\n')[0].slice(0, 200) : 'Failed to open the club');

@@ -15,6 +15,8 @@ import { clubvaultAbi } from '@/lib/abis';
 import { fmt, fmtCompact, short } from '@/lib/format';
 import { explorerAddr, explorerTx } from '@/lib/chain';
 import { useCorrectChain } from '@/lib/useCorrectChain';
+import { useClubMeta, ponsTokenUrl } from '@/lib/clubMeta';
+import { SetMascotImage } from '@/components/SetMascotImage';
 
 /**
  * The club address comes from ?a= rather than a path segment, which keeps every route in
@@ -58,6 +60,7 @@ function InvalidClub({ value }: { value: string }) {
 function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
   const { wrongChain, switching, switchToPyro } = useCorrectChain();
+  const meta = useClubMeta(v);
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const shareDec = club.shareDecimals;
@@ -86,35 +89,71 @@ function ClubBody({ v }: { v: Address }) {
       <Header />
 
       <div style={{ background: 'var(--card)', borderBottom: '1px solid var(--line)' }}>
-        <div className="shell" style={{ padding: '30px 40px 26px' }}>
-          <div className="mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 14 }}>
-            <Link href="/clubs">Clubs</Link> / {sym} / <a href={explorerAddr(v)} target="_blank" rel="noreferrer">{short(v)}</a>
+        <div className="shell" style={{ padding: '26px 40px 30px' }}>
+          <div className="mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 18 }}>
+            <Link href="/clubs">Clubs</Link> / {sym} /{' '}
+            <a href={explorerAddr(v)} target="_blank" rel="noreferrer">{short(v)}</a>
           </div>
-          <div className="between" style={{ alignItems: 'flex-end', flexWrap: 'wrap', gap: 18 }}>
-            <div className="row" style={{ gap: 18 }}>
-              <div className="slab" style={{ width: 54, height: 54, background: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span className="display" style={{ fontSize: 17, color: 'var(--bg)' }}>{sym.slice(0, 2)}</span>
-              </div>
-              <div>
-                <div className="row" style={{ gap: 12, marginBottom: 5, flexWrap: 'wrap' }}>
-                  <span className="display" style={{ fontSize: 30, letterSpacing: '0.03em' }}>
-                    {club.name ?? (isLoading ? 'Loading…' : 'Club')}
+
+          <div className="between stack-sm" style={{ alignItems: 'flex-end', gap: 24 }}>
+            <div className="row" style={{ gap: 22, alignItems: 'center' }}>
+              <div
+                className="slab lift"
+                style={{
+                  width: 104, height: 104, flexShrink: 0,
+                  border: '1px solid var(--line)',
+                  background: meta?.logo
+                    ? `center / cover no-repeat url("${meta.logo}")`
+                    : 'var(--ink)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                {!meta?.logo && (
+                  <span className="display" style={{ fontSize: 30, color: 'var(--bg)' }}>
+                    {(club.mascotSymbol ?? sym).slice(0, 2)}
                   </span>
-                  {club.mascot && club.mascot !== '0x0000000000000000000000000000000000000000' && (
-                    <a href={explorerAddr(club.mascot)} target="_blank" rel="noreferrer noopener" className="chip"
-                      title={`${club.mascotName?.trim() || 'Mascot'} - ${club.mascot}`}
-                      style={{ background: 'var(--ember-wash)', border: '1px solid #FFD2BC', color: 'var(--ember-ink)', fontSize: 12, padding: '6px 11px' }}>
-                      <span className="display" style={{ letterSpacing: '0.04em' }}>${club.mascotSymbol ?? '...'}</span>
-                      {club.mascotName?.trim() && (
-                        <span style={{ marginLeft: 7, opacity: 0.75, fontSize: 11.5 }}>{club.mascotName.trim()}</span>
-                      )}
-                    </a>
+                )}
+              </div>
+
+              <div>
+                <div className="row" style={{ gap: 12, marginBottom: 7, flexWrap: 'wrap', alignItems: 'baseline' }}>
+                  <span className="display" style={{ fontSize: 34, letterSpacing: '0.03em' }}>
+                    {club.mascotName?.trim() || club.name || 'Club'}
+                  </span>
+                  {club.mascotSymbol && (
+                    <span className="display" style={{ fontSize: 22, color: 'var(--ember-ink)' }}>
+                      ${club.mascotSymbol}
+                    </span>
                   )}
                 </div>
-                <div style={{ fontSize: 13.5, color: 'var(--muted)' }}>
-                  Opened by {short(club.creator)}. Creator takes {club.creatorFeeBps !== undefined ? (club.creatorFeeBps / 100).toFixed(1) : '—'}% of each harvest.
+                <div style={{ fontSize: 14, color: 'var(--muted)', maxWidth: 520 }}>
+                  {meta?.description?.trim()
+                    || `A ${sym} club. Every trade of the mascot sends fees back to the jar as more ${sym}.`}
+                </div>
+                <div className="mono" style={{ fontSize: 12, color: 'var(--dim)', marginTop: 7 }}>
+                  opened by {short(club.creator)} · creator takes{' '}
+                  {club.creatorFeeBps !== undefined ? (club.creatorFeeBps / 100).toFixed(1) : '—'}% of each harvest
+                </div>
+                <div style={{ marginTop: 12 }}>
+                  <SetMascotImage vault={v} creator={club.creator} hasImage={Boolean(meta?.logo)} />
                 </div>
               </div>
+            </div>
+
+            <div className="row" style={{ gap: 10, flexWrap: 'wrap' }}>
+              {meta?.twitter && (
+                <a href={meta.twitter} target="_blank" rel="noreferrer noopener" className="btn btn-ghost"
+                   style={{ display: 'inline-block', padding: '13px 18px', fontSize: 14, color: 'var(--ink)' }}>
+                  X
+                </a>
+              )}
+              {club.mascot && club.mascot !== '0x0000000000000000000000000000000000000000' && (
+                <a href={ponsTokenUrl(club.mascot)} target="_blank" rel="noreferrer noopener"
+                   className="btn btn-primary"
+                   style={{ display: 'inline-block', padding: '15px 26px', fontSize: 15 }}>
+                  BUY ${club.mascotSymbol ?? 'MASCOT'}
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -130,8 +169,18 @@ function ClubBody({ v }: { v: Address }) {
             </div>
           </div>
 
-          <div className="slab card" style={{ padding: '26px 28px' }}>
-            <div className="display" style={{ fontSize: 17, letterSpacing: '0.04em', marginBottom: 18 }}>HOW THIS CLUB WORKS</div>
+          <div className="slab card lift" style={{ padding: '26px 28px' }}>
+            <div className="between" style={{ marginBottom: 18, flexWrap: 'wrap', gap: 14 }}>
+              <div className="display" style={{ fontSize: 17, letterSpacing: '0.04em' }}>
+                THE MASCOT PAYS THE JAR
+              </div>
+              {club.mascot && club.mascot !== '0x0000000000000000000000000000000000000000' && (
+                <a href={ponsTokenUrl(club.mascot)} target="_blank" rel="noreferrer noopener"
+                   className="mono" style={{ fontSize: 12.5 }}>
+                  trade ${club.mascotSymbol ?? 'mascot'} on Pons →
+                </a>
+              )}
+            </div>
             <p style={{ fontSize: 14.5, lineHeight: 1.65, color: 'var(--muted)', margin: '0 0 14px' }}>
               The mascot is priced in {sym}, so its creator fees arrive as {sym} and go straight into this jar.
               Nothing is swapped, so there is no route, no oracle and no slippage between a trade and your slice.
