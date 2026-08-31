@@ -14,7 +14,33 @@ import {
   formatUnits, parseUnits, type Address,
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { readFileSync, existsSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { factoryAbi, vaultAbi } from './abis.js';
+
+/**
+ * Load keeper/.env into the environment. Node does not do this on its own, and relying on
+ * --env-file would break anyone launching this through Docker or a process manager.
+ * Real environment variables always win, so a hosted deployment can ignore the file.
+ */
+function loadEnvFile() {
+  const here = dirname(fileURLToPath(import.meta.url));
+  for (const candidate of [resolve(here, '../.env'), resolve(process.cwd(), '.env')]) {
+    if (!existsSync(candidate)) continue;
+    for (const line of readFileSync(candidate, 'utf8').split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq < 1) continue;
+      const key = trimmed.slice(0, eq).trim();
+      const value = trimmed.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
+      if (process.env[key] === undefined) process.env[key] = value;
+    }
+    return;
+  }
+}
+loadEnvFile();
 
 const RPC = process.env.RPC_URL || 'https://rpc.mainnet.chain.robinhood.com';
 const FACTORY = process.env.CLUB_FACTORY as Address | undefined;
