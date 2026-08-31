@@ -44,3 +44,49 @@ export function useClubMeta(vault?: Address, creator?: Address) {
 
   return meta;
 }
+
+/**
+ * Metadata for many clubs at once, for the list view. Same rule as the single
+ * version: a record only counts when its signer matches that club's on-chain
+ * creator, so the check stays with the reader.
+ */
+export function useClubMetas(
+  clubs: { address: Address; creator?: Address }[]
+): Record<string, ClubMeta> {
+  const [metas, setMetas] = useState<Record<string, ClubMeta>>({});
+
+  // Only refetch when the actual set of clubs changes, not on every render.
+  const fingerprint = clubs
+    .map((c) => `${c.address.toLowerCase()}:${(c.creator ?? '').toLowerCase()}`)
+    .sort()
+    .join(',');
+
+  useEffect(() => {
+    const list = fingerprint ? fingerprint.split(',') : [];
+    if (!list.length) return;
+    let live = true;
+
+    Promise.all(
+      list.map(async (entry) => {
+        const [vault, creator] = entry.split(':');
+        if (!vault || !creator) return null;
+        try {
+          const r = await fetch(`/api/club-meta/${vault}`);
+          if (!r.ok) return null;
+          const d = (await r.json()) as { records?: Record<string, ClubMeta> };
+          const rec = d.records?.[creator];
+          return rec ? ([vault, rec] as const) : null;
+        } catch {
+          return null;
+        }
+      })
+    ).then((pairs) => {
+      if (!live) return;
+      setMetas(Object.fromEntries(pairs.filter(Boolean) as [string, ClubMeta][]));
+    });
+
+    return () => { live = false; };
+  }, [fingerprint]);
+
+  return metas;
+}

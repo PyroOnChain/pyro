@@ -7,10 +7,12 @@ import { useClubAddresses, useClubSummaries, factoryDeployed } from '@/lib/clubs
 import { stockByAddress } from '@/lib/addresses';
 import { fmt, fmtCompact, short } from '@/lib/format';
 import { explorerAddr } from '@/lib/chain';
+import { useClubMetas, ponsTokenUrl } from '@/lib/clubMeta';
 
 export default function ClubsPage() {
   const { addresses, isLoading } = useClubAddresses();
   const { clubs, isLoading: loadingDetail } = useClubSummaries(addresses);
+  const metas = useClubMetas(clubs.map((c) => ({ address: c.address, creator: c.creator })));
 
   if (!factoryDeployed()) {
     return (<><Header /><NotDeployed /></>);
@@ -60,23 +62,41 @@ export default function ClubsPage() {
               )}
               {clubs.map((c) => {
                 const sym = c.assetSymbol ?? stockByAddress(c.asset)?.symbol ?? '??';
+                const logo = metas[c.address.toLowerCase()]?.logo;
                 return (
                   <tr key={c.address}>
                     <td>
                       <div className="row" style={{ gap: 13 }}>
-                        <div className="chip" style={{ width: 34, height: 34, background: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <span className="display" style={{ fontSize: 11, color: 'var(--bg)' }}>{sym.slice(0, 2)}</span>
+                        <div
+                          className="chip"
+                          style={{
+                            width: 40, height: 40, flexShrink: 0,
+                            background: logo
+                              ? `center / cover no-repeat url("${logo}")`
+                              : 'var(--ink)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          {!logo && (
+                            <span className="display" style={{ fontSize: 11, color: 'var(--bg)' }}>
+                              {sym.slice(0, 2)}
+                            </span>
+                          )}
                         </div>
                         <div>
-                          <div className="display" style={{ fontSize: 15, letterSpacing: '0.04em' }}>{c.name ?? short(c.address)}</div>
-                          <div className="mono" style={{ fontSize: 11.5, color: 'var(--dim)' }}>{short(c.address)}</div>
+                          <div className="display" style={{ fontSize: 15, letterSpacing: '0.04em' }}>
+                            {c.mascotName?.trim() || c.name || short(c.address)}
+                          </div>
+                          <div className="mono" style={{ fontSize: 11.5, color: 'var(--dim)' }}>
+                            {sym} club · {short(c.address)}
+                          </div>
                         </div>
                       </div>
                     </td>
                     <td>
                       {c.mascot && c.mascot !== '0x0000000000000000000000000000000000000000' ? (
-                        <a href={explorerAddr(c.mascot)} target="_blank" rel="noreferrer noopener"
-                           title={c.mascot} style={{ color: 'var(--ember-ink)' }}>
+                        <a href={ponsTokenUrl(c.mascot)} target="_blank" rel="noreferrer noopener"
+                           title={`Trade $${c.mascotSymbol ?? ''} on Pons`} style={{ color: 'var(--ember-ink)' }}>
                           <span className="display" style={{ fontSize: 15, letterSpacing: '0.03em' }}>
                             ${c.mascotSymbol ?? '…'}
                           </span>

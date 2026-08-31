@@ -99,15 +99,19 @@ export function useClubSummaries(addresses: Address[]) {
     return m && m !== ZERO ? m : undefined;
   });
   const mascotReads = useReadContracts({
-    contracts: mascots.filter(Boolean).map((address) => ({
-      address: address as Address, abi: stockTokenAbi, functionName: 'symbol',
-    })),
+    contracts: mascots.filter(Boolean).flatMap((address) => [
+      { address: address as Address, abi: stockTokenAbi, functionName: 'symbol' } as const,
+      { address: address as Address, abi: stockTokenAbi, functionName: 'name' } as const,
+    ]),
     query: { enabled: mascots.some(Boolean) },
   });
   const mascotSymbolByAddress = new Map<string, string>();
+  const mascotNameByAddress = new Map<string, string>();
   mascots.filter(Boolean).forEach((m, i) => {
-    const r = mascotReads.data?.[i];
-    if (r?.status === 'success') mascotSymbolByAddress.set((m as string).toLowerCase(), r.result as string);
+    const sym = mascotReads.data?.[i * 2];
+    const nm = mascotReads.data?.[i * 2 + 1];
+    if (sym?.status === 'success') mascotSymbolByAddress.set((m as string).toLowerCase(), sym.result as string);
+    if (nm?.status === 'success') mascotNameByAddress.set((m as string).toLowerCase(), nm.result as string);
   });
 
   const clubs: ClubSummary[] = addresses.map((address, i) => {
@@ -129,6 +133,7 @@ export function useClubSummaries(addresses: Address[]) {
       shareDecimals: val(11) !== undefined ? Number(val(11)) : undefined,
       assetSymbol: symbolByAsset.get(((val(0) as string) || '').toLowerCase()),
       mascotSymbol: mascotSymbolByAddress.get(((val(10) as string) || '').toLowerCase()),
+      mascotName: mascotNameByAddress.get(((val(10) as string) || '').toLowerCase()),
     };
   });
 

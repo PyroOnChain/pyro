@@ -10,7 +10,7 @@ export function Providers({ children }: { children: ReactNode }) {
     () => new QueryClient({ defaultOptions: { queries: { staleTime: 10_000, retry: 1 } } })
   );
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={wagmiConfig} reconnectOnMount>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
