@@ -13,6 +13,7 @@ import { stockByAddress } from '@/lib/addresses';
 import { clubvaultAbi } from '@/lib/abis';
 import { fmt, fmtCompact, short } from '@/lib/format';
 import { explorerAddr, explorerTx } from '@/lib/chain';
+import { useCorrectChain } from '@/lib/useCorrectChain';
 
 /**
  * Validate before any data hook runs. Bailing out mid-component would change the number of
@@ -44,6 +45,7 @@ function InvalidClub({ value }: { value: string }) {
 
 function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
+  const { wrongChain, switching, switchToPyro } = useCorrectChain();
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const shareDec = club.shareDecimals;
@@ -162,8 +164,11 @@ function ClubBody({ v }: { v: Address }) {
             <div className="stat" style={{ fontSize: 30, color: 'var(--bg)', marginBottom: 4 }}>{fmt(pendingFees)}</div>
             <div className="mono" style={{ fontSize: 12.5, color: '#A79C90', marginBottom: 18 }}>{sym} of mascot creator fees</div>
             <button className="btn btn-primary" style={{ width: '100%', padding: 14, textAlign: 'center', fontSize: 14 }}
-              disabled={isPending || !pendingFees || pendingFees === 0n} onClick={harvest}>
-              {isPending ? 'HARVESTING…' : pendingFees && pendingFees > 0n ? `HARVEST · KEEP ${fmt(bounty)}` : 'NOTHING TO HARVEST'}
+              disabled={wrongChain ? switching : (isPending || !pendingFees || pendingFees === 0n)}
+              onClick={wrongChain ? switchToPyro : harvest}>
+              {wrongChain ? (switching ? 'CHECK YOUR WALLET…' : 'SWITCH NETWORK')
+                : isPending ? 'HARVESTING…'
+                : pendingFees && pendingFees > 0n ? `HARVEST · KEEP ${fmt(bounty)}` : 'NOTHING TO HARVEST'}
             </button>
             <div style={{ fontSize: 11.5, color: '#A79C90', lineHeight: 1.6, marginTop: 12 }}>
               Anyone can call this. Whoever does keeps {club.harvestBountyBps !== undefined ? (club.harvestBountyBps / 100).toFixed(2) : '0.25'}%.

@@ -6,6 +6,7 @@ import { useAccount, useChainId, useSignTypedData, useWriteContract, useWaitForT
 import { clubvaultAbi, stockTokenAbi } from '@/lib/abis';
 import { fmt, STOCK_DECIMALS } from '@/lib/format';
 import { explorerTx } from '@/lib/chain';
+import { useCorrectChain } from '@/lib/useCorrectChain';
 
 type Props = {
   vault: Address;
@@ -28,6 +29,7 @@ export function DepositPanel(p: Props) {
 
   const { address } = useAccount();
   const chainId = useChainId();
+  const { wrongChain, switching, switchToPyro } = useCorrectChain();
   const { signTypedDataAsync } = useSignTypedData();
   const { writeContractAsync, data: hash, reset } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
@@ -167,12 +169,24 @@ export function DepositPanel(p: Props) {
         </div>
       )}
 
-      <button className="btn btn-primary" style={{ width: '100%', padding: 16, textAlign: 'center' }}
-        disabled={disabled} onClick={submit}>
-        {busy ? busy.toUpperCase() + '…'
-          : overMax ? 'NOT ENOUGH ' + p.symbol
-          : tab === 'deposit' ? `DEPOSIT ${amount || '0'} ${p.symbol}` : `WITHDRAW ${amount || '0'} ${p.symbol}`}
-      </button>
+      {wrongChain ? (
+        <button className="btn btn-primary" style={{ width: '100%', padding: 16, textAlign: 'center' }}
+          disabled={switching} onClick={switchToPyro}>
+          {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
+        </button>
+      ) : (
+        <button className="btn btn-primary" style={{ width: '100%', padding: 16, textAlign: 'center' }}
+          disabled={disabled} onClick={submit}>
+          {busy ? busy.toUpperCase() + '…'
+            : overMax ? 'NOT ENOUGH ' + p.symbol
+            : tab === 'deposit' ? `DEPOSIT ${amount || '0'} ${p.symbol}` : `WITHDRAW ${amount || '0'} ${p.symbol}`}
+        </button>
+      )}
+      {wrongChain && (
+        <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>
+          Your wallet is on another network. Pyro only exists on Robinhood Chain.
+        </div>
+      )}
 
       {err && <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>{err}</div>}
 

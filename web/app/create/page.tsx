@@ -11,12 +11,14 @@ import { clubfactoryAbi, stockTokenAbi } from '@/lib/abis';
 import { factoryDeployed } from '@/lib/clubs';
 import { fmt, STOCK_DECIMALS } from '@/lib/format';
 import { explorerTx } from '@/lib/chain';
+import { useCorrectChain } from '@/lib/useCorrectChain';
 
 const PONS_LAUNCH_FEE = parseEther('0.0005'); // launchFee() on the Pons factory, verified
 
 export default function CreatePage() {
   const router = useRouter();
   const { address } = useAccount();
+  const { wrongChain, switching, switchToPyro } = useCorrectChain();
   const [stock, setStock] = useState(STOCKS[0]);
   const [mascotName, setMascotName] = useState('');
   const [mascotSymbol, setMascotSymbol] = useState('');
@@ -176,10 +178,22 @@ export default function CreatePage() {
                 <Row k="Seed deposit" v={`${seed || '0'} ${stock.symbol}`} />
                 <Row k="Pyro fee" v="0.00" />
               </div>
-              <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
-                disabled={!ready} onClick={submit}>
-                {busy ? busy.toUpperCase() + '…' : 'LIGHT IT UP'}
-              </button>
+              {wrongChain ? (
+                <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
+                  disabled={switching} onClick={switchToPyro}>
+                  {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
+                </button>
+              ) : (
+                <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
+                  disabled={!ready} onClick={submit}>
+                  {busy ? busy.toUpperCase() + '…' : 'LIGHT IT UP'}
+                </button>
+              )}
+              {wrongChain && (
+                <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>
+                  Your wallet is on another network. Switch before signing anything.
+                </div>
+              )}
               {err && <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>{err}</div>}
               {hash && (
                 <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>
