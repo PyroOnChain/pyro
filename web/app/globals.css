@@ -389,3 +389,98 @@ tbody tr:last-child td { border-bottom: none; }
   background-size: 12px 100%;
   transition: right 0.7s steps(16, end);
 }
+
+/* ============================================================================
+   Layout set pieces.
+   The first pass kept the old page's bones - a shell and a grid, section after
+   section. These give each band its own shape instead.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- horizon */
+/* Water is a CSS band so it can span any width; the sun and island are fixed-size
+   SVGs on top of it, which is what keeps their pixel grid square. */
+.scene-band { position: relative; height: 200px; overflow: hidden; }
+.scene-band svg { shape-rendering: crispEdges; position: absolute; }
+.scene-water {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 120px; z-index: 1;
+  background: linear-gradient(180deg,
+    #F6B9A6 0 16.66%, #F1AC9E 16.66% 33.33%, #E9A09A 33.33% 50%,
+    #DE9497 50% 66.66%, #D08A96 66.66% 83.33%, #BE7F93 83.33% 100%);
+}
+/* Carries the deepest water band down past the scene and dissolves it into the
+   page, so the sea does not simply stop mid-air with sky showing under it. */
+.shore {
+  background: linear-gradient(180deg, #BE7F93 0, #C98C98 44px, #E0A29B 130px, #F6CDAE 240px, var(--bg) 340px);
+  padding-bottom: 72px;
+}
+.scene-sun    { right: 17%; bottom: 34px;  width: 136px; height: 136px; z-index: 0; }
+.scene-glint  { right: 17%; bottom: 8px;   width: 136px; height: 86px;  z-index: 2; }
+.scene-island { left: 13%;  bottom: 104px; width: 224px; height: 117px; z-index: 3; }
+@media (max-width: 900px) {
+  .scene-band { height: 150px; }
+  .scene-water { height: 86px; }
+  .scene-sun    { right: 8%;  bottom: 26px; width: 92px;  height: 92px; }
+  .scene-glint  { right: 8%;  bottom: 6px;  width: 92px;  height: 62px; }
+  .scene-island { left: 6%;   bottom: 72px; width: 148px; height: 78px; }
+}
+
+/* ------------------------------------------------------- inventory bar */
+/* Contiguous slots divided by hard rules, the way a game hotbar reads. */
+.hotbar {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--card); border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 rgba(46, 42, 50, 0.18);
+}
+.hotbar > * { padding: 17px 20px; border-right: 3px solid var(--ink); }
+.hotbar > *:last-child { border-right: none; }
+@media (max-width: 760px) {
+  .hotbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hotbar > *:nth-child(2) { border-right: none; }
+  .hotbar > *:nth-child(-n+2) { border-bottom: 3px solid var(--ink); }
+}
+
+/* ------------------------------------------------------------- quest log */
+/* Steps alternate side and overhang their own number block, so the eye zig-zags
+   down the page instead of scanning three identical columns. */
+.quest { display: grid; gap: 52px; }
+.quest-step { position: relative; width: 56%; padding: 46px 34px 32px; }
+.quest-step.alt { margin-left: auto; }
+.quest-num {
+  position: absolute; top: -24px; left: 32px;
+  width: 68px; height: 68px; display: grid; place-items: center;
+  background: var(--ink); color: var(--bg);
+  border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--gold);
+  font-family: var(--font-display), monospace; font-size: 27px; font-weight: 700;
+}
+.quest-step.alt .quest-num { left: auto; right: 32px; }
+.quest-step.alt .quest-text { text-align: right; margin-left: auto; }
+@media (max-width: 1200px) { .quest-step { width: 74%; } }
+@media (max-width: 900px) {
+  .quest { gap: 44px; }
+  .quest-step, .quest-step.alt { width: 100%; margin-left: 0; padding: 44px 22px 26px; }
+  .quest-step.alt .quest-num { left: 22px; right: auto; }
+  .quest-step.alt .quest-text { text-align: left; }
+  .quest-num { left: 22px; }
+}
+
+/* ----------------------------------------------------------------- bento */
+/* Four claims at two different weights, rather than a flat 2x2. */
+.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; }
+.bento > :nth-child(1) { grid-column: span 4; }
+.bento > :nth-child(2) { grid-column: span 2; }
+.bento > :nth-child(3) { grid-column: span 2; }
+.bento > :nth-child(4) { grid-column: span 4; }
+@media (max-width: 900px) { .bento { grid-template-columns: 1fr; } .bento > * { grid-column: 1 / -1 !important; } }
+
+/* ------------------------------------------------------- dark set piece */
+/* One ink band partway down gives the page a tonal break it never had. */
+.sect-dark { background: var(--ink); color: var(--on-ink); }
+.sect-dark .display, .sect-dark .stat { color: var(--on-ink); }
+.sect-dark p, .sect-dark .body-dim { color: var(--on-ink-dim); }
+.sect-dark .label { color: var(--on-ink-dim); }
+.sect-dark .card {
+  background: #3A3440; border-color: #574E5D; color: var(--on-ink);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.32);
+}
+.sect-dark .pxrule { opacity: 0.35; background-image: linear-gradient(90deg, var(--on-ink-dim) 0 6px, transparent 6px 12px); }
+.sect-dark a { color: var(--on-ink-accent); }
