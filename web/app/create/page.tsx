@@ -23,6 +23,9 @@ export default function CreatePage() {
   const [mascotName, setMascotName] = useState('');
   const [mascotSymbol, setMascotSymbol] = useState('');
   const [blurb, setBlurb] = useState('');
+  const [logo, setLogo] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [website, setWebsite] = useState('');
   const [creatorTaxBps, setCreatorTaxBps] = useState(1000);
   const [creatorFeeBps, setCreatorFeeBps] = useState(500);
   const [seed, setSeed] = useState('');
@@ -48,7 +51,10 @@ export default function CreatePage() {
   try { seedWei = seed ? parseUnits(seed, STOCK_DECIMALS) : 0n; } catch { seedWei = 0n; }
   const min = (minSeed.data as bigint | undefined) ?? 0n;
   const belowMin = min > 0n && seedWei < min;
-  const ready = Boolean(address) && mascotName.trim() && mascotSymbol.trim() && seedWei > 0n && !belowMin && !busy;
+  const logoOk = /^https?:\/\/\S+$/i.test(logo.trim()) || /^ipfs:\/\/\S+$/i.test(logo.trim());
+  const ready =
+    Boolean(address) && mascotName.trim() && mascotSymbol.trim() &&
+    logoOk && seedWei > 0n && !belowMin && !busy;
 
   async function submit() {
     if (!address) return;
@@ -76,9 +82,15 @@ export default function CreatePage() {
           {
             name: mascotName,
             symbol: mascotSymbol.replace(/^\$/, ''),
-            logo: '',
+            logo: logo.trim(),
             description: blurb,
-            socials: { twitter: '', telegram: '', discord: '', website: '', farcaster: '' },
+            socials: {
+              twitter: twitter.trim(),
+              telegram: '',
+              discord: '',
+              website: website.trim(),
+              farcaster: '',
+            },
             creatorFeeRecipient: '0x0000000000000000000000000000000000000000' as Address, // factory overwrites with the vault
             creatorTaxBps,
             buybackEnabled: true,
@@ -140,6 +152,44 @@ export default function CreatePage() {
                 <input className="field chip" value={blurb} onChange={(e) => setBlurb(e.target.value)}
                   placeholder="The jacket that launched a trillion dollar company." maxLength={140} />
               </Labeled>
+
+              <div style={{ height: 14 }} />
+              <Labeled label="IMAGE URL">
+                <div className="row" style={{ gap: 12, alignItems: 'stretch' }}>
+                  <div
+                    className="chip"
+                    style={{
+                      width: 54, height: 54, flexShrink: 0, border: '1px solid var(--stroke)',
+                      background: logoOk ? `center / cover no-repeat url(${logo.trim()})` : 'var(--band)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >
+                    {!logoOk && (
+                      <span className="mono" style={{ fontSize: 9.5, color: 'var(--dim)' }}>IMG</span>
+                    )}
+                  </div>
+                  <input className="field chip" style={{ flexGrow: 1 }} value={logo}
+                    onChange={(e) => setLogo(e.target.value)}
+                    placeholder="https://... or ipfs://..." />
+                </div>
+              </Labeled>
+              <div style={{ fontSize: 12.5, color: logo && !logoOk ? 'var(--loss)' : 'var(--dim)', marginTop: 9, lineHeight: 1.55 }}>
+                {logo && !logoOk
+                  ? 'That does not look like a URL. It needs to start with https:// or ipfs://.'
+                  : 'Required. A mascot with no image is close to invisible on the launchpad, which ranks by volume and market cap. Host it anywhere public, or pin it to IPFS.'}
+              </div>
+
+              <div style={{ height: 14 }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <Labeled label="X / TWITTER (OPTIONAL)">
+                  <input className="field chip" value={twitter} onChange={(e) => setTwitter(e.target.value)}
+                    placeholder="https://x.com/..." />
+                </Labeled>
+                <Labeled label="WEBSITE (OPTIONAL)">
+                  <input className="field chip" value={website} onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="https://..." />
+                </Labeled>
+              </div>
             </Step>
 
             <Step n="03" title="SET THE SPLIT">
@@ -172,6 +222,7 @@ export default function CreatePage() {
                 <Row k="Vault" v={`ERC-4626, ${stock.symbol}`} />
                 <Row k="Share token" v={`c${stock.symbol}, transferable`} />
                 <Row k="Mascot" v={`$${mascotSymbol || '—'}, paired to ${stock.symbol}`} />
+                <Row k="Image" v={logoOk ? 'set' : 'missing'} green={logoOk} />
                 <Row k="Fee recipient" v="the vault" green />
                 <div style={{ height: 1, background: 'var(--line-soft)' }} />
                 <Row k="Pons launch fee" v="0.0005 ETH" />
@@ -186,7 +237,7 @@ export default function CreatePage() {
               ) : (
                 <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
                   disabled={!ready} onClick={submit}>
-                  {busy ? busy.toUpperCase() + '…' : 'LIGHT IT UP'}
+                  {busy ? busy.toUpperCase() + '…' : !logoOk ? 'ADD AN IMAGE FIRST' : 'LIGHT IT UP'}
                 </button>
               )}
               {wrongChain && (
@@ -209,8 +260,13 @@ export default function CreatePage() {
                 The mascot&apos;s first five seconds carry a snipe tax that starts at 99% and decays to nothing. That is
                 Pons, not us, and it exists to stop bots buying your launch out from under you.
               </p>
-              <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--body)', margin: 0 }}>
+              <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--body)', margin: '0 0 12px' }}>
                 Your creator-fee split is fixed at launch and cannot be changed afterwards. Pick it carefully.
+              </p>
+              <p style={{ fontSize: 13, lineHeight: 1.65, color: 'var(--body)', margin: 0 }}>
+                A freshly launched mascot has no volume and no market cap, and the launchpad ranks by
+                both, so it will not surface in their explore feed until somebody trades it. Search it
+                there by name or ticker rather than by contract address.
               </p>
             </div>
           </div>
