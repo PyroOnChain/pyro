@@ -17,14 +17,18 @@ export const metadata: Metadata = {
   title: { default: 'Pyro', template: '%s · Pyro' },
   description: DESCRIPTION,
   applicationName: 'Pyro',
+  metadataBase: new URL('https://pyroclubz.com'),
   openGraph: {
     title: 'Pyro — your meme buys your stock',
     description: DESCRIPTION,
     siteName: 'Pyro',
     type: 'website',
+    url: 'https://pyroclubz.com',
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@PyroClubz',
+    creator: '@PyroClubz',
     title: 'Pyro — your meme buys your stock',
     description: DESCRIPTION,
   },

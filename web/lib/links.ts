@@ -7,8 +7,8 @@ type Links = { github: string; docs: string; x: string; website: string };
 export const LINKS: Links = {
   github: 'https://github.com/PyroOnChain/pyro',
   docs: 'https://github.com/PyroOnChain/pyro#readme',
-  x: '',        // e.g. 'https://x.com/yourhandle'
-  website: '',  // e.g. 'pyro.xyz'
+  x: 'https://x.com/PyroClubz',
+  website: 'pyroclubz.com',
 };
 
 const bare = (u: string) => u.replace(/^https?:\/\//, '');

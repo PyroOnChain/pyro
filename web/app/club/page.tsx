@@ -17,6 +17,7 @@ import { explorerAddr, explorerTx } from '@/lib/chain';
 import { useCorrectChain } from '@/lib/useCorrectChain';
 import { useClubMeta, ponsTokenUrl } from '@/lib/clubMeta';
 import { SetMascotImage } from '@/components/SetMascotImage';
+import { useGraduation } from '@/lib/graduation';
 
 /**
  * The club address comes from ?a= rather than a path segment, which keeps every route in
@@ -63,6 +64,7 @@ function ClubBody({ v }: { v: Address }) {
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const meta = useClubMeta(v, club.creator);
+  const grad = useGraduation(club.mascot, club.asset);
   const shareDec = club.shareDecimals;
   const nav = navPerShare(club.totalAssets, club.totalSupply, shareDec);
 
@@ -177,6 +179,35 @@ function ClubBody({ v }: { v: Address }) {
               />
             </div>
           </div>
+
+          {grad && !grad.graduated && (
+            <div className="slab card" style={{ padding: '26px 28px' }}>
+              <div className="between" style={{ marginBottom: 14, flexWrap: 'wrap', gap: 12 }}>
+                <div className="display" style={{ fontSize: 17, letterSpacing: '0.04em' }}>
+                  ${club.mascotSymbol ?? 'MASCOT'} HAS NOT GRADUATED YET
+                </div>
+                <span className="stat" style={{ fontSize: 19 }}>{(grad.progress * 100).toFixed(1)}%</span>
+              </div>
+
+              <div style={{ height: 8, background: 'var(--line-soft)', marginBottom: 12, position: 'relative' }}>
+                <div style={{
+                  position: 'absolute', inset: 0, right: `${100 - grad.progress * 100}%`,
+                  background: 'var(--ember)', transition: 'right 0.6s var(--ease-out)',
+                }} />
+              </div>
+
+              <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 16 }}>
+                <span>{fmt(grad.raised, 18, 4)} {sym} bought</span>
+                <span>{fmt(grad.needed, 18, 2)} {sym} to graduate</span>
+              </div>
+
+              <p style={{ fontSize: 13.5, lineHeight: 1.65, color: 'var(--muted)', margin: 0 }}>
+                While a mascot is still on its bonding curve, what buyers pay stays on the curve.
+                Creator fees only start flowing to this jar once it graduates onto a pool. Until
+                then the jar holds exactly what members put in, and nothing more.
+              </p>
+            </div>
+          )}
 
           <div className="slab card lift" style={{ padding: '26px 28px' }}>
             <div className="between" style={{ marginBottom: 18, flexWrap: 'wrap', gap: 14 }}>
