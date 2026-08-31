@@ -25,6 +25,41 @@ export function metaMessage(vault: string, logo: string) {
 
 type CreatorLookup = { creator: string } | { failure: string };
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * A vault's creator is immutable, so once we have read it we never need to ask
+ * again. Worth caching: the public RPC rate-limits Cloudflare's shared egress
+ * IPs and answers 429 often enough that a single attempt is unreliable.
+ */
+async function creatorOfCached(
+  vault: string,
+  rpc: string,
+  bucket: R2Bucket
+): Promise<CreatorLookup> {
+  const key = `creator/${vault.toLowerCase()}`;
+  const hit = await bucket.get(key);
+  if (hit) {
+    const cached = (await hit.text()).trim().toLowerCase();
+    if (/^0x[0-9a-f]{40}$/.test(cached)) return { creator: cached };
+  }
+
+  let last = 'no attempt';
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (attempt) await sleep(250 * attempt);
+    const got = await creatorOf(vault, rpc);
+    if ('creator' in got) {
+      await bucket.put(key, got.creator, {
+        httpMetadata: { contentType: 'text/plain', cacheControl: 'public, max-age=31536000' },
+      });
+      return got;
+    }
+    last = got.failure;
+    if (!last.startsWith('rpc 429')) break; // only rate limits are worth retrying
+  }
+  return { failure: last };
+}
+
 async function creatorOf(vault: string, rpc: string): Promise<CreatorLookup> {
   let res: Response;
   try {
@@ -75,9 +110,11 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     return json({ error: 'bad_signature' }, 400);
   }
 
-  const lookup = await creatorOf(vault, ctx.env.RPC_URL || DEFAULT_RPC);
+  const lookup = await creatorOfCached(vault, ctx.env.RPC_URL || DEFAULT_RPC, bucket);
   if ('failure' in lookup) {
-    return json({ error: 'vault_unreadable', detail: lookup.failure }, 400);
+    // Almost always the public RPC rate limiting Cloudflare's egress. Setting
+    // RPC_URL to a dedicated endpoint removes this entirely.
+    return json({ error: 'vault_unreadable', detail: lookup.failure }, 503);
   }
   if (lookup.creator !== signer.toLowerCase()) {
     return json({ error: 'not_the_creator', expected: lookup.creator, got: signer.toLowerCase() }, 403);
