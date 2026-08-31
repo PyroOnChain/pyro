@@ -1,4 +1,4 @@
-import { LINKS } from '@/lib/links';
+import { footerLinks } from '@/lib/links';
 
 export function Footer() {
   return (
@@ -10,11 +10,12 @@ export function Footer() {
             <img src="/pyro-logo-dark.png" alt="Pyro" style={{ height: 18, width: 'auto', opacity: 0.85 }} />
             <span className="display" style={{ fontSize: 16, letterSpacing: '0.14em', color: 'var(--muted)' }}>PYRO</span>
           </div>
-          <div className="row" style={{ gap: 40, fontSize: 14, color: 'var(--dim)', flexWrap: 'wrap' }}>
-            <span>[PYRO.XX]</span>
-            <span>[@PYRO_X]</span>
-            <span>Docs</span>
-            <a href={LINKS.github} target="_blank" rel="noreferrer noopener">GitHub</a>
+          <div className="row" style={{ gap: 40, fontSize: 14, flexWrap: 'wrap' }}>
+            {footerLinks().map((l) => (
+              <a key={l.label} href={l.href} target="_blank" rel="noreferrer noopener">
+                {l.label}
+              </a>
+            ))}
           </div>
         </div>
         <p className="mono" style={{ fontSize: 11.5, lineHeight: 1.75, color: 'var(--dim)', margin: 0, maxWidth: 900 }}>
