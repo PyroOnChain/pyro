@@ -60,9 +60,9 @@ function InvalidClub({ value }: { value: string }) {
 function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
   const { wrongChain, switching, switchToPyro } = useCorrectChain();
-  const meta = useClubMeta(v);
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
+  const meta = useClubMeta(v, club.creator);
   const shareDec = club.shareDecimals;
   const nav = navPerShare(club.totalAssets, club.totalSupply, shareDec);
 

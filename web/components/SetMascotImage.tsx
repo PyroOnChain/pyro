@@ -45,9 +45,8 @@ export function SetMascotImage({
         const j = (await res.json().catch(() => ({}))) as { error?: string; detail?: string };
         const readable: Record<string, string> = {
           not_configured: 'Image storage is not switched on for this site.',
-          not_the_creator: 'That wallet did not open this club.',
           bad_signature: 'The signature could not be read.',
-          vault_unreadable: 'Could not confirm who opened this club.',
+          bad_logo: 'That image link is too long.',
         };
         throw new Error(
           (readable[j.error ?? ''] ?? 'Could not save that.') + (j.detail ? ` (${j.detail})` : '')
