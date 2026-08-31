@@ -139,6 +139,18 @@ export function DepositPanel(p: Props) {
         ))}
       </div>
 
+      {tab === 'deposit' && (
+        <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--muted)', margin: '0 0 18px' }}>
+          Put {p.symbol} in the jar and you own a slice of it. Every trade of the mascot sends fees
+          back here as more {p.symbol}, so your slice grows. Leave whenever you like.
+        </p>
+      )}
+      {tab === 'withdraw' && (
+        <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--muted)', margin: '0 0 18px' }}>
+          Take out your share of the jar. Half a percent stays behind for the people still in it.
+        </p>
+      )}
+
       <div className="between mono" style={{ fontSize: 11.5, color: 'var(--dim)', marginBottom: 9 }}>
         <span>AMOUNT</span>
         <span>{tab === 'deposit' ? 'Balance' : 'Redeemable'} {fmt(max)} {p.symbol}</span>

@@ -163,9 +163,18 @@ function ClubBody({ v }: { v: Address }) {
         <div className="col-8" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div className="slab card" style={{ padding: '28px' }}>
             <div className="grid-3" style={{ gap: 24 }}>
-              <Metric label="IN THE JAR" value={fmtCompact(club.totalAssets)} sub={sym} />
-              <Metric label="PER SHARE" value={nav !== undefined ? fmt(nav, 18, 4) : '—'} sub={`${sym} per share`} />
-              <Metric label="UNDRIPPED" value={fmt(club.lockedProfit, 18, 4)} sub="still releasing" subColor="var(--gain)" />
+              <Metric
+                label="IN THE JAR" value={fmtCompact(club.totalAssets)} sub={sym}
+                hint={`All the ${sym} this club is holding for its members.`}
+              />
+              <Metric
+                label="PER SHARE" value={nav !== undefined ? fmt(nav, 18, 4) : '—'} sub={`${sym} per share`}
+                hint="What one share is worth today. It only goes up, as fees arrive."
+              />
+              <Metric
+                label="UNDRIPPED" value={fmt(club.lockedProfit, 18, 4)} sub="still releasing" subColor="var(--gain)"
+                hint="Fees already collected, released into the jar over 24 hours so nobody can time it."
+              />
             </div>
           </div>
 
@@ -256,12 +265,19 @@ function ClubBody({ v }: { v: Address }) {
   );
 }
 
-function Metric({ label, value, sub, subColor }: { label: string; value: string; sub: string; subColor?: string }) {
+function Metric({ label, value, sub, subColor, hint }: {
+  label: string; value: string; sub: string; subColor?: string; hint?: string;
+}) {
   return (
     <div>
       <div className="label" style={{ marginBottom: 9 }}>{label}</div>
       <div className="stat" style={{ fontSize: 34 }}>{value}</div>
       <div className="mono" style={{ fontSize: 12.5, color: subColor ?? 'var(--muted)', marginTop: 3 }}>{sub}</div>
+      {hint && (
+        <div style={{ fontSize: 12, color: 'var(--dim)', marginTop: 7, lineHeight: 1.5, maxWidth: 210 }}>
+          {hint}
+        </div>
+      )}
     </div>
   );
 }

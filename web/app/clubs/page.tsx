@@ -27,8 +27,10 @@ export default function ClubsPage() {
         <div className="between" style={{ alignItems: 'flex-end', marginBottom: 26, flexWrap: 'wrap', gap: 16 }}>
           <div>
             <h1 className="display h-2" style={{ letterSpacing: '0.01em', margin: '0 0 8px' }}>CLUBS</h1>
-            <p style={{ fontSize: 15, color: 'var(--muted)', margin: 0 }}>
-              Every club holds one stock and runs one mascot. Anyone can open another.
+            <p style={{ fontSize: 15, color: 'var(--muted)', margin: 0, maxWidth: 620, textWrap: 'pretty' }}>
+              Every club holds one stock and runs one mascot. Join a club by putting that stock in
+              its jar, and every trade of the mascot sends fees back to the jar as more stock.
+              Anyone can open another.
             </p>
           </div>
           <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '14px 24px', fontSize: 14 }}>

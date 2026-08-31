@@ -130,8 +130,13 @@ export default function LandingPage() {
 
       <section className="shell" style={{ padding: '104px 40px 96px' }}>
         <div className="between stack-sm" style={{ alignItems: 'baseline', marginBottom: 56 }}>
-          <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: 0 }}>HOW THE JAR FILLS</Reveal>
-          <span className="mono" style={{ fontSize: 12, color: 'var(--dim)', letterSpacing: '0.12em' }}>THREE MOVES</span>
+          <div>
+            <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 10px' }}>HOW THE JAR FILLS</Reveal>
+            <Reveal as="p" delay={120} style={{ fontSize: 16, color: 'var(--muted)', margin: 0, maxWidth: 560, textWrap: 'pretty' }}>
+              A club is a shared pot of one stock. This is the whole thing, start to finish.
+            </Reveal>
+          </div>
+          <span className="mono hide-sm" style={{ fontSize: 12, color: 'var(--dim)', letterSpacing: '0.12em' }}>THREE MOVES</span>
         </div>
         <div className="grid-3" style={{ alignItems: 'end' }}>
           {STEPS.map((s, i) => (
@@ -159,7 +164,10 @@ export default function LandingPage() {
                 <Reveal as="span" variant="wipe" style={{ display: 'block' }}>THERE IS</Reveal>
                 <Reveal as="span" variant="wipe" delay={130} style={{ display: 'block' }}>NO SWAP.</Reveal>
               </h2>
-              <Reveal delay={300} style={{ width: 62, height: 3, background: 'var(--ember)' }}><span /></Reveal>
+              <Reveal delay={300} style={{ width: 62, height: 3, background: 'var(--ember)', marginBottom: 22 }}><span /></Reveal>
+              <Reveal as="p" delay={380} style={{ fontSize: 16, color: 'var(--muted)', margin: 0, maxWidth: 380, textWrap: 'pretty' }}>
+                Skip this part if you like. It only matters if you have seen this idea done badly before.
+              </Reveal>
             </div>
             <div className="col-7">
               <p style={{ fontSize: 18, lineHeight: 1.62, color: 'var(--muted)', margin: '0 0 22px', textWrap: 'pretty' }}>
@@ -183,9 +191,10 @@ export default function LandingPage() {
 
       <section className="shell" style={{ padding: '96px 40px' }}>
         <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 14px' }}>WHAT YOU&apos;RE ACTUALLY HOLDING</Reveal>
-        <p style={{ fontSize: 17, color: 'var(--dim)', margin: '0 0 52px' }}>
-          The parts nobody puts on a landing page. They&apos;re the reason this one works.
-        </p>
+        <Reveal as="p" delay={120} style={{ fontSize: 17, color: 'var(--muted)', margin: '0 0 52px', maxWidth: 620, textWrap: 'pretty' }}>
+          The parts nobody puts on a landing page. If you are weighing up whether to put money in,
+          these four are the ones that decide it.
+        </Reveal>
         <div className="grid-2">
           {HONEST.map((c, i) => (
             <Reveal key={c.t} variant="rise" delay={i * 110} className="slab-lg card lift" style={{ padding: '32px 30px' }}>
@@ -202,8 +211,9 @@ export default function LandingPage() {
         </Parallax>
         <div className="shell" style={{ padding: '104px 40px 96px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
           <Reveal as="h2" variant="wipe" className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>LIGHT ONE UP.</Reveal>
-          <Reveal as="p" delay={140} style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 480 }}>
-            Pick a ticker, seed the jar, let the mascot go to work.
+          <Reveal as="p" delay={140} style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 520, textWrap: 'pretty' }}>
+            Opening a club takes one transaction and a few dollars. Joining someone else&apos;s takes
+            one signature.
           </Reveal>
           <Reveal className="row" delay={250} style={{ justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
             <Magnetic strength={0.34}>
