@@ -12,6 +12,7 @@ import { factoryDeployed } from '@/lib/clubs';
 import { fmt, STOCK_DECIMALS } from '@/lib/format';
 import { explorerTx } from '@/lib/chain';
 import { useCorrectChain } from '@/lib/useCorrectChain';
+import { ImagePicker } from '@/components/ImagePicker';
 
 const PONS_LAUNCH_FEE = parseEther('0.0005'); // launchFee() on the Pons factory, verified
 
@@ -51,7 +52,9 @@ export default function CreatePage() {
   try { seedWei = seed ? parseUnits(seed, STOCK_DECIMALS) : 0n; } catch { seedWei = 0n; }
   const min = (minSeed.data as bigint | undefined) ?? 0n;
   const belowMin = min > 0n && seedWei < min;
-  const logoOk = /^https?:\/\/\S+$/i.test(logo.trim()) || /^ipfs:\/\/\S+$/i.test(logo.trim());
+  // The launchpad reverts MetadataTooLong past 512 characters, measured against
+  // the live contract, so a link has to be short as well as valid.
+  const logoOk = /^(https?|ipfs):\/\/\S+$/i.test(logo.trim()) && logo.trim().length <= 480;
   const ready =
     Boolean(address) && mascotName.trim() && mascotSymbol.trim() &&
     logoOk && seedWei > 0n && !belowMin && !busy;
@@ -154,29 +157,13 @@ export default function CreatePage() {
               </Labeled>
 
               <div style={{ height: 14 }} />
-              <Labeled label="IMAGE URL">
-                <div className="row" style={{ gap: 12, alignItems: 'stretch' }}>
-                  <div
-                    className="chip"
-                    style={{
-                      width: 54, height: 54, flexShrink: 0, border: '1px solid var(--stroke)',
-                      background: logoOk ? `center / cover no-repeat url(${logo.trim()})` : 'var(--band)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}
-                  >
-                    {!logoOk && (
-                      <span className="mono" style={{ fontSize: 9.5, color: 'var(--dim)' }}>IMG</span>
-                    )}
-                  </div>
-                  <input className="field chip" style={{ flexGrow: 1 }} value={logo}
-                    onChange={(e) => setLogo(e.target.value)}
-                    placeholder="https://... or ipfs://..." />
-                </div>
+              <Labeled label="MASCOT IMAGE">
+                <ImagePicker value={logo} onChange={setLogo} />
               </Labeled>
-              <div style={{ fontSize: 12.5, color: logo && !logoOk ? 'var(--loss)' : 'var(--dim)', marginTop: 9, lineHeight: 1.55 }}>
-                {logo && !logoOk
-                  ? 'That does not look like a URL. It needs to start with https:// or ipfs://.'
-                  : 'Required. A mascot with no image is close to invisible on the launchpad, which ranks by volume and market cap. Host it anywhere public, or pin it to IPFS.'}
+              <div style={{ fontSize: 12.5, color: 'var(--dim)', marginTop: 9, lineHeight: 1.55 }}>
+                Required. A mascot with no image is close to invisible on the launchpad, which ranks
+                by volume and market cap. Uploads are squared and compressed here in your browser,
+                then stored with the launch, so nothing needs hosting.
               </div>
 
               <div style={{ height: 14 }} />
@@ -222,7 +209,11 @@ export default function CreatePage() {
                 <Row k="Vault" v={`ERC-4626, ${stock.symbol}`} />
                 <Row k="Share token" v={`c${stock.symbol}, transferable`} />
                 <Row k="Mascot" v={`$${mascotSymbol || '—'}, paired to ${stock.symbol}`} />
-                <Row k="Image" v={logoOk ? 'set' : 'missing'} green={logoOk} />
+                <Row
+                  k="Image"
+                  v={logoOk ? 'set' : 'missing'}
+                  green={logoOk}
+                />
                 <Row k="Fee recipient" v="the vault" green />
                 <div style={{ height: 1, background: 'var(--line-soft)' }} />
                 <Row k="Pons launch fee" v="0.0005 ETH" />
