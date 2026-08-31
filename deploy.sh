@@ -80,7 +80,7 @@ say "5. Deploying"
 info "This spends real ETH. Ctrl-C in the next 5 seconds to stop."
 sleep 5
 export OWNER GUARDIAN TREASURY
-OUT=$(forge script script/Deploy.s.sol --rpc-url "$RPC" --broadcast \
+OUT=$(forge script script/Deploy.s.sol:Deploy --rpc-url "$RPC" --broadcast \
         --account pyro-deployer --sender "$SENDER" 2>&1)
 FACTORY=$(echo "$OUT" | grep -oE 'ClubFactory: 0x[a-fA-F0-9]{40}' | grep -oE '0x[a-fA-F0-9]{40}' | head -1)
 if [ -z "$FACTORY" ]; then

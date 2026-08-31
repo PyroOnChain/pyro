@@ -60,8 +60,8 @@ composability. The drip plus the exit fee makes the attack not worth running at 
 
 ```bash
 forge test -vv
-forge script script/Deploy.s.sol:CheckPair --rpc-url rh_mainnet   # which tickers are pairable
-TREASURY=0x.. GUARDIAN=0x.. OWNER=0x.. forge script script/Deploy.s.sol --rpc-url rh_mainnet --broadcast
+forge script script/CheckPair.s.sol --rpc-url rh_mainnet   # which tickers are pairable
+TREASURY=0x.. GUARDIAN=0x.. OWNER=0x.. forge script script/Deploy.s.sol:Deploy --rpc-url rh_mainnet --broadcast
 ```
 
 ## The web app
