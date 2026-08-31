@@ -17,6 +17,11 @@ const UNUSED_OPTIONAL = [
 /** @type {import('next').NextConfig} */
 export default {
   reactStrictMode: true,
+  // Fully static output: no server, no vendor lock-in, deployable to any static host.
+  // Every page here renders from on-chain reads in the browser, so nothing needs SSR.
+  output: 'export',
+  images: { unoptimized: true },
+  trailingSlash: true,
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { use } from 'react';
+import { Suspense } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { isAddress } from 'viem';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import type { Address } from 'viem';
 import { Header } from '@/components/Header';
@@ -16,11 +17,20 @@ import { explorerAddr, explorerTx } from '@/lib/chain';
 import { useCorrectChain } from '@/lib/useCorrectChain';
 
 /**
- * Validate before any data hook runs. Bailing out mid-component would change the number of
- * hooks between renders, which React treats as a crash.
+ * The club address comes from ?a= rather than a path segment, which keeps every route in
+ * this app statically exportable. A path param would force a server render, since the set
+ * of club addresses is not knowable at build time.
  */
-export default function ClubPage({ params }: { params: Promise<{ address: string }> }) {
-  const { address } = use(params);
+export default function ClubPage() {
+  return (
+    <Suspense fallback={<Header />}>
+      <ClubRoute />
+    </Suspense>
+  );
+}
+
+function ClubRoute() {
+  const address = useSearchParams().get('a') ?? '';
   if (!isAddress(address)) return <InvalidClub value={address} />;
   return <ClubBody v={address as Address} />;
 }
@@ -35,7 +45,9 @@ function InvalidClub({ value }: { value: string }) {
         </div>
         <h1 className="display h-1" style={{ margin: '0 0 16px', lineHeight: 1.05 }}>THAT IS NOT AN ADDRESS.</h1>
         <p style={{ fontSize: 17, color: 'var(--muted)', margin: '0 auto 30px', maxWidth: 460, wordBreak: 'break-all' }}>
-          <span className="mono" style={{ fontSize: 14 }}>{value.slice(0, 60)}</span> is not a valid contract address.
+          {value
+            ? <><span className="mono" style={{ fontSize: 14 }}>{value.slice(0, 60)}</span> is not a valid contract address.</>
+            : 'No club was specified.'}
         </p>
         <Link href="/clubs" className="btn btn-primary" style={{ display: 'inline-block' }}>BROWSE CLUBS</Link>
       </div>
@@ -89,9 +101,13 @@ function ClubBody({ v }: { v: Address }) {
                     {club.name ?? (isLoading ? 'Loading…' : 'Club')}
                   </span>
                   {club.mascot && club.mascot !== '0x0000000000000000000000000000000000000000' && (
-                    <a href={explorerAddr(club.mascot)} target="_blank" rel="noreferrer" className="chip mono"
-                      style={{ background: 'var(--ember-wash)', border: '1px solid #FFD2BC', color: 'var(--ember-ink)', fontSize: 11, padding: '5px 10px' }}>
-                      {short(club.mascot)}
+                    <a href={explorerAddr(club.mascot)} target="_blank" rel="noreferrer noopener" className="chip"
+                      title={`${club.mascotName?.trim() || 'Mascot'} - ${club.mascot}`}
+                      style={{ background: 'var(--ember-wash)', border: '1px solid #FFD2BC', color: 'var(--ember-ink)', fontSize: 12, padding: '6px 11px' }}>
+                      <span className="display" style={{ letterSpacing: '0.04em' }}>${club.mascotSymbol ?? '...'}</span>
+                      {club.mascotName?.trim() && (
+                        <span style={{ marginLeft: 7, opacity: 0.75, fontSize: 11.5 }}>{club.mascotName.trim()}</span>
+                      )}
                     </a>
                   )}
                 </div>

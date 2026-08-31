@@ -89,7 +89,7 @@ export default function ClubsPage() {
                     <td className="mono">{c.creatorFeeBps !== undefined ? `${(c.creatorFeeBps / 100).toFixed(1)}%` : '—'}</td>
                     <td className="mono" style={{ color: 'var(--gain)' }}>{fmt(c.lockedProfit, 18, 2)}</td>
                     <td>
-                      <Link href={`/clubs/${c.address}`} className="chip"
+                      <Link href={`/club?a=${c.address}`} className="chip"
                         style={{ display: 'block', border: '1px solid var(--stroke)', padding: '8px 0', textAlign: 'center', fontSize: 13, fontWeight: 500, color: 'var(--ink)' }}>
                         Open
                       </Link>

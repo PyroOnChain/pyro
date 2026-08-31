@@ -81,8 +81,17 @@ canonical address), and every route degrades to an honest "not deployed yet" scr
 |---|---|
 | `/`                 | landing page |
 | `/clubs`            | every club, jar size, creator cut, undripped fees |
-| `/clubs/[address]`  | one club: deposit, withdraw, harvest |
+| `/club?a=0x...`     | one club: deposit, withdraw, harvest |
 | `/create`           | open a club, one transaction |
+
+**The build is fully static.** `npm run build` emits `web/out/`, a plain folder of HTML, JS
+and images with no server component. Every page renders from on-chain reads in the browser,
+so the club route takes its address from a query string rather than a path segment: a path
+param would force a server render, since the set of clubs is not knowable at build time.
+
+That means it deploys to any static host - Cloudflare Pages, Netlify, S3, IPFS - with no
+adapter, no Node runtime, and no plan restrictions. It also means the frontend can be pinned
+and served by anyone if a host ever drops it.
 
 Deposits use ERC-2612 `permit`, so there is no separate approval transaction. If the wallet
 refuses typed-data signing the panel silently falls back to approve-then-deposit rather than
