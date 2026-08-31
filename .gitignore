@@ -1,7 +1,7 @@
-# foundry (anchored to repo root so it does not swallow web/lib or keeper/lib)
-/out/
-/cache/
-/broadcast/
+# build output, at any depth (foundry's out/, next's static export web/out/)
+out/
+cache/
+broadcast/
 
 # node / next
 node_modules/
