@@ -6,6 +6,7 @@ import { NotDeployed } from '@/components/NotDeployed';
 import { useClubAddresses, useClubSummaries, factoryDeployed } from '@/lib/clubs';
 import { stockByAddress } from '@/lib/addresses';
 import { fmt, fmtCompact, short } from '@/lib/format';
+import { explorerAddr } from '@/lib/chain';
 
 export default function ClubsPage() {
   const { addresses, isLoading } = useClubAddresses();
@@ -72,8 +73,17 @@ export default function ClubsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="mono" style={{ color: 'var(--ember-ink)' }}>
-                      {c.mascot && c.mascot !== '0x0000000000000000000000000000000000000000' ? short(c.mascot) : 'none yet'}
+                    <td>
+                      {c.mascot && c.mascot !== '0x0000000000000000000000000000000000000000' ? (
+                        <a href={explorerAddr(c.mascot)} target="_blank" rel="noreferrer noopener"
+                           title={c.mascot} style={{ color: 'var(--ember-ink)' }}>
+                          <span className="display" style={{ fontSize: 15, letterSpacing: '0.03em' }}>
+                            ${c.mascotSymbol ?? '…'}
+                          </span>
+                        </a>
+                      ) : (
+                        <span className="mono" style={{ color: 'var(--dim)' }}>none yet</span>
+                      )}
                     </td>
                     <td className="mono" style={{ fontWeight: 700 }}>{fmtCompact(c.totalAssets)} {sym}</td>
                     <td className="mono">{c.creatorFeeBps !== undefined ? `${(c.creatorFeeBps / 100).toFixed(1)}%` : '—'}</td>

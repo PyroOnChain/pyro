@@ -162,7 +162,9 @@ function ClubBody({ v }: { v: Address }) {
               )}
             </div>
             <div className="stat" style={{ fontSize: 30, color: 'var(--bg)', marginBottom: 4 }}>{fmt(pendingFees)}</div>
-            <div className="mono" style={{ fontSize: 12.5, color: '#A79C90', marginBottom: 18 }}>{sym} of mascot creator fees</div>
+            <div className="mono" style={{ fontSize: 12.5, color: '#A79C90', marginBottom: 18 }}>
+              {sym} of {club.mascotSymbol ? `$${club.mascotSymbol}` : 'mascot'} creator fees
+            </div>
             <button className="btn btn-primary" style={{ width: '100%', padding: 14, textAlign: 'center', fontSize: 14 }}
               disabled={wrongChain ? switching : (isPending || !pendingFees || pendingFees === 0n)}
               onClick={wrongChain ? switchToPyro : harvest}>

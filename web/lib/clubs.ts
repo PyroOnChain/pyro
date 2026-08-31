@@ -5,6 +5,8 @@ import type { Address } from 'viem';
 import { clubfactoryAbi, clubvaultAbi, stockTokenAbi } from './abis';
 import { CLUB_FACTORY } from './addresses';
 
+export const ZERO = '0x0000000000000000000000000000000000000000' as Address;
+
 export const factoryDeployed = () => Boolean(CLUB_FACTORY && CLUB_FACTORY.length === 42);
 
 const VAULT_FIELDS = [
@@ -31,6 +33,8 @@ export type ClubSummary = {
   mascot?: Address;
   assetSymbol?: string;
   shareDecimals?: number;
+  mascotSymbol?: string;
+  mascotName?: string;
 };
 
 /** Every club address the factory has ever created. */
@@ -88,6 +92,24 @@ export function useClubSummaries(addresses: Address[]) {
     if (r?.status === 'success') symbolByAsset.set((a as string).toLowerCase(), r.result as string);
   });
 
+  // The mascot is just an ERC-20, so ask it what it is called rather than showing an address.
+  const mascots = addresses.map((_, i) => {
+    const slice = (data ?? []).slice(i * VAULT_FIELDS.length, (i + 1) * VAULT_FIELDS.length);
+    const m = slice[10]?.status === 'success' ? (slice[10].result as Address) : undefined;
+    return m && m !== ZERO ? m : undefined;
+  });
+  const mascotReads = useReadContracts({
+    contracts: mascots.filter(Boolean).map((address) => ({
+      address: address as Address, abi: stockTokenAbi, functionName: 'symbol',
+    })),
+    query: { enabled: mascots.some(Boolean) },
+  });
+  const mascotSymbolByAddress = new Map<string, string>();
+  mascots.filter(Boolean).forEach((m, i) => {
+    const r = mascotReads.data?.[i];
+    if (r?.status === 'success') mascotSymbolByAddress.set((m as string).toLowerCase(), r.result as string);
+  });
+
   const clubs: ClubSummary[] = addresses.map((address, i) => {
     const slice = (data ?? []).slice(i * VAULT_FIELDS.length, (i + 1) * VAULT_FIELDS.length);
     const val = (n: number) => (slice[n]?.status === 'success' ? slice[n].result : undefined);
@@ -106,6 +128,7 @@ export function useClubSummaries(addresses: Address[]) {
       mascot: val(10) as Address | undefined,
       shareDecimals: val(11) !== undefined ? Number(val(11)) : undefined,
       assetSymbol: symbolByAsset.get(((val(0) as string) || '').toLowerCase()),
+      mascotSymbol: mascotSymbolByAddress.get(((val(10) as string) || '').toLowerCase()),
     };
   });
 
@@ -130,6 +153,17 @@ export function useClub(vault: Address, user?: Address) {
   const assetMeta = useReadContract({
     address: asset, abi: stockTokenAbi, functionName: 'symbol',
     query: { enabled: Boolean(asset) },
+  });
+
+  const mascotAddr = at(10) as Address | undefined;
+  const mascotMeta = useReadContracts({
+    contracts: mascotAddr && mascotAddr !== ZERO
+      ? [
+          { address: mascotAddr, abi: stockTokenAbi, functionName: 'symbol' },
+          { address: mascotAddr, abi: stockTokenAbi, functionName: 'name' },
+        ]
+      : [],
+    query: { enabled: Boolean(mascotAddr && mascotAddr !== ZERO) },
   });
 
   const position = useReadContracts({
@@ -173,6 +207,8 @@ export function useClub(vault: Address, user?: Address) {
       mascot: at(10) as Address | undefined,
       shareDecimals: at(11) !== undefined ? Number(at(11)) : undefined,
       assetSymbol: assetMeta.data as string | undefined,
+      mascotSymbol: mascotMeta.data?.[0]?.status === 'success' ? (mascotMeta.data[0].result as string) : undefined,
+      mascotName: mascotMeta.data?.[1]?.status === 'success' ? (mascotMeta.data[1].result as string) : undefined,
     } as ClubSummary,
     pendingFees: at(12) as bigint | undefined,
     mascotCount: at(13) !== undefined ? Number(at(13)) : undefined,
