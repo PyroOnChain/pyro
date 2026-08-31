@@ -14,6 +14,9 @@ node_modules/
 !.env.example
 .vercel/
 
+# internal only: deploy runbook and accepted-risk notes, not for the public repo
+LAUNCH.md
+
 # tooling and OS
 .claude/
 .DS_Store
