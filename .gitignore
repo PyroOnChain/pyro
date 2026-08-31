@@ -1,0 +1,19 @@
+# build output
+out/
+cache/
+lib/
+broadcast/
+node_modules/
+.next/
+*.tsbuildinfo
+
+# secrets and local config
+.env
+.env.*
+!.env.example
+.vercel/
+
+# tooling and OS
+.claude/
+.DS_Store
+*.log

@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <style>
+    body { margin: 0; background: #FBF9F6; }
+    a { color: #C4400B; text-decoration: none; } a:hover { color: #FF5A1F; }
+    .slab { clip-path: polygon(0 100%, 0 24px, 24px 0, 100% 0, 100% 100%); }
+    .btn  { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%); }
+    .chip { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%); }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #FBF9F6; color: #1A1614; font-family: 'Space Grotesk', system-ui, sans-serif;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid #E7E0D5; background: #FFFFFF;">
+    <div style="display: flex; align-items: center; gap: 34px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="Pyro_logo-dark.png" alt="Pyro" style="height: 19px; width: auto; display: block;">
+        <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.14em;">PYRO</span>
+      </div>
+      <div style="display: flex; gap: 24px; font-size: 14px; font-weight: 500;">
+        <span style="color: #1A1614; border-bottom: 2px solid #FF5A1F; padding-bottom: 3px;">Clubs</span>
+        <span style="color: #6E645C;">Create</span>
+        <span style="color: #6E645C;">Docs</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="chip" style="border: 1px solid #E7E0D5; background: #FBF9F6; padding: 9px 13px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #726860;">4663</div>
+      <div class="chip" style="border: 1px solid #E7E0D5; background: #FBF9F6; padding: 9px 14px; display: flex; align-items: center; gap: 8px;">
+        <span style="width: 7px; height: 7px; background: #177F47; display: block;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">0x7A3f…9C21</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 34px 40px 26px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px;">
+      <div>
+        <h1 style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 38px; letter-spacing: 0.01em; margin: 0 0 8px;">CLUBS</h1>
+        <p style="font-size: 15px; color: #6E645C; margin: 0;">Every club holds one stock and runs one mascot. Anyone can open another.</p>
+      </div>
+      <div class="btn" style="background: #FF5A1F; color: #1A1614; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; padding: 14px 24px;">OPEN A CLUB</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px;">
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 20px 22px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">STOCK IN ALL JARS</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 27px;">3,914.22</div>
+      </div>
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 20px 22px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">HARVESTED, 7D</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 27px; color: #177F47;">61.08</div>
+      </div>
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 20px 22px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">OPEN CLUBS</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 27px;">12</div>
+      </div>
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 20px 22px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">PROTOCOL FEE</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 27px;">0%</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 18px;">
+      <span class="chip" style="background: #1A1614; color: #FBF9F6; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px;">ALL</span>
+      <span class="chip" style="border: 1px solid #E7E0D5; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px; color: #514842;">NVDA</span>
+      <span class="chip" style="border: 1px solid #E7E0D5; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px; color: #514842;">AAPL</span>
+      <span class="chip" style="border: 1px solid #E7E0D5; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px; color: #514842;">TSLA</span>
+      <span class="chip" style="border: 1px solid #E7E0D5; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 8px 14px; color: #514842;">AMZN</span>
+      <span style="flex-grow: 1;"></span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #726860;">sorted by jar size</span>
+    </div>
+
+    <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 2.4fr 1.2fr 1.4fr 1.2fr 1.4fr 1fr; gap: 16px; padding: 15px 26px; border-bottom: 1px solid #E7E0D5; background: #FBF9F6; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: #726860;">
+        <span>CLUB</span><span>MASCOT</span><span>IN THE JAR</span><span>FEES → JAR</span><span>HARVESTED 7D</span><span></span>
+      </div>
+      <sc-for list="{{clubs}}" as="c" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: 2.4fr 1.2fr 1.4fr 1.2fr 1.4fr 1fr; gap: 16px; padding: 18px 26px; border-bottom: 1px solid #F2ECE3; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 13px;">
+            <div class="chip" style="width: 34px; height: 34px; background: #1A1614; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 11px; color: #FBF9F6;">{{c.badge}}</span>
+            </div>
+            <div>
+              <div style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em;">{{c.name}}</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #726860;">{{c.members}} members</div>
+            </div>
+          </div>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; color: #C4400B;">{{c.mascot}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14.5px;">{{c.jar}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px;">{{c.fee}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; color: #177F47;">{{c.harvest}}</span>
+          <div class="chip" style="border: 1px solid #CFC5B6; padding: 8px 0; text-align: center; font-size: 13px; font-weight: 500;">Open</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 22px; padding: 16px 20px; background: #F3EEE7; border: 1px solid #E7E0D5;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#726860" stroke-width="2" stroke-linecap="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span style="font-size: 13px; color: #514842;">Numbers refresh every block. A club with a dead mascot still holds its stock, so a flat harvest column is not a broken club.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      clubs: [
+        { badge: 'NV', name: 'NVDA CLUB',      members: '231', mascot: '$GPU',    jar: '1,284.06', fee: '10.0%', harvest: '+18.42' },
+        { badge: 'TS', name: 'TSLA CLUB',      members: '188', mascot: '$WATT',   jar: '902.41',   fee: '8.0%',  harvest: '+14.03' },
+        { badge: 'AA', name: 'AAPL CLUB',      members: '140', mascot: '$BITTEN', jar: '744.19',   fee: '10.0%', harvest: '+11.87' },
+        { badge: 'AM', name: 'AMZN CLUB',      members: '96',  mascot: '$BOX',    jar: '512.30',   fee: '6.0%',  harvest: '+9.44' },
+        { badge: 'NV', name: 'NVDA CLUB II',   members: '61',  mascot: '$JENSN',  jar: '318.72',   fee: '4.0%',  harvest: '+5.10' },
+        { badge: 'TS', name: 'TSLA DEGEN CLUB',members: '24',  mascot: '$PLAID',  jar: '152.54',   fee: '10.0%', harvest: '+2.22' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

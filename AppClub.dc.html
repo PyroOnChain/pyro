@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <style>
+    body { margin: 0; background: #FBF9F6; }
+    a { color: #C4400B; text-decoration: none; } a:hover { color: #FF5A1F; }
+    .slab { clip-path: polygon(0 100%, 0 24px, 24px 0, 100% 0, 100% 100%); }
+    .btn  { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%); }
+    .chip { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%); }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #FBF9F6; color: #1A1614; font-family: 'Space Grotesk', system-ui, sans-serif;">
+
+  <!-- app header -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid #E7E0D5; background: #FFFFFF;">
+    <div style="display: flex; align-items: center; gap: 34px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="Pyro_logo-dark.png" alt="Pyro" style="height: 19px; width: auto; display: block;">
+        <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.14em;">PYRO</span>
+      </div>
+      <div style="display: flex; gap: 24px; font-size: 14px; font-weight: 500;">
+        <span style="color: #1A1614; border-bottom: 2px solid #FF5A1F; padding-bottom: 3px;">Clubs</span>
+        <span style="color: #6E645C;">Create</span>
+        <span style="color: #6E645C;">Docs</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="chip" style="border: 1px solid #E7E0D5; background: #FBF9F6; padding: 9px 13px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #726860;">4663</div>
+      <div class="chip" style="border: 1px solid #E7E0D5; background: #FBF9F6; padding: 9px 14px; display: flex; align-items: center; gap: 8px;">
+        <span style="width: 7px; height: 7px; background: #177F47; display: block;"></span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px;">0x7A3f…9C21</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- club header -->
+  <div style="padding: 30px 40px 26px; border-bottom: 1px solid #E7E0D5; background: #FFFFFF;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #726860; margin-bottom: 14px;">Clubs / NVDA / 0x4c9a…3Fe0</div>
+    <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <div class="slab" style="width: 54px; height: 54px; background: #1A1614; display: flex; align-items: center; justify-content: center;">
+          <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; color: #FBF9F6;">NV</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 5px;">
+            <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: 0.03em;">NVDA CLUB</span>
+            <span class="chip" style="background: #FFF0E8; border: 1px solid #FFD2BC; color: #C4400B; font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 5px 10px;">$GPU</span>
+          </div>
+          <div style="font-size: 13.5px; color: #6E645C;">Opened by 0x2Bd1…77aE, 14 days ago. 231 members.</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div class="btn" style="border: 1px solid #CFC5B6; padding: 12px 20px; font-size: 14px; font-weight: 500;">Trade $GPU on Pons</div>
+        <div class="btn" style="background: #FF5A1F; color: #1A1614; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; padding: 13px 24px;">DEPOSIT NVDA</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; padding: 30px 40px 48px;">
+
+    <!-- LEFT -->
+    <div style="grid-column: span 8; display: flex; flex-direction: column; gap: 20px;">
+
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 28px 28px 24px;">
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">IN THE JAR</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 34px; letter-spacing: -0.02em;">1,284.06</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #6E645C; margin-top: 3px;">NVDA</div>
+          </div>
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">PER SHARE</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 34px; letter-spacing: -0.02em;">1.0413</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #177F47; margin-top: 3px;">+4.13% since launch</div>
+          </div>
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.13em; color: #726860; margin-bottom: 9px;">HARVESTED, 7D</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 34px; letter-spacing: -0.02em;">18.42</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #6E645C; margin-top: 3px;">NVDA from $GPU fees</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 26px 28px 22px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
+          <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.04em;">NVDA PER SHARE</span>
+          <div style="display: flex; gap: 6px;">
+            <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 5px 10px; border: 1px solid #E7E0D5; color: #726860;">7D</span>
+            <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 5px 10px; background: #1A1614; color: #FBF9F6;">30D</span>
+            <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 5px 10px; border: 1px solid #E7E0D5; color: #726860;">ALL</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 820 190" style="width: 100%; height: 190px; display: block;">
+          <defs>
+            <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF5A1F" stop-opacity="0.20"/>
+              <stop offset="100%" stop-color="#FF5A1F" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="40"  x2="820" y2="40"  stroke="#F0EAE0" stroke-width="1"/>
+          <line x1="0" y1="90"  x2="820" y2="90"  stroke="#F0EAE0" stroke-width="1"/>
+          <line x1="0" y1="140" x2="820" y2="140" stroke="#F0EAE0" stroke-width="1"/>
+          <path d="M0 160 L68 156 L136 158 L204 143 L272 146 L340 128 L408 118 L476 121 L544 96 L612 84 L680 88 L748 58 L820 44 L820 190 L0 190 Z" fill="url(#fillGrad)"/>
+          <path d="M0 160 L68 156 L136 158 L204 143 L272 146 L340 128 L408 118 L476 121 L544 96 L612 84 L680 88 L748 58 L820 44" fill="none" stroke="#FF5A1F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="820" cy="44" r="4.5" fill="#FF5A1F"/>
+        </svg>
+        <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #726860; margin-top: 10px;">
+          <span>1.0000</span><span>each step up is a harvest</span><span>1.0413</span>
+        </div>
+      </div>
+
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 26px 28px 8px;">
+        <div style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.04em; margin-bottom: 6px;">ACTIVITY</div>
+        <sc-for list="{{activity}}" as="a" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #F2ECE3;">
+            <div style="display: flex; align-items: center; gap: 13px;">
+              <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em; padding: 5px 9px; background: {{a.tint}}; color: {{a.ink}};">{{a.kind}}</span>
+              <span style="font-size: 14px; color: #514842;">{{a.who}}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 22px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; color: {{a.ink}};">{{a.amount}}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #726860; width: 62px; text-align: right;">{{a.when}}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div style="grid-column: span 4; display: flex; flex-direction: column; gap: 20px;">
+
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 24px;">
+        <div style="display: flex; gap: 0; margin-bottom: 22px; border-bottom: 1px solid #E7E0D5;">
+          <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em; padding: 0 0 11px; margin-right: 24px; border-bottom: 2px solid #FF5A1F;">DEPOSIT</span>
+          <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.04em; padding: 0 0 11px; color: #726860;">WITHDRAW</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #726860; margin-bottom: 9px;">
+          <span>AMOUNT</span><span>Balance 42.7108 NVDA</span>
+        </div>
+        <div class="chip" style="border: 1px solid #CFC5B6; background: #FBF9F6; padding: 15px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 25px;">12.50</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 4px 8px; border: 1px solid #E7E0D5; color: #C4400B;">MAX</span>
+            <span style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px;">NVDA</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px; padding: 14px 0 18px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Shares you get</span><span style="font-family: 'JetBrains Mono', monospace;">12.0042</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Your share of the jar</span><span style="font-family: 'JetBrains Mono', monospace;">0.97%</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Exit fee if you leave</span><span style="font-family: 'JetBrains Mono', monospace;">0.5%</span></div>
+        </div>
+
+        <div class="btn" style="background: #FF5A1F; color: #1A1614; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.05em; padding: 16px; text-align: center; margin-bottom: 12px;">DEPOSIT 12.50 NVDA</div>
+        <div style="font-size: 12px; color: #726860; line-height: 1.55;">One signature. Pyro uses the token's permit, so there's no separate approval transaction.</div>
+      </div>
+
+      <div class="slab" style="background: #FFFFFF; border: 1px solid #E7E0D5; padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.13em; color: #726860; margin-bottom: 12px;">YOUR POSITION</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px; margin-bottom: 4px;">31.2044</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #6E645C; margin-bottom: 18px;">NVDA redeemable</div>
+        <div style="height: 1px; background: #F2ECE3; margin-bottom: 16px;"></div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Shares held</span><span style="font-family: 'JetBrains Mono', monospace;">29.9670</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Deposited</span><span style="font-family: 'JetBrains Mono', monospace;">30.0000</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6E645C;">Earned from $GPU</span><span style="font-family: 'JetBrains Mono', monospace; color: #177F47;">+1.2044</span></div>
+        </div>
+      </div>
+
+      <div class="slab" style="background: #1A1614; padding: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.13em; color: #A79C90;">SITTING IN ESCROW</span>
+          <span class="chip" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 4px 8px; background: #33291F; color: #FF8A55;">CLAIMABLE</span>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px; color: #FBF9F6; margin-bottom: 4px;">2.8815</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: #A79C90; margin-bottom: 18px;">NVDA of $GPU creator fees</div>
+        <div class="btn" style="background: #FF5A1F; color: #1A1614; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; padding: 14px; text-align: center; margin-bottom: 12px;">HARVEST · KEEP 0.0072</div>
+        <div style="font-size: 11.5px; color: #A79C90; line-height: 1.6;">Anyone can call this. Whoever does keeps 0.25%. The rest drips into the jar over the next 24 hours.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      activity: [
+        { kind: 'HARVEST',  who: '0x9fAb…12c4 harvested $GPU fees', amount: '+3.9102 NVDA', when: '2h',  tint: '#E8F5EC', ink: '#177F47' },
+        { kind: 'DEPOSIT',  who: '0x41e7…88bB joined the club',     amount: '+25.000 NVDA', when: '5h',  tint: '#FFF0E8', ink: '#C4400B' },
+        { kind: 'DEPOSIT',  who: '0x7A3f…9C21 added to position',   amount: '+30.000 NVDA', when: '9h',  tint: '#FFF0E8', ink: '#C4400B' },
+        { kind: 'WITHDRAW', who: '0xd220…4a19 left the club',       amount: '-8.4400 NVDA', when: '1d',  tint: '#F3EEE7', ink: '#726860' },
+        { kind: 'HARVEST',  who: '0x9fAb…12c4 harvested $GPU fees', amount: '+5.2210 NVDA', when: '1d',  tint: '#E8F5EC', ink: '#177F47' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
