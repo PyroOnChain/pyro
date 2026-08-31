@@ -42,8 +42,16 @@ export function SetMascotImage({
         body: JSON.stringify({ vault, logo: logo.trim(), signature }),
       });
       if (!res.ok) {
-        const j = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(j.error === 'not_configured' ? 'Image storage is not switched on.' : 'Could not save that.');
+        const j = (await res.json().catch(() => ({}))) as { error?: string; detail?: string };
+        const readable: Record<string, string> = {
+          not_configured: 'Image storage is not switched on for this site.',
+          not_the_creator: 'That wallet did not open this club.',
+          bad_signature: 'The signature could not be read.',
+          vault_unreadable: 'Could not confirm who opened this club.',
+        };
+        throw new Error(
+          (readable[j.error ?? ''] ?? 'Could not save that.') + (j.detail ? ` (${j.detail})` : '')
+        );
       }
       setDone(true);
       setTimeout(() => window.location.reload(), 700);

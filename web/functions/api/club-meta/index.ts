@@ -23,18 +23,33 @@ export function metaMessage(vault: string, logo: string) {
   return `Pyro club metadata\nvault: ${vault.toLowerCase()}\nlogo: ${logo}`;
 }
 
-async function creatorOf(vault: string, rpc: string): Promise<string | null> {
-  const res = await fetch(rpc, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      jsonrpc: '2.0', id: 1, method: 'eth_call',
-      params: [{ to: vault, data: CREATOR_SELECTOR }, 'latest'],
-    }),
-  });
-  const j = (await res.json()) as { result?: string };
-  if (!j.result || j.result.length < 66) return null;
-  return ('0x' + j.result.slice(-40)).toLowerCase();
+type CreatorLookup = { creator: string } | { failure: string };
+
+async function creatorOf(vault: string, rpc: string): Promise<CreatorLookup> {
+  let res: Response;
+  try {
+    res = await fetch(rpc, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0', id: 1, method: 'eth_call',
+        params: [{ to: vault, data: CREATOR_SELECTOR }, 'latest'],
+      }),
+    });
+  } catch (e) {
+    return { failure: `fetch threw: ${e instanceof Error ? e.message : String(e)}` };
+  }
+
+  const text = await res.text();
+  if (!res.ok) return { failure: `rpc ${res.status}: ${text.slice(0, 120)}` };
+
+  let j: { result?: string; error?: { message?: string } };
+  try { j = JSON.parse(text); } catch { return { failure: `unparseable: ${text.slice(0, 120)}` }; }
+  if (j.error) return { failure: `rpc error: ${j.error.message ?? 'unknown'}` };
+  if (!j.result || j.result.length < 66) {
+    return { failure: `short result: ${String(j.result).slice(0, 80)}` };
+  }
+  return { creator: ('0x' + j.result.slice(-40)).toLowerCase() };
 }
 
 export const onRequestPost: PagesFunction<Env> = async (ctx) => {
@@ -60,9 +75,13 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     return json({ error: 'bad_signature' }, 400);
   }
 
-  const creator = await creatorOf(vault, ctx.env.RPC_URL || DEFAULT_RPC);
-  if (!creator) return json({ error: 'vault_unreadable' }, 400);
-  if (creator !== signer.toLowerCase()) return json({ error: 'not_the_creator' }, 403);
+  const lookup = await creatorOf(vault, ctx.env.RPC_URL || DEFAULT_RPC);
+  if ('failure' in lookup) {
+    return json({ error: 'vault_unreadable', detail: lookup.failure }, 400);
+  }
+  if (lookup.creator !== signer.toLowerCase()) {
+    return json({ error: 'not_the_creator', expected: lookup.creator, got: signer.toLowerCase() }, 403);
+  }
 
   const record = {
     vault: vault.toLowerCase(),
