@@ -108,21 +108,67 @@ say "8. Creating the harvest robot's wallet"
 info "A separate throwaway wallet that only holds gas money."
 if [ -f keeper/.env ]; then
   ok "Already exists, leaving it alone"
-  KEEPER_ADDR=$(grep -oE '0x[a-fA-F0-9]{40}' keeper/.env | head -1 || echo "see keeper/.env")
+  KEEPER_ADDR=$(python3 - <<'PYEOF'
+import os, re, subprocess
+env = {'PATH': os.path.expanduser('~/.foundry/bin') + ':/usr/bin:/bin'}
+key = next((l.split('=',1)[1].strip() for l in open('keeper/.env')
+            if l.startswith('KEEPER_PRIVATE_KEY=')), '')
+if len(key) == 66:
+    out = subprocess.run(['cast','wallet','address','--private-key',key],
+                         capture_output=True, text=True, env=env).stdout
+    print(re.sub(r'\x1b\[[0-9;]*m', '', out).strip())
+PYEOF
+)
 else
-  NEW=$(cast wallet new)
-  KEEPER_ADDR=$(echo "$NEW" | grep -i 'address' | grep -oE '0x[a-fA-F0-9]{40}')
-  KEEPER_KEY=$(echo "$NEW" | grep -i 'private key' | grep -oE '0x[a-fA-F0-9]{64}')
-  cat > keeper/.env <<ENV
-CLUB_FACTORY=$FACTORY
-KEEPER_PRIVATE_KEY=$KEEPER_KEY
-RPC_URL=$RPC_URL
-POLL_SECONDS=300
-MIN_CLAIMABLE=0.05
-ENV
-  chmod 600 keeper/.env
+  # The private key is written straight to the file and never echoed. Printing it would
+  # put it in terminal scrollback, where it is one careless copy-paste from being stolen.
+  KEEPER_ADDR=$(FACTORY="$FACTORY" RPC_URL="$RPC_URL" python3 - <<'PYEOF'
+import subprocess, json, os, re
+env = {'PATH': os.path.expanduser('~/.foundry/bin') + ':/usr/bin:/bin'}
+
+def find_wallet(node):
+    if isinstance(node, dict):
+        keys = {k.lower(): k for k in node}
+        addr = next((node[keys[k]] for k in keys if 'address' in k), None)
+        priv = next((node[keys[k]] for k in keys if 'private' in k), None)
+        if isinstance(addr, str) and isinstance(priv, str):
+            return addr, priv
+        for v in node.values():
+            got = find_wallet(v)
+            if got: return got
+    elif isinstance(node, list):
+        for v in node:
+            got = find_wallet(v)
+            if got: return got
+    return None
+
+raw = subprocess.run(['cast','wallet','new','--json'], capture_output=True, text=True, env=env).stdout
+addr = priv = None
+try:
+    got = find_wallet(json.loads(raw))
+    if got: addr, priv = got
+except Exception:
+    pass
+if not (addr and priv):
+    clean = re.sub(r'\x1b\[[0-9;]*m', '', subprocess.run(
+        ['cast','wallet','new'], capture_output=True, text=True, env=env).stdout)
+    addr = re.search(r'0x[a-fA-F0-9]{40}', clean).group(0)
+    priv = re.search(r'0x[a-fA-F0-9]{64}', clean).group(0)
+
+assert len(addr) == 42 and len(priv) == 66, 'could not generate a keeper wallet'
+open('keeper/.env','w').write(
+    f"CLUB_FACTORY={os.environ['FACTORY']}\n"
+    f"KEEPER_PRIVATE_KEY={priv}\n"
+    f"RPC_URL={os.environ['RPC_URL']}\n"
+    "POLL_SECONDS=300\nMIN_CLAIMABLE=0.05\n")
+os.chmod('keeper/.env', 0o600)
+print(addr)
+PYEOF
+)
+  [ -n "$KEEPER_ADDR" ] || die "Could not create the keeper wallet."
   ok "Created keeper wallet $KEEPER_ADDR"
-  warn "Send it about 0.02 ETH so it can pay for harvests."
+  warn "Its private key is in keeper/.env and was deliberately not printed. Never paste that file anywhere."
+  warn "Send this wallet about 0.02 ETH so it can pay for harvests."
 fi
 
 # ---------------------------------------------------------------- done
