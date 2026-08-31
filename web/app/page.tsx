@@ -7,8 +7,6 @@ import { CountUp } from '@/components/CountUp';
 import { Marquee } from '@/components/Marquee';
 import { Magnetic } from '@/components/Magnetic';
 import { Parallax } from '@/components/Parallax';
-import { TokenBanner } from '@/components/TokenBanner';
-import { LINKS } from '@/lib/links';
 
 const STEPS = [
   {
@@ -130,7 +128,6 @@ export default function LandingPage() {
         </Marquee>
       </div>
 
-      <TokenBanner address={LINKS.token} />
 
       <section className="shell" style={{ padding: '104px 40px 96px' }}>
         <div className="between stack-sm" style={{ alignItems: 'baseline', marginBottom: 56 }}>
