@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { use } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { isAddress } from 'viem';
 import { useState } from 'react';
 import type { Address } from 'viem';
 import { Header } from '@/components/Header';
@@ -13,10 +14,36 @@ import { clubvaultAbi } from '@/lib/abis';
 import { fmt, fmtCompact, short } from '@/lib/format';
 import { explorerAddr, explorerTx } from '@/lib/chain';
 
+/**
+ * Validate before any data hook runs. Bailing out mid-component would change the number of
+ * hooks between renders, which React treats as a crash.
+ */
 export default function ClubPage({ params }: { params: Promise<{ address: string }> }) {
-  const { address: vault } = use(params);
+  const { address } = use(params);
+  if (!isAddress(address)) return <InvalidClub value={address} />;
+  return <ClubBody v={address as Address} />;
+}
+
+function InvalidClub({ value }: { value: string }) {
+  return (
+    <>
+      <Header />
+      <div className="shell" style={{ padding: '110px 40px 130px', textAlign: 'center' }}>
+        <div className="mono" style={{ fontSize: 12, letterSpacing: '0.18em', color: 'var(--dim)', marginBottom: 18 }}>
+          NOT A CLUB
+        </div>
+        <h1 className="display h-1" style={{ margin: '0 0 16px', lineHeight: 1.05 }}>THAT IS NOT AN ADDRESS.</h1>
+        <p style={{ fontSize: 17, color: 'var(--muted)', margin: '0 auto 30px', maxWidth: 460, wordBreak: 'break-all' }}>
+          <span className="mono" style={{ fontSize: 14 }}>{value.slice(0, 60)}</span> is not a valid contract address.
+        </p>
+        <Link href="/clubs" className="btn btn-primary" style={{ display: 'inline-block' }}>BROWSE CLUBS</Link>
+      </div>
+    </>
+  );
+}
+
+function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
-  const v = vault as Address;
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const shareDec = club.shareDecimals;
