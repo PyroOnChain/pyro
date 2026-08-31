@@ -120,3 +120,113 @@ tbody tr:last-child td { border-bottom: none; }
 @media (max-width: 520px) {
   .grid-4 { grid-template-columns: 1fr; }
 }
+
+/* ============================================================================
+   Motion.
+   The brand's whole visual language is a diagonal clip, so reveals wipe along
+   that same angle rather than fading. Easing is snappy rather than floaty:
+   this is a degen product, not a meditation app.
+   Everything below collapses to "already visible" under prefers-reduced-motion.
+   ========================================================================== */
+
+:root {
+  --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
+  --ease-snap: cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+/* Scroll reveal.
+   The hidden state is scoped behind .motion, which a tiny inline script sets on
+   <html> before paint. If JavaScript is off, fails, or the visitor asked for
+   reduced motion, .motion is never set and everything renders plainly visible.
+   Content must never depend on an animation running. */
+.motion .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.62s var(--ease-out), transform 0.62s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+.motion .reveal.in { opacity: 1; transform: none; }
+
+/* Headline lines wipe in along the logo's diagonal. */
+.motion .wipe {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  opacity: 0;
+  transition: clip-path 0.78s var(--ease-out), opacity 0.4s linear;
+  transition-delay: var(--d, 0ms);
+}
+.motion .wipe.in {
+  clip-path: polygon(0 0, 118% 0, 100% 100%, 0 100%);
+  opacity: 1;
+}
+
+/* Cards rise and settle with a touch of overshoot. */
+.motion .rise {
+  opacity: 0;
+  transform: translateY(34px) scale(0.985);
+  transition: opacity 0.5s var(--ease-out), transform 0.66s var(--ease-snap);
+  transition-delay: var(--d, 0ms);
+}
+.motion .rise.in { opacity: 1; transform: none; }
+
+/* Buttons: lift, and the clipped corner opens up slightly on hover. */
+.btn-primary, .btn-ghost {
+  transition: transform 0.18s var(--ease-out), background 0.18s linear,
+              border-color 0.18s linear, box-shadow 0.22s var(--ease-out),
+              clip-path 0.22s var(--ease-out);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -10px rgba(255, 90, 31, 0.75);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 17px), calc(100% - 17px) 100%, 0 100%);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+.btn-ghost:hover:not(:disabled) {
+  transform: translateY(-2px);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 17px), calc(100% - 17px) 100%, 0 100%);
+}
+.btn-ghost:active:not(:disabled) { transform: translateY(0); }
+
+/* Cards lift a little when pointed at. */
+.lift { transition: transform 0.24s var(--ease-out), border-color 0.24s linear, box-shadow 0.24s var(--ease-out); }
+.lift:hover {
+  transform: translateY(-3px);
+  border-color: var(--stroke);
+  box-shadow: 0 14px 34px -22px rgba(26, 22, 20, 0.5);
+}
+
+/* The ember glow breathes, slowly enough that you feel it rather than watch it. */
+@keyframes emberBreathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.06); }
+}
+.ember-glow { animation: emberBreathe 7.5s ease-in-out infinite; }
+
+/* The little square beside LIVE ON ROBINHOOD CHAIN. */
+@keyframes emberPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 90, 31, 0.55); }
+  70%      { opacity: 0.72; box-shadow: 0 0 0 7px rgba(255, 90, 31, 0); }
+}
+.pulse-dot { animation: emberPulse 2.4s ease-out infinite; }
+
+/* Underline that draws in on hover, for the proof row and nav. */
+.draw { position: relative; }
+.draw::after {
+  content: ''; position: absolute; left: 0; bottom: -3px; height: 1px; width: 100%;
+  background: var(--ember); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.28s var(--ease-out);
+}
+.draw:hover::after { transform: scaleX(1); }
+
+/* Numbers that tick up shouldn't reflow the layout as digits change width. */
+.tabular { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .wipe, .rise {
+    opacity: 1 !important; transform: none !important;
+    clip-path: none !important; transition: none !important;
+  }
+  .ember-glow, .pulse-dot { animation: none !important; }
+  .btn-primary, .btn-ghost, .lift { transition: none !important; }
+  .btn-primary:hover, .btn-ghost:hover, .lift:hover { transform: none !important; }
+}

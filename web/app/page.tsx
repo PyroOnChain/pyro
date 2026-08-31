@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { STOCKS } from '@/lib/addresses';
+import { Reveal } from '@/components/Reveal';
+import { CountUp } from '@/components/CountUp';
 
 const STEPS = [
   {
@@ -31,55 +33,59 @@ export default function LandingPage() {
       <Header />
 
       <section style={{ position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, width: 760, height: 620,
+        <div className="ember-glow" style={{ position: 'absolute', left: 0, top: 0, width: 760, height: 620,
           background: 'radial-gradient(ellipse at 20% 30%, rgba(255,90,31,0.13), transparent 68%)', pointerEvents: 'none' }} />
         <div className="shell" style={{ padding: '96px 40px 88px', position: 'relative', zIndex: 2 }}>
           <div className="grid-12">
             <div className="col-7">
-              <div className="row" style={{ gap: 10, marginBottom: 30 }}>
-                <span style={{ width: 7, height: 7, background: 'var(--ember)', display: 'block' }} />
+              <Reveal className="row" style={{ gap: 10, marginBottom: 30 }}>
+                <span className="pulse-dot" style={{ width: 7, height: 7, background: 'var(--ember)', display: 'block' }} />
                 <span className="mono" style={{ fontSize: 12, letterSpacing: '0.18em', color: 'var(--muted)' }}>
                   LIVE ON ROBINHOOD CHAIN
                 </span>
-              </div>
+              </Reveal>
 
               <h1 className="display h-hero" style={{ lineHeight: 0.94, letterSpacing: '-0.02em', margin: '0 0 28px' }}>
-                YOUR MEME<br />BUYS YOUR<br /><span style={{ color: 'var(--ember-ink)' }}>STOCK.</span>
+                <Reveal as="span" variant="wipe" delay={80} style={{ display: 'block' }}>YOUR MEME</Reveal>
+                <Reveal as="span" variant="wipe" delay={190} style={{ display: 'block' }}>BUYS YOUR</Reveal>
+                <Reveal as="span" variant="wipe" delay={300} style={{ display: 'block', color: 'var(--ember-ink)' }}>STOCK.</Reveal>
               </h1>
 
-              <p style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--body)', margin: '0 0 20px', maxWidth: 620, textWrap: 'pretty' }}>
+              <Reveal as="p" delay={420} style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--body)', margin: '0 0 20px', maxWidth: 620, textWrap: 'pretty' }}>
                 Put tokenized NVDA in the jar. Pyro launches one mascot coin for the club, priced in NVDA instead of ETH.
                 Every time somebody trades that mascot, the creator fee lands back in the jar as more NVDA.
-              </p>
-              <p style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--ink)', margin: '0 0 40px', maxWidth: 620, fontWeight: 500 }}>
+              </Reveal>
+              <Reveal as="p" delay={520} style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--ink)', margin: '0 0 40px', maxWidth: 620, fontWeight: 500 }}>
                 Mascot goes to zero? You still own the stock.
-              </p>
+              </Reveal>
 
-              <div className="row" style={{ gap: 14, marginBottom: 36, flexWrap: 'wrap' }}>
+              <Reveal className="row" delay={600} style={{ gap: 14, marginBottom: 36, flexWrap: 'wrap' }}>
                 <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 34px', fontSize: 16 }}>
                   OPEN A CLUB
                 </Link>
                 <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 30px', fontSize: 16, color: 'var(--ink)' }}>
                   SEE THE CLUBS
                 </Link>
-              </div>
+              </Reveal>
 
               <div className="row mono" style={{ gap: 26, fontSize: 12.5, color: 'var(--dim)', flexWrap: 'wrap' }}>
-                <span>NO SWAP</span><span style={{ color: 'var(--stroke)' }}>/</span>
-                <span>NO ORACLE</span><span style={{ color: 'var(--stroke)' }}>/</span>
-                <span>NO SLIPPAGE</span><span style={{ color: 'var(--stroke)' }}>/</span>
-                <span>NO MEV</span>
+                {['NO SWAP', 'NO ORACLE', 'NO SLIPPAGE', 'NO MEV'].map((t, i) => (
+                  <Reveal as="span" key={t} delay={700 + i * 90} className="row" style={{ gap: 26 }}>
+                    {i > 0 && <span style={{ color: 'var(--stroke)' }}>/</span>}
+                    <span className="draw">{t}</span>
+                  </Reveal>
+                ))}
               </div>
             </div>
 
             <div className="col-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div className="slab-lg card" style={{ width: '100%', maxWidth: 428, padding: '30px 30px 26px', alignSelf: 'flex-start' }}>
+              <Reveal variant="rise" delay={340} className="slab-lg card lift" style={{ width: '100%', maxWidth: 428, padding: '30px 30px 26px', alignSelf: 'flex-start' }}>
                 <div className="between" style={{ marginBottom: 26 }}>
                   <span className="display" style={{ fontSize: 19, letterSpacing: '0.06em' }}>NVDA CLUB</span>
                   <span className="chip mono" style={{ fontSize: 10, letterSpacing: '0.1em', color: 'var(--dim)', border: '1px solid var(--stroke)', padding: '5px 9px' }}>SAMPLE</span>
                 </div>
                 <div className="label" style={{ marginBottom: 8 }}>IN THE JAR</div>
-                <div className="stat" style={{ fontSize: 42, marginBottom: 4 }}>1,284.06</div>
+                <div className="stat" style={{ fontSize: 42, marginBottom: 4 }}><CountUp value={1284.06} /></div>
                 <div className="mono" style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 26 }}>NVDA</div>
                 <div style={{ height: 1, background: 'var(--line)', marginBottom: 22 }} />
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 20 }}>
@@ -92,7 +98,7 @@ export default function LandingPage() {
                     <div className="stat" style={{ fontSize: 20 }}>10.0%</div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         </div>
@@ -101,11 +107,11 @@ export default function LandingPage() {
       <div style={{ borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', background: 'var(--band)' }}>
         <div className="shell" style={{ padding: '0 40px' }}>
           <div className="ticker-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))' }}>
-            {STOCKS.map((s) => (
-              <div key={s.symbol} style={{ padding: '26px 0', display: 'flex', alignItems: 'baseline', gap: 12, borderRight: '1px solid var(--line-soft)' }}>
+            {STOCKS.map((s, i) => (
+              <Reveal key={s.symbol} delay={i * 90} className="lift" style={{ padding: '26px 0', display: 'flex', alignItems: 'baseline', gap: 12, borderRight: '1px solid var(--line-soft)' }}>
                 <span className="display" style={{ fontSize: 17, letterSpacing: '0.06em' }}>{s.symbol}</span>
                 <span className="mono" style={{ fontSize: 12, color: 'var(--dim)' }}>graduates at {s.graduation}</span>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -113,12 +119,12 @@ export default function LandingPage() {
 
       <section className="shell" style={{ padding: '104px 40px 96px' }}>
         <div className="between stack-sm" style={{ alignItems: 'baseline', marginBottom: 56 }}>
-          <h2 className="display h-2" style={{ letterSpacing: '-0.01em', margin: 0 }}>HOW THE JAR FILLS</h2>
+          <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: 0 }}>HOW THE JAR FILLS</Reveal>
           <span className="mono" style={{ fontSize: 12, color: 'var(--dim)', letterSpacing: '0.12em' }}>THREE MOVES</span>
         </div>
         <div className="grid-3" style={{ alignItems: 'end' }}>
-          {STEPS.map((s) => (
-            <div key={s.n} className="slab-lg card"
+          {STEPS.map((s, i) => (
+            <Reveal key={s.n} variant="rise" delay={i * 130} className="slab-lg card lift"
               style={{ padding: '34px 30px', height: s.h, display: 'flex', flexDirection: 'column',
                 justifyContent: 'space-between', borderColor: s.accent ? 'var(--ember)' : 'var(--line)' }}>
               <div>
@@ -129,7 +135,7 @@ export default function LandingPage() {
               {s.foot && (
                 <div className="mono" style={{ fontSize: 12, color: s.accent ? 'var(--ember-ink)' : 'var(--dim)' }}>{s.foot}</div>
               )}
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -139,9 +145,10 @@ export default function LandingPage() {
           <div className="grid-12" style={{ alignItems: 'start' }}>
             <div className="col-5">
               <h2 className="display h-1" style={{ lineHeight: 1.02, letterSpacing: '-0.01em', margin: '0 0 22px' }}>
-                THERE IS<br />NO SWAP.
+                <Reveal as="span" variant="wipe" style={{ display: 'block' }}>THERE IS</Reveal>
+                <Reveal as="span" variant="wipe" delay={130} style={{ display: 'block' }}>NO SWAP.</Reveal>
               </h2>
-              <div style={{ width: 62, height: 3, background: 'var(--ember)' }} />
+              <Reveal delay={300} style={{ width: 62, height: 3, background: 'var(--ember)' }}><span /></Reveal>
             </div>
             <div className="col-7">
               <p style={{ fontSize: 18, lineHeight: 1.62, color: 'var(--muted)', margin: '0 0 22px', textWrap: 'pretty' }}>
@@ -151,44 +158,44 @@ export default function LandingPage() {
               <p style={{ fontSize: 18, lineHeight: 1.62, color: 'var(--ink)', margin: '0 0 30px', textWrap: 'pretty' }}>
                 Pyro prices the mascot against NVDA itself. The fees arrive as NVDA already. Nothing to swap means nothing to skim.
               </p>
-              <div className="chip mono" style={{ background: 'var(--bg)', border: '1px solid var(--line)', padding: '18px 20px', fontSize: 13, lineHeight: 1.7, color: 'var(--dim)' }}>
+              <Reveal variant="rise" delay={160} className="chip mono lift" style={{ background: 'var(--bg)', border: '1px solid var(--line)', padding: '18px 20px', fontSize: 13, lineHeight: 1.7, color: 'var(--dim)' }}>
                 <span style={{ color: 'var(--stroke)' }}>$</span> pairTokenEconomics(<span style={{ color: 'var(--ink)' }}>NVDA</span>)<br />
                 <span style={{ color: 'var(--stroke)' }}>→</span> phantom <span style={{ color: 'var(--ember-ink)' }}>16.64</span>{'  '}
                 threshold <span style={{ color: 'var(--ember-ink)' }}>41.6</span>{'  '}
                 decimals <span style={{ color: 'var(--ember-ink)' }}>18</span><br />
                 <span style={{ color: 'var(--dim)' }}>{'// verified on mainnet, not a whitepaper claim'}</span>
-              </div>
+              </Reveal>
             </div>
           </div>
         </div>
       </section>
 
       <section className="shell" style={{ padding: '96px 40px' }}>
-        <h2 className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 14px' }}>WHAT YOU&apos;RE ACTUALLY HOLDING</h2>
+        <Reveal as="h2" variant="wipe" className="display h-2" style={{ letterSpacing: '-0.01em', margin: '0 0 14px' }}>WHAT YOU&apos;RE ACTUALLY HOLDING</Reveal>
         <p style={{ fontSize: 17, color: 'var(--dim)', margin: '0 0 52px' }}>
           The parts nobody puts on a landing page. They&apos;re the reason this one works.
         </p>
         <div className="grid-2">
-          {HONEST.map((c) => (
-            <div key={c.t} className="slab-lg card" style={{ padding: '32px 30px' }}>
+          {HONEST.map((c, i) => (
+            <Reveal key={c.t} variant="rise" delay={i * 110} className="slab-lg card lift" style={{ padding: '32px 30px' }}>
               <div className="display" style={{ fontSize: 21, marginBottom: 12 }}>{c.t}</div>
               <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--muted)', margin: 0, textWrap: 'pretty' }}>{c.b}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section style={{ position: 'relative', borderTop: '1px solid var(--line)', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 120%, rgba(255,90,31,0.15), transparent 62%)' }} />
+        <div className="ember-glow" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 120%, rgba(255,90,31,0.15), transparent 62%)' }} />
         <div className="shell" style={{ padding: '104px 40px 96px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
-          <h2 className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>LIGHT ONE UP.</h2>
-          <p style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 480 }}>
+          <Reveal as="h2" variant="wipe" className="display h-3" style={{ lineHeight: 1.02, letterSpacing: '-0.015em', margin: '0 0 20px' }}>LIGHT ONE UP.</Reveal>
+          <Reveal as="p" delay={140} style={{ fontSize: 18, color: 'var(--muted)', margin: '0 auto 38px', maxWidth: 480 }}>
             Pick a ticker, seed the jar, let the mascot go to work.
-          </p>
-          <div className="row" style={{ justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
+          </Reveal>
+          <Reveal className="row" delay={250} style={{ justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
             <Link href="/create" className="btn btn-primary" style={{ display: 'inline-block', padding: '18px 38px', fontSize: 16 }}>OPEN A CLUB</Link>
             <Link href="/clubs" className="btn btn-ghost" style={{ display: 'inline-block', padding: '17px 32px', fontSize: 16, color: 'var(--ink)' }}>BROWSE CLUBS</Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 

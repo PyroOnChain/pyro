@@ -33,6 +33,17 @@ export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <head>
+        {/* Enables the scroll-reveal styles only when JS can actually run them.
+            Without this the page would render blank if the script failed. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)" +
+              "document.documentElement.classList.add('motion')}catch(e){}",
+          }}
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
