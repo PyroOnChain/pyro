@@ -1,8 +1,10 @@
-# build output
-out/
-cache/
-lib/
-broadcast/
+# foundry (anchored to repo root so it does not swallow web/lib or keeper/lib)
+/out/
+/cache/
+/lib/
+/broadcast/
+
+# node / next
 node_modules/
 .next/
 *.tsbuildinfo
