@@ -257,3 +257,76 @@ button:disabled { cursor: not-allowed; }
   .pulse-dot, .flicker, .marquee-track { animation: none; }
   .btn, .lift { transition: none; }
 }
+
+/* ============================================================================
+   Degen layer. The grid-of-equal-cards look is what made the first pass read as
+   template work, so these are the pieces that break the grid: a live backdrop,
+   strips running at an angle, numbers big enough to be furniture, and hover
+   states with some violence in them.
+   ========================================================================== */
+
+.arena-canvas {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: -1; pointer-events: none; display: block;
+}
+
+/* the hero owns the screen */
+.hero-full { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+
+/* strips that cut across the page at an angle */
+.skew-strip {
+  position: relative; z-index: 2;
+  transform: rotate(-2.2deg) scale(1.05);
+  border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+  background: var(--gold); color: #000;
+  padding: 13px 0; overflow: hidden;
+}
+.skew-strip.alt { transform: rotate(1.6deg) scale(1.05); background: var(--red); color: #000; }
+.skew-strip .marquee-track { animation-duration: 26s; }
+.skew-item {
+  display: flex; align-items: center; gap: 18px; padding: 0 22px; white-space: nowrap;
+  font-family: var(--font-display), sans-serif; font-size: 20px; letter-spacing: -0.01em; text-transform: uppercase;
+}
+
+/* numbers used as furniture rather than data */
+.bignum {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(90px, 17vw, 210px); line-height: 0.78; letter-spacing: -0.05em;
+  color: transparent; -webkit-text-stroke: 2px var(--line);
+  pointer-events: none; user-select: none;
+}
+.bignum.on-a { -webkit-text-stroke-color: rgba(255, 79, 216, 0.5); }
+.bignum.on-b { -webkit-text-stroke-color: rgba(47, 128, 255, 0.5); }
+.bignum.on-c { -webkit-text-stroke-color: rgba(124, 255, 63, 0.5); }
+
+/* outlined display type, for headings that should feel printed rather than typed */
+.outline {
+  color: transparent; -webkit-text-stroke: 2px var(--ink);
+}
+
+/* alternating full-width rows: the eye zig-zags instead of scanning three boxes */
+.beat { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 38px; align-items: center; padding: 44px 0; border-top: 2px solid var(--line); }
+.beat.flip > :first-child { order: 2; }
+@media (max-width: 900px) { .beat { grid-template-columns: 1fr; gap: 18px; } .beat.flip > :first-child { order: 0; } }
+
+/* a card that reacts like it has been hit */
+.slam { transition: transform 0.18s var(--ease-snap), border-color 0.18s linear, background-color 0.18s linear; }
+.slam:hover { transform: translate(-4px, -4px); border-color: var(--ink); }
+.slam:active { transform: translate(0, 0); }
+
+/* the headline treatment: each line can carry its own colour and shift on hover */
+.line { display: block; transition: transform 0.4s var(--ease-out), color 0.3s linear; }
+.hero-full:hover .line.l2 { transform: translateX(10px); }
+
+@keyframes ticker-blink { 0%, 92%, 100% { opacity: 1; } 94%, 98% { opacity: 0.25; } }
+.blink { animation: ticker-blink 3.4s steps(1, end) infinite; }
+
+/* a scroll cue that actually moves */
+@keyframes nudge { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(7px); opacity: 1; } }
+.nudge { animation: nudge 1.9s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blink, .nudge { animation: none; }
+  .slam, .line { transition: none; }
+  .skew-strip { transform: none; }
+}
