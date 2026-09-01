@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Anton, Barlow, JetBrains_Mono } from 'next/font/google';
+import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import { CursorGlow } from '@/components/CursorGlow';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import './globals.css';
 
-// Anton for the versus-screen headlines, Barlow for copy that has to be read
-// while a clock is running, JetBrains for every figure on the page.
-const display = Anton({ subsets: ['latin'], weight: '400', variable: '--font-display' });
+// Archivo Black is the wide, heavy poster face the whole layout hangs off. Barlow
+// keeps copy readable while a clock is running; JetBrains carries every figure.
+const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--font-display' });
 const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: 'Stock Wars — two coins enter, one gets paid', description: DESCRIPTION },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#0A0C12' };
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#000000' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

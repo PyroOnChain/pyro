@@ -1,39 +1,43 @@
 /* ============================================================================
    Stock Wars design system.
 
-   A versus screen. Two sides, one red one blue, fighting over a gold pot on a
-   dark arena floor. Everything is built to be read at a glance while a clock is
-   running: heavy condensed display type, monospace figures, hard edges, and
-   colour used to mean something rather than to decorate. Red is always side A,
-   blue is always side B, gold is always the prize.
+   A versus screen on pure black: hot pink against electric blue, fighting over an
+   acid yellow pot. Poster typography, stadium pills and rings carry the identity;
+   colour is semantic rather than decorative, so pink is always side A, blue is
+   always side B, and yellow is always the prize.
    ========================================================================== */
 
 :root {
-  --bg: #0A0C12;
-  --surface: #141824;
-  --surface-2: #1B2130;
-  --line: #262D3E;
-  --line-soft: #1D2432;
+  --bg: #000000;
+  --surface: #0D0D11;
+  --surface-2: #16161C;
+  --line: #2A2A33;
+  --line-soft: #1C1C23;
 
-  --ink: #F2F4F8;
-  --body: #C3CAD8;
-  --muted: #8A93A6;
-  --dim: #5C6478;
+  --ink: #FFFFFF;
+  --body: #C9C9D3;
+  --muted: #8B8B97;
+  --dim: #5A5A66;
 
-  /* the two corners */
-  --red: #FF3B47;
-  --red-dim: #B32731;
-  --red-wash: rgba(255, 59, 71, 0.12);
-  --blue: #2F8BFF;
-  --blue-dim: #1E5FB3;
-  --blue-wash: rgba(47, 139, 255, 0.12);
+  /* the two corners. Kept as --red/--blue names so nothing else has to move,
+     but side A is now hot pink: it reads hotter than red against pure black. */
+  --red: #FF4FD8;
+  --red-dim: #B02C93;
+  --red-wash: rgba(255, 79, 216, 0.14);
+  --blue: #2F80FF;
+  --blue-dim: #1B52A8;
+  --blue-wash: rgba(47, 128, 255, 0.14);
 
   /* the pot */
-  --gold: #FFC53D;
-  --gold-dim: #B3872A;
+  --gold: #FFE500;
+  --gold-dim: #B39F00;
 
-  --live: #2ED573;
-  --loss: #FF5C6C;
+  /* the rest of the poster palette, used to colour-cycle lists */
+  --lime: #7CFF3F;
+  --violet: #8B5CFF;
+
+  --live: #7CFF3F;
+  --loss: #FF4F6E;
 
   --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
   --ease-snap: cubic-bezier(0.22, 1.2, 0.36, 1);
@@ -59,9 +63,9 @@ body {
 .arena {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(70% 55% at 0% 22%, rgba(255, 59, 71, 0.16), transparent 62%),
-    radial-gradient(70% 55% at 100% 22%, rgba(47, 139, 255, 0.16), transparent 62%),
-    linear-gradient(180deg, #0D1018 0%, var(--bg) 55%);
+    radial-gradient(66% 52% at 0% 20%, rgba(255, 79, 216, 0.20), transparent 62%),
+    radial-gradient(66% 52% at 100% 20%, rgba(47, 128, 255, 0.20), transparent 62%),
+    linear-gradient(180deg, #08080B 0%, var(--bg) 55%);
 }
 .arena::after {
   content: ''; position: absolute; inset: 0;
@@ -76,7 +80,7 @@ a { color: var(--ink); text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 
-.display { font-family: var(--font-display), Impact, sans-serif; font-weight: 400; letter-spacing: 0.01em; }
+.display { font-family: var(--font-display), Impact, sans-serif; font-weight: 400; letter-spacing: -0.02em; }
 .mono { font-family: var(--font-mono), ui-monospace, monospace; }
 .tabular { font-variant-numeric: tabular-nums; }
 
@@ -85,17 +89,23 @@ button:disabled { cursor: not-allowed; }
 /* ---------------------------------------------------------------- surfaces */
 .panel {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 2px solid var(--line);
 }
-.panel-2 { background: var(--surface-2); border: 1px solid var(--line); }
+.panel-2 { background: var(--surface-2); border: 2px solid var(--line); }
 
-/* A corner-cut plate, the shape the whole UI is built from. */
-.plate {
-  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+/* Panels are softly squared; the personality lives in the pills and circles. */
+.plate { border-radius: 18px; }
+.pill { border-radius: 999px; }
+/* A stadium bar with a coloured ring inside it, the motif the whole page repeats. */
+.pill-row {
+  display: flex; align-items: center; gap: 14px;
+  border: 2px solid var(--line); border-radius: 999px;
+  padding: 12px 20px; background: var(--surface);
 }
+.dot { width: 22px; height: 22px; border-radius: 999px; flex-shrink: 0; }
 
 /* ---------------------------------------------------------------- type */
-.h-hero { font-size: clamp(52px, 12vw, 132px); line-height: 0.88; letter-spacing: -0.01em; }
+.h-hero { font-size: clamp(40px, 8.4vw, 94px); line-height: 0.92; letter-spacing: -0.035em; }
 .h-1 { font-size: clamp(34px, 6vw, 64px); line-height: 0.94; }
 .h-2 { font-size: clamp(26px, 4.4vw, 44px); line-height: 0.98; }
 .label {
@@ -108,17 +118,17 @@ button:disabled { cursor: not-allowed; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   font-family: var(--font-display), sans-serif; font-size: 17px; letter-spacing: 0.06em;
-  padding: 16px 30px; border: 1px solid transparent; text-transform: uppercase;
+  padding: 16px 32px; border: 2px solid transparent; text-transform: uppercase;
+  border-radius: 999px;
   transition: transform 0.16s var(--ease-snap), box-shadow 0.16s var(--ease-out),
               background-color 0.16s linear, border-color 0.16s linear;
-  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
 }
-.btn-gold { background: var(--gold); color: #14100A; }
-.btn-gold:hover:not(:disabled) { background: #FFD166; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 197, 61, 0.28); }
-.btn-red { background: var(--red); color: #fff; }
-.btn-red:hover:not(:disabled) { background: #FF5560; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 59, 71, 0.32); }
+.btn-gold { background: var(--gold); color: #000; }
+.btn-gold:hover:not(:disabled) { background: #FFF04D; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 229, 0, 0.30); }
+.btn-red { background: var(--red); color: #000; }
+.btn-red:hover:not(:disabled) { background: #FF74E1; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 79, 216, 0.34); }
 .btn-blue { background: var(--blue); color: #fff; }
-.btn-blue:hover:not(:disabled) { background: #4C9CFF; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(47, 139, 255, 0.32); }
+.btn-blue:hover:not(:disabled) { background: #5798FF; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(47, 128, 255, 0.34); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn-ghost:hover:not(:disabled) { border-color: var(--muted); background: rgba(255,255,255,0.03); }
 .btn:disabled { opacity: 0.4; transform: none !important; box-shadow: none !important; }
@@ -126,37 +136,36 @@ button:disabled { cursor: not-allowed; }
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--font-mono), monospace; font-size: 11.5px; letter-spacing: 0.1em;
-  padding: 6px 11px; border: 1px solid var(--line); background: var(--surface-2);
-  text-transform: uppercase;
+  padding: 7px 14px; border: 2px solid var(--line); background: var(--surface-2);
+  text-transform: uppercase; border-radius: 999px;
 }
-.chip-live { border-color: rgba(46, 213, 115, 0.45); color: var(--live); }
-.chip-red { border-color: rgba(255, 59, 71, 0.45); color: var(--red); }
-.chip-blue { border-color: rgba(47, 139, 255, 0.45); color: var(--blue); }
-.chip-gold { border-color: rgba(255, 197, 61, 0.45); color: var(--gold); }
+.chip-live { border-color: rgba(124, 255, 63, 0.5); color: var(--live); }
+.chip-red { border-color: rgba(255, 79, 216, 0.5); color: var(--red); }
+.chip-blue { border-color: rgba(47, 128, 255, 0.5); color: var(--blue); }
+.chip-gold { border-color: rgba(255, 229, 0, 0.5); color: var(--gold); }
 
 /* ---------------------------------------------------------------- the VS badge */
+/* A ring, not a diamond: the reference language is circles inside stadiums. */
 .vs {
   display: grid; place-items: center; flex-shrink: 0;
-  width: 74px; height: 74px;
-  font-family: var(--font-display), sans-serif; font-size: 30px; letter-spacing: 0.02em;
+  width: 78px; height: 78px; border-radius: 999px;
+  font-family: var(--font-display), sans-serif; font-size: 25px; letter-spacing: 0.01em;
   color: var(--ink); background: var(--bg);
-  border: 2px solid var(--line);
-  transform: rotate(45deg);
-  box-shadow: 0 0 0 6px var(--bg), 0 0 40px rgba(255, 197, 61, 0.18);
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 0 7px var(--bg), 0 0 46px rgba(255, 229, 0, 0.22);
 }
-.vs > span { transform: rotate(-45deg); }
 
 /* ---------------------------------------------------------------- health bars */
 /* The market-cap bar. Two sides of one track, meeting in the middle, so the
    balance of a match is legible without reading a single number. */
 .tug {
-  display: flex; height: 22px; width: 100%; overflow: hidden;
-  border: 1px solid var(--line); background: var(--surface-2);
+  display: flex; height: 26px; width: 100%; overflow: hidden;
+  border: 2px solid var(--line); background: var(--surface-2); border-radius: 999px;
 }
 .tug-a { background: linear-gradient(90deg, var(--red-dim), var(--red)); transition: width 0.6s var(--ease-out); }
 .tug-b { background: linear-gradient(90deg, var(--blue), var(--blue-dim)); transition: width 0.6s var(--ease-out); margin-left: auto; }
 
-.bar { height: 8px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.bar { height: 10px; background: var(--surface-2); border: 2px solid var(--line); overflow: hidden; border-radius: 999px; }
 .bar > i { display: block; height: 100%; transition: width 0.6s var(--ease-out); }
 
 /* ---------------------------------------------------------------- layout */
@@ -174,7 +183,7 @@ button:disabled { cursor: not-allowed; }
 }
 
 /* a strip of stats divided by hard rules */
-.statbar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); background: var(--surface); }
+.statbar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 2px solid var(--line); background: var(--surface); border-radius: 18px; overflow: hidden; }
 .statbar > * { padding: 18px 22px; border-right: 1px solid var(--line); }
 .statbar > *:last-child { border-right: none; }
 
@@ -233,7 +242,7 @@ button:disabled { cursor: not-allowed; }
 @keyframes slide { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
 
 .field {
-  width: 100%; background: var(--bg); border: 1px solid var(--line);
+  width: 100%; background: var(--bg); border: 2px solid var(--line); border-radius: 12px;
   padding: 14px 15px; font-size: 15px; color: var(--ink); font-family: inherit;
 }
 .field:focus { outline: none; border-color: var(--gold); }

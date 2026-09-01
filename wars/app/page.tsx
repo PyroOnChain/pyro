@@ -7,6 +7,8 @@ import { Magnetic } from '@/components/Magnetic';
 import { FeaturedFight } from '@/components/FeaturedFight';
 import { STOCKS } from '@/lib/addresses';
 
+const ACCENTS = ['var(--red)', 'var(--blue)', 'var(--lime)'];
+
 const ROUNDS = [
   {
     n: 'ROUND 1',
@@ -56,7 +58,7 @@ export default function LandingPage() {
           <span className="label" style={{ color: 'var(--muted)' }}>LIVE ON ROBINHOOD CHAIN</span>
         </Reveal>
 
-        <h1 className="display h-hero" style={{ margin: '0 0 30px', maxWidth: 1120 }}>
+        <h1 className="display h-hero" style={{ margin: '0 0 30px' }}>
           <Reveal as="span" variant="wipe" style={{ display: 'block' }}>TWO COINS ENTER.</Reveal>
           <Reveal as="span" variant="wipe" delay={160} style={{ display: 'block' }}>
             ONE GETS <span style={{ color: 'var(--gold)' }}>PAID.</span>
@@ -117,8 +119,11 @@ export default function LandingPage() {
         <div className="grid-3">
           {ROUNDS.map((r, i) => (
             <Reveal key={r.n} variant="rise" delay={i * 110} className="panel plate lift" style={{ padding: '30px 26px 28px' }}>
-              <div className="label" style={{ color: 'var(--gold)', marginBottom: 20 }}>{r.n}</div>
-              <div className="display" style={{ fontSize: 30, marginBottom: 14 }}>{r.title}</div>
+              <div className="row" style={{ gap: 11, marginBottom: 20 }}>
+                <span className="dot" style={{ width: 16, height: 16, background: ACCENTS[i] }} />
+                <span className="label" style={{ color: ACCENTS[i] }}>{r.n}</span>
+              </div>
+              <div className="display" style={{ fontSize: 27, marginBottom: 14, color: ACCENTS[i] }}>{r.title}</div>
               <p style={{ fontSize: 15.5, lineHeight: 1.65, color: 'var(--body)', margin: 0 }}>{r.body}</p>
             </Reveal>
           ))}
@@ -162,7 +167,10 @@ export default function LandingPage() {
         <div className="grid-2">
           {RULES.map((r, i) => (
             <Reveal key={r.t} variant="rise" delay={i * 90} className="panel plate lift" style={{ padding: '28px 26px' }}>
-              <div className="display" style={{ fontSize: 24, marginBottom: 12 }}>{r.t}</div>
+              <div className="row" style={{ gap: 12, marginBottom: 12 }}>
+                <span className="dot" style={{ background: ['var(--red)', 'var(--blue)', 'var(--gold)', 'var(--violet)'][i] }} />
+                <div className="display" style={{ fontSize: 22 }}>{r.t}</div>
+              </div>
               <p style={{ fontSize: 15.5, lineHeight: 1.65, color: 'var(--body)', margin: 0 }}>{r.b}</p>
             </Reveal>
           ))}
