@@ -22,8 +22,8 @@ OUT=$(forge script script/LocalStockWars.s.sol --rpc-url $RPC --broadcast 2>&1)
 echo "$OUT" | grep -E "^  (NVDA|FACTORY|live|close|deployer)" || { echo "$OUT" | tail -25; exit 1; }
 FACTORY=$(echo "$OUT" | grep "^  FACTORY" | awk '{print $2}')
 
-cat > wars/.env.local <<ENV
+cat > web/.env.local <<ENV
 NEXT_PUBLIC_BATTLE_FACTORY=$FACTORY
 NEXT_PUBLIC_RPC_URL=$RPC
 ENV
-echo "==> wrote wars/.env.local"
+echo "==> wrote web/.env.local"

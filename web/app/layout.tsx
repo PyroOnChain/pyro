@@ -1,63 +1,46 @@
 import type { Metadata } from 'next';
-import { Pixelify_Sans, Nunito, JetBrains_Mono } from 'next/font/google';
+import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import { CursorGlow } from '@/components/CursorGlow';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import './globals.css';
 
-// Pixelify carries the blocky wordmark look for headings; Nunito keeps body copy
-// friendly and readable, and JetBrains stays on the numbers, where a pixel face
-// would cost more legibility than it is worth.
-const display = Pixelify_Sans({ subsets: ['latin'], weight: ['500', '600', '700'], variable: '--font-display' });
-const body = Nunito({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-body' });
-const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-mono' });
+// Archivo Black is the wide, heavy poster face the whole layout hangs off. Barlow
+// keeps copy readable while a clock is running; JetBrains carries every figure.
+const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--font-display' });
+const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
+const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
 
-/** The live host. Absolute URLs in the social card are built from this. */
-const SITE = 'https://vaulttube.fun';
-
+const SITE = 'https://stockswars.com';
 const DESCRIPTION =
-  'Put tokenized stock in the vault. VaultTube launches one mascot coin per club, priced in the stock ' +
-  'itself, so every trade of it sends fees back to the vault as more stock.';
+  'Two memecoins launch at the same second, priced in the same tokenized stock. '
+  + 'One hour later the side that hit the higher market cap takes both tokens’ creator fees, paid in stock.';
 
 export const metadata: Metadata = {
-  title: { default: 'VaultTube', template: '%s · VaultTube' },
+  title: { default: 'Stock Wars', template: '%s · Stock Wars' },
   description: DESCRIPTION,
-  applicationName: 'VaultTube',
+  applicationName: 'Stock Wars',
   metadataBase: new URL(SITE),
-  openGraph: {
-    title: 'VaultTube — your meme buys your stock',
-    description: DESCRIPTION,
-    siteName: 'VaultTube',
-    type: 'website',
-    url: SITE,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@VaultTube',
-    creator: '@VaultTube',
-    title: 'VaultTube — your meme buys your stock',
-    description: DESCRIPTION,
-  },
+  openGraph: { title: 'Stock Wars — two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Stock Wars', type: 'website', url: SITE },
+  twitter: { card: 'summary_large_image', title: 'Stock Wars — two coins enter, one gets paid', description: DESCRIPTION },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#FFD9B0' };
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#000000' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
-        {/* Enables the scroll-reveal styles only when JS can actually run them.
-            Without this the page would render blank if the script failed. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)" +
-              "document.documentElement.classList.add('motion')}catch(e){}",
+              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)"
+              + "document.documentElement.classList.add('motion')}catch(e){}",
           }}
         />
       </head>
       <body>
-        <div className="sky" aria-hidden="true" />
+        <div className="arena" aria-hidden="true" />
         <ScrollProgress />
         <CursorGlow />
         <Providers>{children}</Providers>

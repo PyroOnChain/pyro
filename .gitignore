@@ -23,7 +23,7 @@ LAUNCH.md
 *.log
 
 # Stock Wars web app
-/wars/node_modules/
-/wars/.next/
-/wars/out/
-/wars/.env.local
+/web/node_modules/
+/web/.next/
+/web/out/
+/web/.env.local

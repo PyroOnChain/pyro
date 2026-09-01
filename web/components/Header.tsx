@@ -1,82 +1,88 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { useCorrectChain } from '@/lib/useCorrectChain';
+import { useAccount, useDisconnect } from 'wagmi';
+import { WalletPicker } from '@/components/WalletPicker';
 import { short } from '@/lib/format';
+import { useCorrectChain } from '@/lib/useCorrectChain';
+
+/**
+ * A floating island rather than a full-width bar.
+ *
+ * The backdrop is a live canvas, and a solid header cut a hard line across it.
+ * Taking the nav out of the flow lets the arena run edge to edge behind it, and
+ * the blur keeps the links legible over whatever colour happens to be underneath.
+ * Nav labels stay visible at every width: hiding them on phones left the only
+ * route between pages a button on the home page.
+ */
+const nav = [
+  { href: '/battles', label: 'Fights' },
+  { href: '/start', label: 'Start' },
+];
 
 export function Header() {
   const path = usePathname();
   const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { wrongChain, switching, switchToVaultTube, walletChainId } = useCorrectChain();
+  const { wrongChain, switching, switchToVaultTube: switchChain } = useCorrectChain();
 
-  const nav = [
-    { href: '/clubs', label: 'Clubs' },
-    { href: '/create', label: 'Create' },
-  ];
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setStuck(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header style={{ background: 'var(--card)', borderBottom: '3px solid var(--ink)' }}>
-      <div className="shell between" style={{ padding: '18px 40px' }}>
-        <div className="row" style={{ gap: 34 }}>
-          <Link href="/" className="row" style={{ gap: 10, color: 'var(--ink)' }}>
-            <Image src="/vaulttube-mark.png" alt="VaultTube" width={128} height={128}
-              style={{ height: 30, width: 30, border: '2px solid var(--ink)', boxShadow: '3px 3px 0 var(--gold)' }} priority />
-            <span className="display" style={{ fontSize: 20, letterSpacing: '0.06em' }}>VaultTube</span>
-          </Link>
-          <nav className="row hide-sm" style={{ gap: 24, fontSize: 14, fontWeight: 500 }}>
-            {nav.map((n) => {
-              const active = path.startsWith(n.href);
-              return (
-                <Link
-                  key={n.href}
-                  href={n.href}
-                  style={{
-                    color: active ? 'var(--ink)' : 'var(--muted)',
-                    borderBottom: active ? '2px solid var(--accent)' : '2px solid transparent',
-                    paddingBottom: 3,
-                  }}
-                >
-                  {n.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-
-        <div className="row" style={{ gap: 10 }}>
-          {wrongChain ? (
-            <button className="chip btn-primary" style={{ padding: '10px 16px', fontSize: 13 }}
-              disabled={switching} onClick={switchToVaultTube}>
-              {switching ? 'CHECK WALLET…' : 'WRONG NETWORK — SWITCH'}
-            </button>
-          ) : (
-            <span className="chip mono hide-sm"
-              style={{ border: '1px solid var(--line)', background: 'var(--bg)', padding: '9px 13px', fontSize: 12, color: 'var(--dim)' }}>
-              {isConnected ? walletChainId : 4663}
+    <>
+      <div className="island-wrap">
+        <div className={`island${stuck ? ' stuck' : ''}`}>
+          <Link href="/" className="row" style={{ gap: 9, whiteSpace: 'nowrap' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/stockwars-mark.png" alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+            <span className="display" style={{ fontSize: 17, letterSpacing: '-0.02em' }}>
+              STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
             </span>
-          )}
+          </Link>
 
-          {isConnected ? (
-            <button className="chip row"
-              style={{ border: '1px solid var(--line)', background: 'var(--bg)', padding: '9px 14px', gap: 8 }}
+          <span className="island-sep" />
+
+          <nav className="island-nav">
+            {nav.map((n) => (
+              <Link key={n.href} href={n.href}
+                className={`island-link${path.startsWith(n.href) ? ' on' : ''}`}>
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          {wrongChain ? (
+            <button className="btn btn-gold" style={{ padding: '9px 16px', fontSize: 13 }}
+              disabled={switching} onClick={switchChain}>
+              {switching ? 'Check wallet' : 'Wrong network'}
+            </button>
+          ) : isConnected ? (
+            <button className="btn btn-ghost" style={{ padding: '9px 15px', fontSize: 12.5, fontFamily: 'var(--font-mono)', letterSpacing: 0 }}
               onClick={() => disconnect()} title="Disconnect">
-              <span style={{ width: 7, height: 7, background: 'var(--gain)', display: 'block' }} />
-              <span className="mono" style={{ fontSize: 12.5 }}>{short(address)}</span>
+              {short(address)}
             </button>
           ) : (
-            <button className="chip btn-primary" style={{ padding: '11px 18px', fontSize: 13 }}
-              disabled={isPending}
-              onClick={() => connect({ connector: connectors[0] })}>
-              {isPending ? 'CONNECTING…' : 'CONNECT WALLET'}
-            </button>
+            <WalletPicker>
+              {(open) => (
+                <button className="btn btn-gold" style={{ padding: '9px 18px', fontSize: 13 }} onClick={open}>
+                  Connect
+                </button>
+              )}
+            </WalletPicker>
           )}
         </div>
       </div>
-    </header>
+
+      {/* the island is fixed, so the flow needs the space back */}
+      <div className="island-gap" aria-hidden="true" />
+    </>
   );
 }
