@@ -6,7 +6,7 @@ type Links = { x: string; website: string };
 
 export const LINKS: Links = {
   x: 'https://x.com/VaultTubeClubz',
-  website: '', // set once the new domain is live; empty renders nothing
+  website: 'vaulttube.fun',
 };
 
 const bare = (u: string) => u.replace(/^https?:\/\//, '');

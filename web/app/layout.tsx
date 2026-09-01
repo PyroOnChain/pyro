@@ -12,8 +12,8 @@ const display = Pixelify_Sans({ subsets: ['latin'], weight: ['500', '600', '700'
 const body = Nunito({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-body' });
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-mono' });
 
-/** The live host. Update in one place when the new domain is pointed at the site. */
-const SITE = 'https://pyroclubz.com';
+/** The live host. Absolute URLs in the social card are built from this. */
+const SITE = 'https://vaulttube.fun';
 
 const DESCRIPTION =
   'Put tokenized stock in the vault. VaultTube launches one mascot coin per club, priced in the stock ' +
