@@ -11,7 +11,7 @@ const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--
 const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
 
-const SITE = 'https://stockwars.fun';
+const SITE = 'https://stockswars.com';
 const DESCRIPTION =
   'Two memecoins launch at the same second, priced in the same tokenized stock. '
   + 'One hour later the side that hit the higher market cap takes both tokens’ creator fees, paid in stock.';
