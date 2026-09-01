@@ -1,3 +1,5 @@
+import { LINKS } from '@/lib/links';
+
 export function Footer() {
   return (
     <footer style={{ borderTop: '1px solid var(--line)', marginTop: 80 }}>
@@ -10,7 +12,14 @@ export function Footer() {
               STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
             </span>
           </span>
-          <span className="label">Robinhood Chain · 4663</span>
+          <span className="row" style={{ gap: 16 }}>
+            {LINKS.x && (
+              <a href={LINKS.x} target="_blank" rel="noreferrer noopener" className="chip">
+                {LINKS.handle}
+              </a>
+            )}
+            <span className="label">Robinhood Chain · 4663</span>
+          </span>
         </div>
         <p className="mono" style={{ fontSize: 11.5, lineHeight: 1.8, color: 'var(--dim)', margin: 0, maxWidth: 940 }}>
           Tokenized stocks on Robinhood Chain are issued by Robinhood Assets (Jersey) Limited and are debt securities

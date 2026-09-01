@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
+import { LINKS } from '@/lib/links';
 import { CursorGlow } from '@/components/CursorGlow';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import './globals.css';
@@ -21,8 +22,11 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: 'Stock Wars',
   metadataBase: new URL(SITE),
-  openGraph: { title: 'Stock Wars — two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Stock Wars', type: 'website', url: SITE },
-  twitter: { card: 'summary_large_image', title: 'Stock Wars — two coins enter, one gets paid', description: DESCRIPTION },
+  openGraph: { title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Stock Wars', type: 'website', url: SITE },
+  twitter: {
+    card: 'summary_large_image', site: LINKS.handle, creator: LINKS.handle,
+    title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION,
+  },
 };
 
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#000000' };

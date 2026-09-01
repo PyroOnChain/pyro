@@ -7,6 +7,7 @@ import { useAccount, useDisconnect } from 'wagmi';
 import { WalletPicker } from '@/components/WalletPicker';
 import { short } from '@/lib/format';
 import { useCorrectChain } from '@/lib/useCorrectChain';
+import { LINKS } from '@/lib/links';
 
 /**
  * A floating island rather than a full-width bar.
@@ -58,6 +59,16 @@ export function Header() {
               </Link>
             ))}
           </nav>
+
+          {LINKS.x && (
+            <a href={LINKS.x} target="_blank" rel="noreferrer noopener"
+              className="island-link" aria-label="Stock Wars on X" title="Stock Wars on X"
+              style={{ display: 'grid', placeItems: 'center', padding: '9px 11px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.9 2H22l-7 8 8.2 12h-6.4l-5-7.3L5.9 22H2.8l7.5-8.6L2.4 2h6.6l4.5 6.7L18.9 2Zm-1.1 18.1h1.7L7.3 3.8H5.5l12.3 16.3Z"/>
+              </svg>
+            </a>
+          )}
 
           {wrongChain ? (
             <button className="btn btn-gold" style={{ padding: '9px 16px', fontSize: 13 }}
