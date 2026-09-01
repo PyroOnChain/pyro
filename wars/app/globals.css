@@ -378,3 +378,26 @@ button:disabled { cursor: not-allowed; }
   .island-link { padding: 8px 11px; font-size: 13px; }
   .island-sep { display: none; }
 }
+
+/* ---------------------------------------------------------------- wallet picker */
+/* Every injected extension announces itself, so the user has to choose rather than
+   be handed whichever one happened to register first. */
+.picker-scrim { position: fixed; inset: 0; z-index: 70; background: rgba(0, 0, 0, 0.55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.picker {
+  position: fixed; top: 78px; left: 50%; transform: translateX(-50%); z-index: 80;
+  width: min(340px, calc(100vw - 32px));
+  border-radius: 22px; border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(12, 12, 16, 0.94);
+  -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.65);
+  padding: 14px;
+}
+.picker-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 12px 14px; border-radius: 14px; border: 1px solid transparent;
+  background: transparent; color: var(--ink); font-size: 15px; font-weight: 600; text-align: left;
+  transition: background-color 0.16s linear, border-color 0.16s linear;
+}
+.picker-item:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.12); }
+.picker-item img { width: 26px; height: 26px; border-radius: 7px; }
+.picker-fallback { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--surface-2); font-size: 12px; color: var(--muted); }

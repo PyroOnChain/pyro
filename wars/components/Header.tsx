@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
+import { WalletPicker } from '@/components/WalletPicker';
 import { short } from '@/lib/format';
 import { useCorrectChain } from '@/lib/useCorrectChain';
 
@@ -24,7 +25,6 @@ const nav = [
 export function Header() {
   const path = usePathname();
   const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const { wrongChain, switching, switchToVaultTube: switchChain } = useCorrectChain();
 
@@ -66,10 +66,13 @@ export function Header() {
               {short(address)}
             </button>
           ) : (
-            <button className="btn btn-gold" style={{ padding: '9px 18px', fontSize: 13 }}
-              disabled={isPending} onClick={() => connect({ connector: connectors[0] })}>
-              {isPending ? 'Connecting' : 'Connect'}
-            </button>
+            <WalletPicker>
+              {(open) => (
+                <button className="btn btn-gold" style={{ padding: '9px 18px', fontSize: 13 }} onClick={open}>
+                  Connect
+                </button>
+              )}
+            </WalletPicker>
           )}
         </div>
       </div>
