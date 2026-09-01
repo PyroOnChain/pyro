@@ -26,6 +26,7 @@ export type BattleSummary = {
   settled?: boolean;
   winner?: number;
   totalHarvested?: bigint;
+  stockSymbol?: string;
 };
 
 /** live while the clock runs, awaiting once it stops until someone settles it */
@@ -93,13 +94,16 @@ export function useBattleSummaries(addresses: Address[]) {
   });
 
   // second pass for the token names, which need the addresses from the first
+  // The stock's own symbol comes from chain rather than the curated list, so a pair
+  // asset we have not hardcoded still renders a ticker instead of a blank.
   const tokenCalls = base.flatMap((b) =>
-    b.tokenA && b.tokenB
+    b.tokenA && b.tokenB && b.stock
       ? ([
           { address: b.tokenA, abi: erc20Abi, functionName: 'name' },
           { address: b.tokenA, abi: erc20Abi, functionName: 'symbol' },
           { address: b.tokenB, abi: erc20Abi, functionName: 'name' },
           { address: b.tokenB, abi: erc20Abi, functionName: 'symbol' },
+          { address: b.stock, abi: erc20Abi, functionName: 'symbol' },
         ] as const)
       : []
   );
@@ -110,13 +114,13 @@ export function useBattleSummaries(addresses: Address[]) {
 
   let cursor = 0;
   const battles = base.map((b) => {
-    if (!b.tokenA || !b.tokenB) return b;
+    if (!b.tokenA || !b.tokenB || !b.stock) return b;
     const g = (k: number) => {
       const r = tokenData?.[cursor + k];
       return r?.status === 'success' ? (r.result as string) : undefined;
     };
-    const out = { ...b, nameA: g(0), symbolA: g(1), nameB: g(2), symbolB: g(3) };
-    cursor += 4;
+    const out = { ...b, nameA: g(0), symbolA: g(1), nameB: g(2), symbolB: g(3), stockSymbol: g(4) };
+    cursor += 5;
     return out;
   });
 

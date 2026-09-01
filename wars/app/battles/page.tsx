@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Countdown } from '@/components/Countdown';
+import { FeaturedFight } from '@/components/FeaturedFight';
 import { useBattleAddresses, useBattleSummaries, phaseOf, tugSplit } from '@/lib/battles';
 import { factoryDeployed } from '@/lib/addresses';
 import { fmt, short } from '@/lib/format';
@@ -29,6 +30,13 @@ export default function BattlesPage() {
   const order = { live: 0, awaiting: 1, settled: 2 } as const;
   const sorted = [...battles].sort((x, y) => order[phaseOf(x)] - order[phaseOf(y)]);
 
+  // whichever live fight is closest to its bell gets the spotlight above, so keep
+  // it out of the grid rather than showing the same match twice
+  const featured = sorted
+    .filter((b) => phaseOf(b) === 'live' && b.endAt !== undefined)
+    .sort((x, y) => Number(x.endAt) - Number(y.endAt))[0];
+  const rest = sorted.filter((b) => b.address !== featured?.address);
+
   return (
     <>
       <Header />
@@ -43,9 +51,17 @@ export default function BattlesPage() {
           <Link href="/start" className="btn btn-gold" style={{ fontSize: 15, padding: '13px 22px' }}>Start a fight</Link>
         </div>
 
+        {/* one fight gets the spotlight; the rest sit underneath */}
+        {featured && (
+          <div style={{ marginBottom: 34 }}>
+            <div className="label" style={{ marginBottom: 12 }}>THE MAIN EVENT</div>
+            <FeaturedFight />
+          </div>
+        )}
+
         {loading && <div className="panel plate" style={{ padding: 28, color: 'var(--muted)' }}>Reading the chain…</div>}
 
-        {!loading && sorted.length === 0 && (
+        {!loading && battles.length === 0 && (
           <div className="panel plate" style={{ padding: '52px 28px', textAlign: 'center' }}>
             <div className="display" style={{ fontSize: 26, marginBottom: 10 }}>NO FIGHTS YET</div>
             <p style={{ color: 'var(--muted)', margin: '0 0 22px' }}>Someone has to throw the first punch.</p>
@@ -54,7 +70,7 @@ export default function BattlesPage() {
         )}
 
         <div className="card-grid">
-          {sorted.map((b) => {
+          {rest.map((b) => {
             const ph = phaseOf(b);
             const [pa, pb] = tugSplit(b.peakA, b.peakB);
             const winA = b.winner === 1;

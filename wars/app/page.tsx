@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer';
 import { Reveal } from '@/components/Reveal';
 import { Marquee } from '@/components/Marquee';
 import { Magnetic } from '@/components/Magnetic';
-import { CountUp } from '@/components/CountUp';
+import { FeaturedFight } from '@/components/FeaturedFight';
 import { STOCKS } from '@/lib/addresses';
 
 const ROUNDS = [
@@ -84,43 +84,9 @@ export default function LandingPage() {
             </Reveal>
           </div>
 
-          {/* the versus card: what a match looks like */}
-          <Reveal variant="rise" delay={260} className="panel plate" style={{ padding: '26px 26px 24px' }}>
-            <div className="between" style={{ marginBottom: 22 }}>
-              <span className="chip chip-gold">SAMPLE MATCH</span>
-              <span className="mono" style={{ fontSize: 13, color: 'var(--muted)' }}>
-                <span className="pulse-dot" style={{ color: 'var(--live)' }}>●</span> 41:07 LEFT
-              </span>
-            </div>
-
-            <div className="versus" style={{ marginBottom: 22 }}>
-              <Corner side="a" name="Jensen’s Jacket" sym="JACKET" cap={38.4} />
-              <div className="vs"><span>VS</span></div>
-              <Corner side="b" name="Cook’s Turtleneck" sym="NECK" cap={26.1} />
-            </div>
-
-            <div className="tug" style={{ marginBottom: 10 }}>
-              <div className="tug-a" style={{ width: '59.5%' }} />
-              <div className="tug-b" style={{ width: '40.5%' }} />
-            </div>
-            <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 22 }}>
-              <span style={{ color: 'var(--red)' }}>59.5%</span>
-              <span>PEAK MARKET CAP</span>
-              <span style={{ color: 'var(--blue)' }}>40.5%</span>
-            </div>
-
-            <div style={{ borderTop: '1px solid var(--line)', paddingTop: 18 }} className="between">
-              <div>
-                <div className="label" style={{ marginBottom: 6 }}>PURSE SO FAR</div>
-                <div className="stat" style={{ fontSize: 27, color: 'var(--gold)' }}>
-                  <CountUp value={12.84} /> <span style={{ fontSize: 14, color: 'var(--muted)' }}>NVDA</span>
-                </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div className="label" style={{ marginBottom: 6 }}>FIGHTING IN</div>
-                <div className="display" style={{ fontSize: 24 }}>NVDA</div>
-              </div>
-            </div>
+          {/* the headline fight, live from the chain when one is running */}
+          <Reveal variant="rise" delay={260}>
+            <FeaturedFight />
           </Reveal>
         </div>
       </section>
@@ -224,14 +190,3 @@ export default function LandingPage() {
   );
 }
 
-function Corner({ side, name, sym, cap }: { side: 'a' | 'b'; name: string; sym: string; cap: number }) {
-  const c = side === 'a' ? 'var(--red)' : 'var(--blue)';
-  return (
-    <div style={{ textAlign: side === 'a' ? 'left' : 'right' }}>
-      <div className="label" style={{ color: c, marginBottom: 8 }}>{side === 'a' ? 'SIDE A' : 'SIDE B'}</div>
-      <div className="display" style={{ fontSize: 21, lineHeight: 1.1, marginBottom: 4 }}>{name}</div>
-      <div className="mono" style={{ fontSize: 13, color: c, marginBottom: 10 }}>${sym}</div>
-      <div className="stat" style={{ fontSize: 19 }}>{cap.toFixed(2)}</div>
-    </div>
-  );
-}
