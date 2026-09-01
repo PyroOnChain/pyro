@@ -21,3 +21,9 @@ LAUNCH.md
 .claude/
 .DS_Store
 *.log
+
+# Stock Wars web app
+/wars/node_modules/
+/wars/.next/
+/wars/out/
+/wars/.env.local
