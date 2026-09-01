@@ -8,6 +8,7 @@ import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteCon
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Countdown } from '@/components/Countdown';
+import { ShareCoin } from '@/components/ShareCoin';
 import { battleAbi, erc20Abi } from '@/lib/abi';
 import { SIDE_A, SIDE_B, phaseOf, tugSplit, useBattle } from '@/lib/battles';
 import { stockByAddress } from '@/lib/addresses';
@@ -41,6 +42,9 @@ function BattlePage() {
   // prefer the curated name, fall back to whatever the token calls itself
   const sym = stockMeta?.symbol ?? stockSymbol ?? '—';
   const phase = phaseOf(battle);
+  const minsLeft = battle.endAt !== undefined
+    ? Math.max(0, Math.floor((Number(battle.endAt) - Math.floor(Date.now() / 1000)) / 60))
+    : undefined;
   const [pa, pb] = tugSplit(battle.peakA, battle.peakB);
 
   // everything about the connected wallet's position, read together
@@ -170,9 +174,11 @@ function BattlePage() {
           </div>
 
           <div className="versus" style={{ marginBottom: 20 }}>
-            <Corner side="a" name={battle.nameA} sym={battle.symbolA} peak={battle.peakA} won={winA} settled={battle.settled} />
+            <Corner side="a" name={battle.nameA} sym={battle.symbolA} peak={battle.peakA} won={winA}
+              settled={battle.settled} token={battle.tokenA} other={battle.symbolB} minsLeft={minsLeft} />
             <div className="vs"><span>VS</span></div>
-            <Corner side="b" name={battle.nameB} sym={battle.symbolB} peak={battle.peakB} won={winB} settled={battle.settled} align="right" />
+            <Corner side="b" name={battle.nameB} sym={battle.symbolB} peak={battle.peakB} won={winB}
+              settled={battle.settled} token={battle.tokenB} other={battle.symbolA} minsLeft={minsLeft} align="right" />
           </div>
 
           <div className="tug" style={{ marginBottom: 8 }}>
@@ -349,7 +355,8 @@ function BattlePage() {
 }
 
 function Corner(p: {
-  side: 'a' | 'b'; name?: string; sym?: string; peak?: bigint; won?: boolean; settled?: boolean; align?: 'right';
+  side: 'a' | 'b'; name?: string; sym?: string; peak?: bigint; won?: boolean; settled?: boolean;
+  token?: string; other?: string; minsLeft?: number; align?: 'right';
 }) {
   const c = p.side === 'a' ? 'var(--red)' : 'var(--blue)';
   const dim = p.settled && !p.won;
@@ -360,7 +367,10 @@ function Corner(p: {
       </div>
       <div className="display" style={{ fontSize: 30, lineHeight: 1.05, marginBottom: 4 }}>{p.name ?? '—'}</div>
       <div className="mono" style={{ fontSize: 14, color: c, marginBottom: 10 }}>${p.sym ?? '…'}</div>
-      <div className="stat" style={{ fontSize: 22 }}>{fmt(p.peak, 18, 2)}</div>
+      <div className="stat" style={{ fontSize: 22, marginBottom: 12 }}>{fmt(p.peak, 18, 2)}</div>
+      <div style={{ display: 'flex', justifyContent: p.align === 'right' ? 'flex-end' : 'flex-start' }}>
+        <ShareCoin token={p.token} symbol={p.sym} otherSymbol={p.other} side={p.side} minsLeft={p.minsLeft} />
+      </div>
     </div>
   );
 }
