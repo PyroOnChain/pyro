@@ -40,8 +40,12 @@ export function Header() {
     <>
       <div className="island-wrap">
         <div className={`island${stuck ? ' stuck' : ''}`}>
-          <Link href="/" className="display" style={{ fontSize: 17, letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-            STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+          <Link href="/" className="row" style={{ gap: 9, whiteSpace: 'nowrap' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/stockwars-mark.png" alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+            <span className="display" style={{ fontSize: 17, letterSpacing: '-0.02em' }}>
+              STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+            </span>
           </Link>
 
           <span className="island-sep" />

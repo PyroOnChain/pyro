@@ -3,8 +3,12 @@ export function Footer() {
     <footer style={{ borderTop: '1px solid var(--line)', marginTop: 80 }}>
       <div className="shell" style={{ padding: '38px 36px 52px' }}>
         <div className="between" style={{ marginBottom: 26, flexWrap: 'wrap', gap: 20 }}>
-          <span className="display" style={{ fontSize: 19, color: 'var(--muted)' }}>
-            STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+          <span className="row" style={{ gap: 10 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/stockwars-mark.png" alt="" style={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.85 }} />
+            <span className="display" style={{ fontSize: 19, color: 'var(--muted)' }}>
+              STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+            </span>
           </span>
           <span className="label">Robinhood Chain · 4663</span>
         </div>
