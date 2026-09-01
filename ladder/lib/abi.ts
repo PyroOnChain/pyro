@@ -31,6 +31,13 @@ export const stockAbi = [
 export const feeEscrowAbi = [
   {
     type: 'function',
+    name: 'balanceOf',
+    stateMutability: 'view',
+    inputs: [{ name: 'recipient', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
     name: 'balanceOfToken',
     stateMutability: 'view',
     inputs: [{ name: 'recipient', type: 'address' }, { name: 'token', type: 'address' }],

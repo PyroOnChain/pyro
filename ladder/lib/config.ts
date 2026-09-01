@@ -34,6 +34,28 @@ export const STOCKS: Record<string, Stock> = {
   AMZN: { symbol: 'AMZN', name: 'Amazon', address: '0x12f190a9F9d7D37a250758b26824B97CE941bF54', decimals: 18 },
 };
 
+// ----------------------------------------------------------- the quote asset
+
+/**
+ * What the coin is priced against on Pons, which decides what creator fees are
+ * paid in. Two shapes, because the escrow keeps them in separate ledgers:
+ * native fees come back from balanceOf, token fees from balanceOfToken.
+ *
+ * Decimals are not cosmetic here. USDG is 6, not 18.
+ */
+export type Quote =
+  | { kind: 'native'; symbol: string; name: string; decimals: number }
+  | { kind: 'erc20'; symbol: string; name: string; address: Address; decimals: number };
+
+export const QUOTES = {
+  ETH: { kind: 'native', symbol: 'ETH', name: 'Ether', decimals: 18 },
+  USDG: { kind: 'erc20', symbol: 'USDG', name: 'Global Dollar', address: '0x5fc5360d0400a0fd4f2af552aDd042d716F1D168', decimals: 6 },
+  NVDA: { kind: 'erc20', ...STOCKS.NVDA },
+  AAPL: { kind: 'erc20', ...STOCKS.AAPL },
+  TSLA: { kind: 'erc20', ...STOCKS.TSLA },
+  AMZN: { kind: 'erc20', ...STOCKS.AMZN },
+} satisfies Record<string, Quote>;
+
 // ---------------------------------------------------------------- the project
 
 /**
@@ -61,9 +83,18 @@ export const FEE_WALLET = '' as Address | '';
 /** The coin itself, once it is launched on Pons. */
 export const TOKEN = {
   address: '' as Address | '',
-  /** The tokenized stock the coin is priced in, so fees arrive denominated in it. */
-  quote: STOCKS.NVDA,
+  /** Set this to whatever the launch is actually priced against. */
+  quote: QUOTES.ETH as Quote,
 };
+
+/**
+ * True when fees already arrive as something the ladder buys, so nothing has to
+ * be converted on the way in. Changes what the site claims, so it is derived
+ * rather than written down twice.
+ */
+export const feesAreLadderStock = (): boolean =>
+  TOKEN.quote.kind === 'erc20' &&
+  LADDER.some((r) => r.stock.address.toLowerCase() === (TOKEN.quote as { address: Address }).address.toLowerCase());
 
 export const ponsUrl = (token: string) => `https://pons.fun/token/${token}`;
 

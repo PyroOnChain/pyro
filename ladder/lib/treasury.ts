@@ -63,17 +63,28 @@ export function useTreasury(): TreasuryState {
   // Kept as its own call rather than folded into the array above: a mixed-ABI
   // contracts list defeats wagmi's return-type inference and lands everything
   // on unknown.
+  //
+  // The escrow keeps native and token fees in separate ledgers, so which function
+  // answers depends on what the coin is priced against.
+  const quote = TOKEN.quote;
   const { data: escrowData } = useReadContracts({
     allowFailure: true,
     contracts:
       FEE_WALLET !== ''
         ? [
-            {
-              address: FEE_ESCROW,
-              abi: feeEscrowAbi,
-              functionName: 'balanceOfToken',
-              args: [FEE_WALLET as `0x${string}`, TOKEN.quote.address],
-            } as const,
+            quote.kind === 'native'
+              ? ({
+                  address: FEE_ESCROW,
+                  abi: feeEscrowAbi,
+                  functionName: 'balanceOf',
+                  args: [FEE_WALLET as `0x${string}`],
+                } as const)
+              : ({
+                  address: FEE_ESCROW,
+                  abi: feeEscrowAbi,
+                  functionName: 'balanceOfToken',
+                  args: [FEE_WALLET as `0x${string}`, quote.address],
+                } as const),
           ]
         : [],
     query: { enabled: FEE_WALLET !== '', refetchInterval: 15_000 },
@@ -125,7 +136,7 @@ export function useTreasury(): TreasuryState {
     const pending = escrowData?.[0];
     const pendingFees =
       pending?.status === 'success'
-        ? Number(formatUnits(pending.result as bigint, TOKEN.quote.decimals))
+        ? Number(formatUnits(pending.result as bigint, quote.decimals))
         : undefined;
 
     return {
@@ -136,7 +147,7 @@ export function useTreasury(): TreasuryState {
       progress,
       clearedCount: rungs.filter((r) => r.cleared).length,
       pendingFees,
-      pendingSymbol: TOKEN.quote.symbol,
+      pendingSymbol: quote.symbol,
     };
-  }, [stockData, escrowData, stocks, hasTreasury]);
+  }, [stockData, escrowData, stocks, hasTreasury, quote]);
 }

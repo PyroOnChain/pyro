@@ -23,7 +23,11 @@ Everything on the page comes from two live calls, refreshed every 15 seconds.
 | Number | Source |
 | --- | --- |
 | Shares owned | `balanceOf(TREASURY)` on each stock, times `uiMultiplier() / 1e18` |
-| Fees waiting on Pons | `balanceOfToken(FEE_WALLET, stock)` on the Pons escrow |
+| Fees waiting on Pons | `balanceOf(FEE_WALLET)` for a native quote, `balanceOfToken(FEE_WALLET, quote)` for a token one |
+
+The escrow keeps native and token fees in two separate ledgers, so which call
+answers depends on what the coin is priced against. `TOKEN.quote` in the config
+picks it, and decimals travel with it: USDG is 6, not 18.
 
 The multiplier is not optional. Tokenized stocks apply splits and dividends
 through ERC-8056 rather than by rewriting balances, and AAPL already sits at
@@ -51,8 +55,12 @@ history in a browser is not a real option. `balanceOfToken` is one call.
 
 Every switch is in `ladder/lib/config.ts`.
 
-1. Launch the coin on Pons priced against the stock in `TOKEN.quote`, so creator
-   fees are denominated in that stock rather than in the coin.
+1. Launch the coin on Pons and set `TOKEN.quote` to whatever it is actually
+   priced against (`QUOTES.ETH`, `QUOTES.USDG`, or one of the stocks).
+   If the quote is a stock the ladder buys, fees arrive as the asset itself and
+   nothing is converted. Otherwise they are swapped for stock when routed, and
+   the landing copy says so on its own: the first two beats are derived from
+   `feesAreLadderStock()` rather than written down twice.
 2. Set `TOKEN.address`.
 3. Set `TREASURY` to a fresh address that holds nothing else. Fund its gas from
    somewhere unconnected to any personal wallet, and do not sweep proceeds back

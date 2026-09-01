@@ -5,21 +5,32 @@ import { Backdrop } from '@/components/Backdrop';
 import { Reveal } from '@/components/Reveal';
 import { Marquee } from '@/components/Marquee';
 import { LadderStatus, LadderRungs } from '@/components/Ladder';
-import { BRAND, LADDER, TOKEN } from '@/lib/config';
+import { BRAND, LADDER, TOKEN, feesAreLadderStock } from '@/lib/config';
 
 const BEATS = [
-  {
-    n: '01',
-    kicker: 'The coin trades',
-    title: 'FEES ARRIVE\nAS STOCK.',
-    body: `${BRAND.ticker} is priced against tokenized ${TOKEN.quote.symbol} on Pons, so the creator fee on every buy and sell is collected in ${TOKEN.quote.symbol} rather than in the coin. Nothing has to be swapped later and nothing has to be sold to realise it. The fee is already the asset.`,
-    accent: 'var(--ember)',
-  },
+  // What the first beat can honestly claim depends on what the coin is priced
+  // against. If fees already arrive as something the ladder buys, nothing is
+  // converted. Otherwise there is a conversion step and the page says so.
+  feesAreLadderStock()
+    ? {
+        n: '01',
+        kicker: 'The coin trades',
+        title: 'FEES ARRIVE\nAS STOCK.',
+        body: `${BRAND.ticker} is priced against tokenized ${TOKEN.quote.symbol} on Pons, so the creator fee on every buy and sell is collected in ${TOKEN.quote.symbol} rather than in the coin. Nothing has to be swapped later and nothing has to be sold to realise it. The fee is already the asset.`,
+        accent: 'var(--ember)',
+      }
+    : {
+        n: '01',
+        kicker: 'The coin trades',
+        title: `FEES ARRIVE\nIN ${TOKEN.quote.symbol}.`,
+        body: `${BRAND.ticker} is priced against ${TOKEN.quote.name} on Pons, so the creator fee on every buy and sell is collected in ${TOKEN.quote.symbol}. That is not what the ladder buys, so it gets swapped for stock on the way into the treasury. Fees are earned in one asset and counted in another, and only the second one shows up on this page.`,
+        accent: 'var(--ember)',
+      },
   {
     n: '02',
     kicker: 'A person moves it',
     title: 'ROUTED\nBY HAND.',
-    body: 'Fees sit in the Pons escrow until they are claimed and sent to the treasury address. There is no contract doing that automatically, which means nothing is on a timer and nothing can be drained by a bug in code we wrote. It also means it happens when a human does it.',
+    body: `Fees sit in the Pons escrow until they are claimed and moved to the treasury${feesAreLadderStock() ? '' : ', buying stock along the way'}. There is no contract doing that automatically, which means nothing is on a timer and nothing can be drained by a bug in code we wrote. It also means it happens when a human does it.`,
     accent: 'var(--amber)',
   },
   {
