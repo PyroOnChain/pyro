@@ -1,0 +1,92 @@
+import type { Address } from 'viem';
+
+/**
+ * Everything that changes between "not launched yet" and "live" lives in this
+ * file, so going live is one edit and a redeploy.
+ *
+ * Nothing here is a secret. Every address in this file ends up in the shipped
+ * JavaScript, which is the point: the numbers on the site are only worth
+ * anything if a visitor can check them against the chain themselves.
+ */
+
+export const BRAND = {
+  name: 'LADDER',
+  ticker: 'LADDER',
+  tagline: 'One whole share at a time.',
+  x: 'https://x.com/',
+};
+
+// --------------------------------------------------------------------- stocks
+
+export type Stock = {
+  symbol: string;
+  name: string;
+  address: Address;
+  /** Tokenized stocks on Robinhood Chain are 18-decimal. Verified on NVDA. */
+  decimals: number;
+};
+
+/** Pair assets Pons will price a launch against. Verified live on mainnet. */
+export const STOCKS: Record<string, Stock> = {
+  NVDA: { symbol: 'NVDA', name: 'NVIDIA', address: '0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC', decimals: 18 },
+  AAPL: { symbol: 'AAPL', name: 'Apple', address: '0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9', decimals: 18 },
+  TSLA: { symbol: 'TSLA', name: 'Tesla', address: '0x322F0929c4625eD5bAd873c95208D54E1c003b2d', decimals: 18 },
+  AMZN: { symbol: 'AMZN', name: 'Amazon', address: '0x12f190a9F9d7D37a250758b26824B97CE941bF54', decimals: 18 },
+};
+
+// ---------------------------------------------------------------- the project
+
+/**
+ * The public treasury. Whole shares live here and nowhere else, so this balance
+ * IS the scoreboard. Use an address that holds nothing but treasury stock, and
+ * fund its gas from somewhere unconnected to a personal wallet - the moment a
+ * transfer links the two, the explorer links them for everyone.
+ *
+ * Empty until it exists; the site says "not funded yet" rather than showing a zero
+ * it cannot source.
+ */
+export const TREASURY = '' as Address | '';
+
+/**
+ * Where Pons sends creator fees. OPTIONAL.
+ *
+ * Setting it adds one number to the page: fees credited but not yet claimed,
+ * read straight out of the Pons escrow. Leaving it blank hides that number and
+ * the site reports treasury holdings only, which is still fully checkable.
+ *
+ * Only set it if the wallet is meant to be public - it ships in the bundle.
+ */
+export const FEE_WALLET = '' as Address | '';
+
+/** The coin itself, once it is launched on Pons. */
+export const TOKEN = {
+  address: '' as Address | '',
+  /** The tokenized stock the coin is priced in, so fees arrive denominated in it. */
+  quote: STOCKS.NVDA,
+};
+
+export const ponsUrl = (token: string) => `https://pons.fun/token/${token}`;
+
+// --------------------------------------------------------------- the ladder
+
+/**
+ * The rungs, in order. Each is a whole number of shares of one stock, and a rung
+ * is cleared when the treasury actually holds that much. Deliberately whole
+ * shares: a fraction is a balance, a whole share is an event.
+ */
+export type Rung = { stock: Stock; shares: number };
+
+export const LADDER: Rung[] = [
+  { stock: STOCKS.NVDA, shares: 1 },
+  { stock: STOCKS.NVDA, shares: 5 },
+  { stock: STOCKS.NVDA, shares: 10 },
+  { stock: STOCKS.AAPL, shares: 1 },
+  { stock: STOCKS.AAPL, shares: 5 },
+  { stock: STOCKS.TSLA, shares: 1 },
+  { stock: STOCKS.TSLA, shares: 5 },
+  { stock: STOCKS.AMZN, shares: 1 },
+  { stock: STOCKS.AMZN, shares: 5 },
+  { stock: STOCKS.NVDA, shares: 25 },
+];
+
+export const isLive = () => TREASURY !== '' && TOKEN.address !== '';

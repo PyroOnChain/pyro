@@ -27,3 +27,8 @@ LAUNCH.md
 /web/.next/
 /web/out/
 /web/.env.local
+
+# ladder app
+ladder/node_modules/
+ladder/.next/
+ladder/out/
