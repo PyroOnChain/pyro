@@ -48,7 +48,7 @@ export default function LandingPage() {
       <Header />
 
       {/* ------------------------------------------------------------ hero */}
-      <section className="shell hero-full" style={{ padding: '40px 36px 60px' }}>
+      <section className="shell hero-full" style={{ padding: '10px 36px 60px' }}>
         <Reveal className="row" style={{ gap: 10, marginBottom: 22 }}>
           <span className="pulse-dot" style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--lime)', display: 'block' }} />
           <span className="label blink" style={{ color: 'var(--muted)' }}>LIVE ON ROBINHOOD CHAIN · 4663</span>

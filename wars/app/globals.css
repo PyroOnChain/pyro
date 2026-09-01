@@ -330,3 +330,51 @@ button:disabled { cursor: not-allowed; }
   .slam, .line { transition: none; }
   .skew-strip { transform: none; }
 }
+
+/* ---------------------------------------------------------------- the island */
+/* A floating pill rather than a full-width bar: it hovers over the canvas so the
+   backdrop reads as one continuous surface instead of being cut off by a header. */
+.island-wrap {
+  position: fixed; top: 16px; left: 0; right: 0; z-index: 60;
+  display: flex; justify-content: center; pointer-events: none;
+  padding: 0 16px;
+}
+.island {
+  pointer-events: auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 7px 7px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(10, 10, 14, 0.62);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: padding 0.3s var(--ease-out), background-color 0.3s linear,
+              border-color 0.3s linear, transform 0.3s var(--ease-out);
+  max-width: 100%;
+}
+/* tightens as you scroll away from the top, the way a dynamic island compresses */
+.island.stuck {
+  padding: 5px 5px 5px 16px;
+  background: rgba(10, 10, 14, 0.86);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+.island-nav { display: flex; align-items: center; gap: 4px; }
+.island-link {
+  padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 600;
+  color: var(--muted); white-space: nowrap;
+  transition: color 0.18s linear, background-color 0.18s linear;
+}
+.island-link:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+.island-link.on { color: var(--ink); background: rgba(255, 255, 255, 0.09); }
+.island-sep { width: 1px; height: 22px; background: rgba(255, 255, 255, 0.10); margin: 0 4px; }
+
+/* content has to clear a header that no longer takes up space in the flow */
+.island-gap { height: 74px; }
+
+@media (max-width: 560px) {
+  .island { padding: 6px 6px 6px 14px; gap: 4px; }
+  .island-link { padding: 8px 11px; font-size: 13px; }
+  .island-sep { display: none; }
+}
