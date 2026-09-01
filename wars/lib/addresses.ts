@@ -1,7 +1,12 @@
 import type { Address } from 'viem';
 
-/** Set once deployed. Empty renders a "not live yet" page rather than a broken one. */
-export const BATTLE_FACTORY = (process.env.NEXT_PUBLIC_BATTLE_FACTORY || '') as Address | '';
+/**
+ * Live on Robinhood Chain. Baked in rather than left to an env var so a fresh
+ * clone builds into a working site; the env var still overrides it for local
+ * stacks and testnet.
+ */
+const DEPLOYED = '0x0Be67889010dd3C21F75b49fEBC421e2556433bD';
+export const BATTLE_FACTORY = (process.env.NEXT_PUBLIC_BATTLE_FACTORY || DEPLOYED) as Address | '';
 
 export const factoryDeployed = () => BATTLE_FACTORY !== '';
 
