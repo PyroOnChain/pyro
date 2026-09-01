@@ -5,7 +5,7 @@
 type Links = { x: string; website: string };
 
 export const LINKS: Links = {
-  x: 'https://x.com/VaultTubeClubz',
+  x: 'https://x.com/VaultTube',
   website: 'vaulttube.fun',
 };
 
