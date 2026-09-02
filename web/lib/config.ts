@@ -85,7 +85,7 @@ export const TREASURY = '0x7F485bF0558a47cE8fFCEda47633d253B0f8A3Aa' as Address 
  *
  * Only set it if the wallet is meant to be public - it ships in the bundle.
  */
-export const FEE_WALLET = '' as Address | '';
+export const FEE_WALLET = '0x62A5319BAd49C3BC7e3D22edf368D3a61998AAc8' as Address | '';
 
 /** The coin itself, once it is launched on Pons. */
 export const TOKEN = {
