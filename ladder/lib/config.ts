@@ -13,7 +13,10 @@ export const BRAND = {
   name: 'LADDER',
   ticker: 'LADDER',
   tagline: 'One whole share at a time.',
-  x: 'https://x.com/',
+  /** Canonical origin, no trailing slash. Drives canonical URLs, OG tags and the sitemap. */
+  site: 'https://example.com',
+  /** Blank until the account exists. Links to it are hidden rather than pointed at x.com. */
+  x: '',
 };
 
 // --------------------------------------------------------------------- stocks

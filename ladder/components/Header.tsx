@@ -12,7 +12,7 @@ export function Header() {
         <nav>
           <Link href="/treasury">Treasury</Link>
           <Link href="/#how">How it works</Link>
-          <a href={BRAND.x} target="_blank" rel="noreferrer">X</a>
+          {BRAND.x && <a href={BRAND.x} target="_blank" rel="noreferrer">X</a>}
         </nav>
         <Link href="/treasury" className="btn btn-primary">See the ladder</Link>
       </div>

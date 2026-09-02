@@ -87,6 +87,38 @@ Every switch is in `ladder/lib/config.ts`.
 Until `TREASURY` and `TOKEN.address` are set, the site renders a "not launched
 yet" state instead of a zero it cannot source.
 
+## Publishing
+
+Static export, no server. `npm run build` in `ladder/` writes `out/`.
+
+Cloudflare Pages, same shape as the other sites:
+
+| Setting | Value |
+| --- | --- |
+| Root directory | `ladder` |
+| Build command | `npm run build` |
+| Output directory | `out` |
+
+`public/_headers` ships with the export and sets `nosniff`, `DENY` framing, a
+strict referrer policy, a closed permissions policy, and immutable caching for
+`/_next/static/*`.
+
+Set `BRAND.site` in the config to the real origin before the first deploy. It is
+the base for the canonical link, the OG and Twitter tags, and `sitemap.xml`,
+which currently all point at `https://example.com`. A share card pointing at a
+placeholder domain is the kind of thing nobody notices until the first link is
+posted.
+
+`BRAND.x` is blank, so the X links in the header and footer are not rendered at
+all rather than pointing at x.com. Fill it in and they reappear.
+
+### Icons
+
+`app/icon.png`, `app/apple-icon.png` and `app/opengraph-image.png` are
+placeholders, drawn to be replaced. The tile is a four-rung ladder because five
+rungs turn to mush at 32px, which is worth keeping in mind for the real mark:
+whatever replaces it has to survive being a favicon, not just a hero image.
+
 ## Copy that must not drift
 
 The coin is not backed by the treasury, holders have no claim on it, and nothing

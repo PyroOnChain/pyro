@@ -8,7 +8,9 @@ export function Footer() {
           {BRAND.name} · {BRAND.tagline}
         </div>
         <div className="row" style={{ gap: 22 }}>
-          <a className="label" href={BRAND.x} target="_blank" rel="noreferrer" style={{ color: 'var(--body)' }}>X</a>
+          {BRAND.x && (
+            <a className="label" href={BRAND.x} target="_blank" rel="noreferrer" style={{ color: 'var(--body)' }}>X</a>
+          )}
           <span className="label">Robinhood Chain · 4663</span>
         </div>
       </div>

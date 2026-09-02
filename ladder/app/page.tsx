@@ -65,8 +65,9 @@ export default function Home() {
         <div className="grid-2" style={{ gap: 48, alignItems: 'end' }}>
           <div>
             <Reveal as="p" delay={220} style={{ fontSize: 18.5, lineHeight: 1.62, color: 'var(--body)', margin: '0 0 14px', maxWidth: 520 }}>
-              A memecoin whose creator fees are collected in tokenized stock and spent on whole shares of it.
-              One rung at a time, in public, at an address anyone can open in an explorer.
+              A memecoin whose creator fees are collected in {TOKEN.quote.symbol} and spent on whole shares of
+              tokenized {LADDER[0].stock.symbol}. One rung at a time, in public, at an address anyone can open in
+              an explorer.
             </Reveal>
             <Reveal as="p" delay={280} style={{ fontSize: 18.5, color: 'var(--paper)', fontWeight: 600, margin: '0 0 32px' }}>
               You cannot redeem it. You can count it.
