@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Backdrop } from '@/components/Backdrop';
@@ -6,6 +7,17 @@ import { LadderStatus, LadderRungs } from '@/components/Ladder';
 import { BRAND, TREASURY, FEE_WALLET, TOKEN, LADDER } from '@/lib/config';
 import { FEE_ESCROW } from '@/lib/abi';
 import { explorerAddr } from '@/lib/chain';
+
+/**
+ * Without this, the root layout's canonical ('/') applies here too and the page
+ * tells search engines it is a duplicate of the home page.
+ */
+export const metadata: Metadata = {
+  title: 'Treasury',
+  description: `Every whole share ${BRAND.name} owns, read live from Robinhood Chain, with the addresses to check it yourself.`,
+  alternates: { canonical: '/treasury/' },
+  openGraph: { title: `${BRAND.name} treasury`, url: '/treasury/' },
+};
 
 type Row = { label: string; addr: string; note: string };
 
