@@ -120,10 +120,19 @@ all rather than pointing at x.com. Fill it in and they reappear.
 
 ### Icons
 
-`app/icon.png`, `app/apple-icon.png` and `app/opengraph-image.png` are
-placeholders, drawn to be replaced. The tile is a four-rung ladder because five
-rungs turn to mush at 32px, which is worth keeping in mind for the real mark:
-whatever replaces it has to survive being a favicon, not just a hero image.
+`scripts/make-icons.py` builds everything from `brand/ladder-logo.jpg`. Run it
+from `web/` after changing that file.
+
+The supplied logo is a white ladder on an orange ground. The favicon and apple
+icon keep that ground, because at 32px in a browser tab it reads far better than
+white-on-black. The header mark and the Open Graph card key the ground out
+instead, since the site itself is black; the key is done on the blue channel,
+which cleanly separates the orange ground (blue ~5-12) from the white mark
+(blue ~250).
+
+The tiles are quantized to a 128-colour adaptive palette. The orange gradient
+stores badly as full-colour PNG, which put the 512 tile at about 170KB; the
+palette version is roughly 70KB with no visible banding at tile sizes.
 
 ## Copy that must not drift
 

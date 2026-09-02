@@ -1,106 +1,104 @@
 #!/usr/bin/env python3
 """
-Regenerates the placeholder favicon, apple icon and Open Graph card.
+Builds the favicon, apple icon, Open Graph card and header mark from the brand
+logo at brand/ladder-logo.jpg.
 
-Placeholders until the real mark lands. Run from the web/ directory:
+Run from the web/ directory:
 
     python3 scripts/make-icons.py
 
-The favicon tile deliberately carries fewer rungs than the OG mark: five rungs
-blur into a solid block at 32px, which is the size that actually matters for a
-browser tab.
+The supplied logo is a white ladder on an orange ground. The tiles keep that
+ground, because it reads far better than white-on-black at 32px in a browser
+tab. The site itself is black, so the header and the OG card use a version with
+the ground keyed out.
 """
 from PIL import Image, ImageDraw, ImageFont
+import os
 
+SRC    = '../brand/ladder-logo.jpg'
 INK    = (8, 9, 11)
 ACCENT = (255, 106, 19)
 PAPER  = (239, 235, 226)
-SS     = 4  # supersample; PIL does not antialias, so draw big and downsample
 
 
-def _bar(canvas, box, radius, top, bot):
-    """A rounded bar filled with a vertical ramp, as an RGBA layer."""
-    layer = Image.new('RGBA', canvas, (0, 0, 0, 0))
-    grad = Image.new('RGB', canvas, INK)
-    g = ImageDraw.Draw(grad)
-    x0, y0, x1, y1 = box
-    span = max(1, int(y1 - y0))
-    for i in range(span):
-        t = i / span
-        g.rectangle([x0, y0 + i, x1, y0 + i + 1],
-                    fill=tuple(int(top[k] + (bot[k] - top[k]) * t) for k in range(3)))
-    mask = Image.new('L', canvas, 0)
-    ImageDraw.Draw(mask).rounded_rectangle(box, radius=radius, fill=255)
-    layer.paste(grad, (0, 0), mask)
-    return layer
+def load():
+    if not os.path.exists(SRC):
+        raise SystemExit(f'missing {SRC}')
+    return Image.open(SRC).convert('RGB')
 
 
-def glyph(w, h, n=4, cleared=1, pad=0.12, rail=0.16, rung=0.62):
-    """Ladder on transparency. Rungs stop short of the rail ends so the rails
-       read as continuing past them, the way a real ladder does."""
-    W, H = int(w * SS), int(h * SS)
-    canvas = (W, H)
-    img = Image.new('RGBA', canvas, (0, 0, 0, 0))
-
-    px, py = W * pad, H * pad
-    rail_w = (W - px * 2) * rail
-    left, right = px, W - px - rail_w
-    top, bottom = py, H - py
-
-    rung_h = rail_w * rung
-    end_gap = rung_h * 1.2
-    y0, y1 = top + end_gap, bottom - end_gap - rung_h
-    step = (y1 - y0) / (n - 1)
-    inset = rail_w * 0.46
-
-    for i in range(n):
-        y = y0 + step * i
-        box = [left + inset, y, right + rail_w - inset, y + rung_h]
-        r = rung_h * 0.42
-        if i >= n - cleared:                      # rungs already climbed
-            l = Image.new('RGBA', canvas, (0, 0, 0, 0))
-            ImageDraw.Draw(l).rounded_rectangle(box, radius=r, fill=ACCENT + (255,))
-            img.alpha_composite(l)
-        else:
-            img.alpha_composite(_bar(canvas, box, r, (255, 255, 255), (158, 164, 174)))
-
-    for x in (left, right):
-        img.alpha_composite(_bar(canvas, [x, top, x + rail_w, bottom], rail_w * 0.45,
-                                 (255, 255, 255), (112, 118, 128)))
-    return img.resize((int(w), int(h)), Image.LANCZOS)
+def white_mark(src):
+    """Key the orange ground out. The ground sits at blue ~5-12 and the mark at
+       blue ~250, so the blue channel separates them on its own."""
+    blue = src.split()[2]
+    LO, HI = 40, 190
+    alpha = blue.point(lambda v: 0 if v <= LO else (255 if v >= HI else int((v - LO) * 255 / (HI - LO))))
+    mark = Image.new('RGBA', src.size, (255, 255, 255, 0))
+    mark.putalpha(alpha)
+    return mark.crop(mark.getbbox())
 
 
-def on_ink(g):
-    bg = Image.new('RGB', g.size, INK)
-    bg.paste(g, (0, 0), g)
-    return bg
+def tile(src, size, pad=0.14):
+    """Square tile on the original orange ground, cropped so the mark fills more
+       of the frame than it does in the source (which carries a lot of air)."""
+    mark_box = white_mark(src).getbbox()
+    full = white_mark(src)
+    x0, y0, x1, y1 = src.getbbox()
+    m = Image.new('RGBA', src.size, (255, 255, 255, 0))
+    m.putalpha(src.split()[2].point(lambda v: 0 if v <= 40 else 255))
+    bb = m.getbbox()
+
+    side = max(bb[2] - bb[0], bb[3] - bb[1])
+    grow = int(side * pad)
+    cx, cy = (bb[0] + bb[2]) // 2, (bb[1] + bb[3]) // 2
+    half = side // 2 + grow
+    box = (max(0, cx - half), max(0, cy - half),
+           min(src.width, cx + half), min(src.height, cy + half))
+    return src.crop(box).resize((size, size), Image.LANCZOS)
 
 
 def main():
-    on_ink(glyph(512, 512)).save('app/icon.png')
-    on_ink(glyph(180, 180, pad=0.10)).save('app/apple-icon.png')
+    src = load()
+    mark = white_mark(src)
 
+    # The orange ground is a smooth gradient, which PNG stores badly: the plain
+    # 512 tile lands around 170KB. An adaptive palette cuts that by roughly 10x
+    # with no visible banding at tile sizes.
+    def save_tile(size, path):
+        t = tile(src, size).convert('RGB')
+        t.quantize(colors=128, method=Image.MEDIANCUT, dither=Image.FLOYDSTEINBERG).save(path, optimize=True)
+
+    save_tile(512, 'app/icon.png')
+    save_tile(180, 'app/apple-icon.png')
+
+    # Transparent white mark for the header, where the page is black.
+    hm = mark.copy()
+    hm.thumbnail((256, 256), Image.LANCZOS)
+    hm.save('public/ladder-mark.png')
+
+    # ---- open graph card ----
     W, H = 1200, 630
     og = Image.new('RGB', (W, H), INK)
     d = ImageDraw.Draw(og)
-    for y in range(H):                            # slight top-down lift
+    for y in range(H):
         v = int(7 * (1 - y / H))
         d.rectangle([0, y, W, y + 1], fill=(INK[0] + v, INK[1] + v, INK[2] + v))
 
-    mark = glyph(250, 400, n=5, cleared=2, pad=0.02)
-    og.paste(mark, (120, H // 2 - 200), mark)
+    m = mark.copy()
+    m.thumbnail((330, 330), Image.LANCZOS)
+    og.paste(m, (135, (H - m.height) // 2), m)
 
     heavy = '/System/Library/Fonts/Supplemental/Arial Black.ttf'
     plain = '/System/Library/Fonts/Supplemental/Arial.ttf'
-    d.text((470, 228), 'LADDER', font=ImageFont.truetype(heavy, 108), fill=PAPER)
-    d.text((474, 356), 'One whole share at a time.',
+    d.text((540, 228), 'LADDER', font=ImageFont.truetype(heavy, 108), fill=PAPER)
+    d.text((544, 356), 'One whole share at a time.',
            font=ImageFont.truetype(plain, 34), fill=(185, 189, 198))
-    d.text((474, 410), 'Creator fees in ETH. Treasury in NVDA.',
+    d.text((544, 410), 'Creator fees in ETH. Treasury in NVDA.',
            font=ImageFont.truetype(plain, 27), fill=(126, 132, 143))
-    d.rectangle([474, 468, 538, 472], fill=ACCENT)
+    d.rectangle([544, 468, 608, 472], fill=ACCENT)
     og.save('app/opengraph-image.png')
 
-    for f in ('app/icon.png', 'app/apple-icon.png', 'app/opengraph-image.png'):
+    for f in ('app/icon.png', 'app/apple-icon.png', 'app/opengraph-image.png', 'public/ladder-mark.png'):
         print(f'  wrote {f}  {Image.open(f).size}')
 
 

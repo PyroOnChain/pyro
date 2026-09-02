@@ -6,7 +6,15 @@ export function Header() {
     <header className="hdr">
       <div className="shell hdr-in">
         <Link href="/" className="mark">
-          <span className="dot" style={{ background: 'var(--accent)' }} />
+          {/* Plain img: this is a static export with image optimisation off, and
+              the mark is a fixed-size asset that never needs a srcset. */}
+          <img
+            src="/ladder-mark.png"
+            alt=""
+            width={22}
+            height={22}
+            style={{ display: 'block', width: 22, height: 'auto' }}
+          />
           <span className="glyph">{BRAND.name}</span>
         </Link>
         <nav>
