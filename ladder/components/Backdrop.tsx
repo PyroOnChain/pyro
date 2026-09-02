@@ -75,7 +75,7 @@ export function Backdrop() {
         const lit = (i % 7 === 0);
         ctx.lineWidth = lit ? 1.6 : 1;
         ctx.strokeStyle = lit
-          ? `rgba(0,229,114,${0.22 * a})`
+          ? `rgba(255,106,19,${0.26 * a})`
           : `rgba(255,255,255,${0.045 * a})`;
         ctx.beginPath();
         ctx.moveTo(cx - halfW, y);

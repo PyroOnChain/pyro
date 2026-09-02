@@ -17,28 +17,28 @@ const BEATS = [
         kicker: 'The coin trades',
         title: 'FEES ARRIVE\nAS STOCK.',
         body: `${BRAND.ticker} is priced against tokenized ${TOKEN.quote.symbol} on Pons, so the creator fee on every buy and sell is collected in ${TOKEN.quote.symbol} rather than in the coin. Nothing has to be swapped later and nothing has to be sold to realise it. The fee is already the asset.`,
-        accent: 'var(--ember)',
+        accent: 'var(--accent-pale)',
       }
     : {
         n: '01',
         kicker: 'The coin trades',
         title: `FEES ARRIVE\nIN ${TOKEN.quote.symbol}.`,
         body: `${BRAND.ticker} is priced against ${TOKEN.quote.name} on Pons, so the creator fee on every buy and sell is collected in ${TOKEN.quote.symbol}. That is not what the ladder buys, so it gets swapped for stock on the way into the treasury. Fees are earned in one asset and counted in another, and only the second one shows up on this page.`,
-        accent: 'var(--ember)',
+        accent: 'var(--accent-pale)',
       },
   {
     n: '02',
     kicker: 'A person moves it',
     title: 'ROUTED\nBY HAND.',
     body: `Fees sit in the Pons escrow until they are claimed and moved to the treasury${feesAreLadderStock() ? '' : ', buying stock along the way'}. There is no contract doing that automatically, which means nothing is on a timer and nothing can be drained by a bug in code we wrote. It also means it happens when a human does it.`,
-    accent: 'var(--amber)',
+    accent: 'var(--accent-mid)',
   },
   {
     n: '03',
     kicker: 'The count goes up',
     title: 'ONE WHOLE\nSHARE.',
     body: 'A rung clears when the treasury actually holds that many shares, not when it is close. Fractions are just a balance. A whole share is a thing you either own or do not, which is the only reason the number on this page is worth reading.',
-    accent: 'var(--green)',
+    accent: 'var(--accent)',
   },
 ];
 
@@ -58,7 +58,7 @@ export default function Home() {
         <h1 className="display h-hero" style={{ margin: '0 0 30px' }}>
           <Reveal as="span" style={{ display: 'block' }}>THE TREASURY</Reveal>
           <Reveal as="span" delay={120} style={{ display: 'block' }}>
-            <span className="outline">CLIMBS</span> <span style={{ color: 'var(--green)' }}>UP.</span>
+            <span className="outline">CLIMBS</span> <span style={{ color: 'var(--accent)' }}>UP.</span>
           </Reveal>
         </h1>
 
@@ -146,7 +146,7 @@ export default function Home() {
               ['Not a security.', `${BRAND.ticker} is a memecoin. Buying it is not an investment in anything and it entitles you to nothing.`],
             ].map(([t, b], i) => (
               <div key={i} style={{ background: 'var(--panel)', padding: '20px 22px' }}>
-                <div className="display" style={{ fontSize: 19, marginBottom: 7, color: 'var(--ember)' }}>{t}</div>
+                <div className="display" style={{ fontSize: 19, marginBottom: 7, color: 'var(--paper)' }}>{t}</div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--body)', margin: 0 }}>{b}</p>
               </div>
             ))}

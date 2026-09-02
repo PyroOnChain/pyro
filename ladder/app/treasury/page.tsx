@@ -80,7 +80,7 @@ export default function Treasury() {
                   href={explorerAddr(r.addr)}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ fontSize: 11.5, color: 'var(--green)', wordBreak: 'break-all' }}
+                  style={{ fontSize: 11.5, color: 'var(--accent)', wordBreak: 'break-all' }}
                 >
                   {r.addr} ↗
                 </a>

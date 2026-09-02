@@ -11,10 +11,12 @@
   --muted:    #7E848F;
   --dim:      #565C67;
 
-  --green:    #00E572;
-  --green-dk: #00A251;
-  --amber:    #FFB020;
-  --ember:    #FF5A36;
+  /* One accent, three heats. Orange carries everything the treasury has
+     actually done; white carries whatever is still in progress. */
+  --accent:      #FF6A13;
+  --accent-dk:   #A83B00;
+  --accent-mid:  #FF8F47;
+  --accent-pale: #FFC299;
 
   --display: var(--font-display), 'Anton', 'Archivo Black', Impact, sans-serif;
   --mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -53,7 +55,7 @@ body::before {
 
 a { color: inherit; text-decoration: none; }
 
-::selection { background: var(--green); color: var(--ink); }
+::selection { background: var(--accent); color: var(--ink); }
 
 /* ------------------------------------------------------------------ layout */
 .shell { max-width: var(--shell); margin: 0 auto; width: 100%; }
@@ -138,8 +140,8 @@ a { color: inherit; text-decoration: none; }
 }
 .btn:active { transform: translateY(1px); }
 
-.btn-primary { background: var(--green); color: var(--ink); font-weight: 700; }
-.btn-primary:hover { background: #2BFF92; }
+.btn-primary { background: var(--accent); color: var(--ink); font-weight: 700; }
+.btn-primary:hover { background: #FF8534; }
 
 .btn-ghost { background: transparent; border-color: var(--line-hot); color: var(--paper); }
 .btn-ghost:hover { border-color: var(--paper); background: rgba(255, 255, 255, 0.04); }
@@ -242,19 +244,19 @@ a { color: inherit; text-decoration: none; }
   color: var(--dim);
 }
 
-.rung.is-cleared { background: linear-gradient(90deg, rgba(0, 229, 114, 0.09), transparent 62%); border-color: rgba(0, 229, 114, 0.24); }
-.rung.is-cleared .sym { color: var(--green); }
-.rung.is-cleared .state { color: var(--green); }
+.rung.is-cleared { background: linear-gradient(90deg, rgba(255, 106, 19, 0.10), transparent 62%); border-color: rgba(255, 106, 19, 0.26); }
+.rung.is-cleared .sym { color: var(--accent); }
+.rung.is-cleared .state { color: var(--accent); }
 
 .rung.is-current { background: var(--panel-2); border-color: var(--line-hot); }
-.rung.is-current .state { color: var(--amber); }
+.rung.is-current .state { color: var(--paper); }
 
 /* The fill sits behind the current rung's content. */
 .rung .fill {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255, 176, 32, 0.16), rgba(255, 176, 32, 0.05));
-  border-right: 1px solid rgba(255, 176, 32, 0.5);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
+  border-right: 1px solid rgba(255, 255, 255, 0.42);
   transform-origin: left;
   transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -272,7 +274,7 @@ a { color: inherit; text-decoration: none; }
 }
 .bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--green-dk), var(--green));
+  background: linear-gradient(90deg, var(--accent-dk), var(--accent));
   border-radius: 999px;
   transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;

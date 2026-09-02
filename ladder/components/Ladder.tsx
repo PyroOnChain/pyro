@@ -47,8 +47,8 @@ export function LadderStatus() {
     return (
       <div className="panel raised" style={{ padding: '30px 30px 28px' }}>
         <div className="row" style={{ gap: 10, marginBottom: 16 }}>
-          <span className="dot" style={{ background: 'var(--amber)' }} />
-          <span className="label" style={{ color: 'var(--amber)' }}>Not launched yet</span>
+          <span className="dot" style={{ background: 'var(--accent-pale)' }} />
+          <span className="label" style={{ color: 'var(--accent-pale)' }}>Not launched yet</span>
         </div>
         <div className="display h-2" style={{ marginBottom: 12 }}>The ladder starts at zero.</div>
         <p style={{ fontSize: 15, lineHeight: 1.65, color: 'var(--body)', margin: 0 }}>
@@ -65,7 +65,7 @@ export function LadderStatus() {
     <div className="panel raised" style={{ padding: '26px 28px 24px' }}>
       <div className="spread" style={{ marginBottom: 20, gap: 14, flexWrap: 'wrap' }}>
         <div className="row" style={{ gap: 9 }}>
-          <span className="dot pulse-dot" style={{ background: 'var(--green)', color: 'var(--green)' }} />
+          <span className="dot pulse-dot" style={{ background: 'var(--accent)', color: 'var(--accent)' }} />
           <span className="label">Live from Robinhood Chain</span>
         </div>
         <span className="label">{t.clearedCount} of {t.rungs.length} rungs cleared</span>
@@ -92,12 +92,12 @@ export function LadderStatus() {
               holding{' '}
               <span style={{ color: 'var(--paper)' }}>{shares(t.held[cur.stock.symbol] ?? 0)}</span> {cur.stock.symbol}
             </span>
-            <span style={{ color: 'var(--green)' }}>{(pct * 100).toFixed(1)}%</span>
+            <span style={{ color: 'var(--accent)' }}>{(pct * 100).toFixed(1)}%</span>
           </div>
         </>
       ) : (
         <>
-          <div className="display h-2" style={{ marginBottom: 10, color: 'var(--green)' }}>Ladder cleared.</div>
+          <div className="display h-2" style={{ marginBottom: 10, color: 'var(--accent)' }}>Ladder cleared.</div>
           <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--body)', margin: 0 }}>
             Every rung is done. New ones get added and the treasury keeps climbing.
           </p>
@@ -109,7 +109,7 @@ export function LadderStatus() {
           <hr className="rule" style={{ margin: '20px 0 16px' }} />
           <div className="spread" style={{ gap: 12, flexWrap: 'wrap' }}>
             <span className="label">Creator fees waiting on Pons</span>
-            <span className="mono" style={{ fontSize: 14, color: 'var(--amber)' }}>
+            <span className="mono" style={{ fontSize: 14, color: 'var(--paper)' }}>
               {shares(t.pendingFees)} {t.pendingSymbol}
             </span>
           </div>

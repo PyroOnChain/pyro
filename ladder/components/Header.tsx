@@ -6,7 +6,7 @@ export function Header() {
     <header className="hdr">
       <div className="shell hdr-in">
         <Link href="/" className="mark">
-          <span className="dot" style={{ background: 'var(--green)' }} />
+          <span className="dot" style={{ background: 'var(--accent)' }} />
           <span className="glyph">{BRAND.name}</span>
         </Link>
         <nav>
