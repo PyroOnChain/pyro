@@ -15,7 +15,7 @@ export function Header() {
             height={22}
             style={{ display: 'block', width: 22, height: 'auto' }}
           />
-          <span className="glyph">{BRAND.name}</span>
+          <span className="glyph">{BRAND.short}</span>
         </Link>
         <nav>
           <Link href="/treasury">Treasury</Link>

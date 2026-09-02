@@ -10,8 +10,12 @@ import type { Address } from 'viem';
  */
 
 export const BRAND = {
-  name: 'LADDER',
-  ticker: 'LADDER',
+  /** Full name, used for page titles, metadata and the footer. */
+  name: 'Ladder Capital',
+  /** Short wordmark that sits beside the logo in the header. */
+  short: 'LADDER',
+  /** The on-chain symbol. Verified against the deployed token, which reports LADR. */
+  ticker: 'LADR',
   tagline: 'One whole share at a time.',
   /** Canonical origin, no trailing slash. Drives canonical URLs, OG tags and the sitemap. */
   site: 'https://platform-ladder.com',
@@ -85,7 +89,7 @@ export const FEE_WALLET = '' as Address | '';
 
 /** The coin itself, once it is launched on Pons. */
 export const TOKEN = {
-  address: '' as Address | '',
+  address: '0xcFC308043277B09eA78476886FaE329bED85f436' as Address | '',
   /** Set this to whatever the launch is actually priced against. */
   quote: QUOTES.ETH as Quote,
 };
