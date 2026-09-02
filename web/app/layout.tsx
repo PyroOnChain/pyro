@@ -1,52 +1,42 @@
 import type { Metadata } from 'next';
-import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
-import { Providers } from './providers';
-import { LINKS } from '@/lib/links';
-import { CursorGlow } from '@/components/CursorGlow';
-import { ScrollProgress } from '@/components/ScrollProgress';
+import { Anton, Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
+import { Providers } from './providers';
+import { BRAND } from '@/lib/config';
 
-// Archivo Black is the wide, heavy poster face the whole layout hangs off. Barlow
-// keeps copy readable while a clock is running; JetBrains carries every figure.
-const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--font-display' });
-const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
-const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
+// Self-hosted at build time by next/font. A <link> to Google Fonts would add a
+// render-blocking request to a third party on every first paint.
+const display = Anton({ subsets: ['latin'], weight: '400', variable: '--font-display', display: 'swap' });
+const sans = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' });
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono', display: 'swap' });
 
-const SITE = 'https://stockswars.com';
 const DESCRIPTION =
-  'Two memecoins launch at the same second, priced in the same tokenized stock. '
-  + 'One hour later the side that hit the higher market cap takes both tokens’ creator fees, paid in stock.';
+  'A memecoin whose creator fees are collected in ETH and spent on whole shares of tokenized NVDA. '
+  + 'The treasury is one public address, so every share it owns can be checked on-chain.';
+
+const TITLE = `${BRAND.name}: the treasury climbs up`;
 
 export const metadata: Metadata = {
-  title: { default: 'Stock Wars', template: '%s · Stock Wars' },
+  title: { default: BRAND.name, template: `%s · ${BRAND.name}` },
   description: DESCRIPTION,
-  applicationName: 'Stock Wars',
-  metadataBase: new URL(SITE),
-  openGraph: { title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Stock Wars', type: 'website', url: SITE },
+  applicationName: BRAND.name,
+  metadataBase: new URL(BRAND.site),
+  alternates: { canonical: '/' },
+  openGraph: { title: TITLE, description: DESCRIPTION, siteName: BRAND.name, type: 'website', url: BRAND.site },
   twitter: {
-    card: 'summary_large_image', site: LINKS.handle, creator: LINKS.handle,
-    title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION,
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    ...(BRAND.x ? { site: `@${BRAND.x.split('/').pop()}`, creator: `@${BRAND.x.split('/').pop()}` } : {}),
   },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#000000' };
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#08090B' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)"
-              + "document.documentElement.classList.add('motion')}catch(e){}",
-          }}
-        />
-      </head>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body>
-        <div className="arena" aria-hidden="true" />
-        <ScrollProgress />
-        <CursorGlow />
         <Providers>{children}</Providers>
       </body>
     </html>

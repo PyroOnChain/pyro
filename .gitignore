@@ -22,13 +22,13 @@ LAUNCH.md
 .DS_Store
 *.log
 
-# Stock Wars web app
+# whichever app lives at web/ (currently LADDER, the path Pages builds)
 /web/node_modules/
 /web/.next/
 /web/out/
 /web/.env.local
 
-# ladder app
-ladder/node_modules/
-ladder/.next/
-ladder/out/
+# stock wars, kept for reference after the ladder took over web/
+stockwars/node_modules/
+stockwars/.next/
+stockwars/out/

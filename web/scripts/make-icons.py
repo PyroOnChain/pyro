@@ -2,7 +2,7 @@
 """
 Regenerates the placeholder favicon, apple icon and Open Graph card.
 
-Placeholders until the real mark lands. Run from the ladder/ directory:
+Placeholders until the real mark lands. Run from the web/ directory:
 
     python3 scripts/make-icons.py
 

@@ -12,8 +12,6 @@ const UNUSED_OPTIONAL = [
   '@x402/svm/exact/client',
   // WalletConnect's logger optionally pretty-prints; we never enable it.
   'pino-pretty',
-  // MetaMask's SDK optionally imports React Native storage; browser-only here.
-  '@react-native-async-storage/async-storage',
 ];
 
 /** @type {import('next').NextConfig} */

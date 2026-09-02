@@ -89,13 +89,19 @@ yet" state instead of a zero it cannot source.
 
 ## Publishing
 
-Static export, no server. `npm run build` in `ladder/` writes `out/`.
+Static export, no server. `npm run build` in `web/` writes `out/`.
 
-Cloudflare Pages, same shape as the other sites:
+The app lives at `web/` rather than a directory named after itself, because the
+Cloudflare Pages project is wired to the GitHub repo with `web` as its root and
+deploys on every push. Putting the app there means a push is the deploy, with no
+dashboard step. Stock Wars, which used to occupy that path, is kept at
+`stockwars/`; swapping the two directory names swaps which site is live.
+
+Cloudflare Pages:
 
 | Setting | Value |
 | --- | --- |
-| Root directory | `ladder` |
+| Root directory | `web` |
 | Build command | `npm run build` |
 | Output directory | `out` |
 
