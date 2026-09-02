@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTreasury, type RungState } from '@/lib/treasury';
-import { TREASURY, FEE_WALLET, TOKEN, BRAND } from '@/lib/config';
+import { TREASURY, FEE_WALLET, TOKEN, BRAND, isLive } from '@/lib/config';
 import { explorerAddr } from '@/lib/chain';
 
 /** Eases a number toward its target so a live update reads as movement, not a jump. */
@@ -41,7 +41,9 @@ const shares = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits:
 export function LadderStatus() {
   const t = useTreasury();
   const pct = useEased(t.current ? t.progress : 1);
-  const live = TREASURY !== '';
+  // Both, deliberately: a treasury with no coin behind it has nothing feeding
+  // it, and a bar sitting at 0% would suggest otherwise.
+  const live = isLive();
 
   if (!live) {
     return (

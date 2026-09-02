@@ -16,7 +16,7 @@ export const BRAND = {
   /** Canonical origin, no trailing slash. Drives canonical URLs, OG tags and the sitemap. */
   site: 'https://platform-ladder.com',
   /** Blank until the account exists. Links to it are hidden rather than pointed at x.com. */
-  x: '',
+  x: 'https://x.com/LadderCapitalX',
 };
 
 // --------------------------------------------------------------------- stocks
@@ -70,7 +70,7 @@ export const QUOTES = {
  * Empty until it exists; the site says "not funded yet" rather than showing a zero
  * it cannot source.
  */
-export const TREASURY = '' as Address | '';
+export const TREASURY = '0x7F485bF0558a47cE8fFCEda47633d253B0f8A3Aa' as Address | '';
 
 /**
  * Where Pons sends creator fees. OPTIONAL.
