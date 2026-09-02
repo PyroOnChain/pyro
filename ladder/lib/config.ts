@@ -111,13 +111,12 @@ export const LADDER: Rung[] = [
   { stock: STOCKS.NVDA, shares: 1 },
   { stock: STOCKS.NVDA, shares: 5 },
   { stock: STOCKS.NVDA, shares: 10 },
-  { stock: STOCKS.AAPL, shares: 1 },
-  { stock: STOCKS.AAPL, shares: 5 },
-  { stock: STOCKS.TSLA, shares: 1 },
-  { stock: STOCKS.TSLA, shares: 5 },
-  { stock: STOCKS.AMZN, shares: 1 },
-  { stock: STOCKS.AMZN, shares: 5 },
   { stock: STOCKS.NVDA, shares: 25 },
+  { stock: STOCKS.NVDA, shares: 50 },
+  { stock: STOCKS.NVDA, shares: 100 },
+  { stock: STOCKS.NVDA, shares: 250 },
+  { stock: STOCKS.NVDA, shares: 500 },
+  { stock: STOCKS.NVDA, shares: 1000 },
 ];
 
 export const isLive = () => TREASURY !== '' && TOKEN.address !== '';

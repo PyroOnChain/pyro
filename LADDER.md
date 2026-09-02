@@ -1,10 +1,22 @@
 # LADDER
 
-A memecoin whose creator fees are collected in tokenized stock and spent on whole
-shares of it. The treasury is one public address, so the number on the site is
+A memecoin whose creator fees are collected in ETH and spent on whole shares of
+tokenized NVDA. The treasury is one public address, so the number on the site is
 something a visitor can check rather than something they have to believe.
 
 Not deployed. Nothing here has launched yet.
+
+## The two assets
+
+Fees are earned in ETH and the treasury is filled with NVDA, so a swap happens
+between the two. Nobody can verify that step from the page: it is a person
+moving money. What the page can prove is the far end, which is why the bar reads
+the treasury's NVDA balance rather than anything upstream of it.
+
+The copy is derived from this rather than written down twice. `feesAreLadderStock()`
+is false here, so the first two beats say fees are swapped for stock on the way in
+and that only the treasury side shows up on the page. Point `TOKEN.quote` at a
+stock the ladder buys and they change on their own.
 
 ## Why there is no contract
 
