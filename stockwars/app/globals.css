@@ -22,9 +22,9 @@
   /* The two corners. Green and white rather than two hues, because on pure black
      they carry equal weight: neither corner looks like the underdog before a
      punch is thrown. Grey is never a side; it is structure and defeat. */
-  --a: #2BE86B;
-  --a-dim: #179242;
-  --a-wash: rgba(43, 232, 107, 0.14);
+  --a: #12FE7E;
+  --a-dim: #0B9E4E;
+  --a-wash: rgba(18, 254, 126, 0.14);
   --b: #FFFFFF;
   --b-dim: #9A9AA6;
   --b-wash: rgba(255, 255, 255, 0.12);
@@ -33,7 +33,7 @@
   --prize: #C6FF4D;
   --prize-dim: #8AB230;
 
-  --live: #2BE86B;
+  --live: #12FE7E;
   --loss: #6B6B78;
 
   --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
@@ -60,7 +60,7 @@ body {
 .arena {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(66% 52% at 0% 20%, rgba(43, 232, 107, 0.20), transparent 62%),
+    radial-gradient(66% 52% at 0% 20%, rgba(18, 254, 126, 0.20), transparent 62%),
     radial-gradient(66% 52% at 100% 20%, rgba(255, 255, 255, 0.20), transparent 62%),
     linear-gradient(180deg, #08080B 0%, var(--bg) 55%);
 }
@@ -123,7 +123,7 @@ button:disabled { cursor: not-allowed; }
 .btn-prize { background: var(--prize); color: #000; }
 .btn-prize:hover:not(:disabled) { background: #FFF04D; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 229, 0, 0.30); }
 .btn-a { background: var(--a); color: #000; }
-.btn-a:hover:not(:disabled) { background: #4CF287; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(43, 232, 107, 0.34); }
+.btn-a:hover:not(:disabled) { background: #4BFF9B; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(18, 254, 126, 0.34); }
 .btn-b { background: var(--b); color: #000; }   /* side B is white now, so the label must be dark */
 .btn-b:hover:not(:disabled) { background: #E8E8EE; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 255, 255, 0.34); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
@@ -137,7 +137,7 @@ button:disabled { cursor: not-allowed; }
   text-transform: uppercase; border-radius: 999px;
 }
 .chip-live { border-color: rgba(198, 255, 77, 0.5); color: var(--live); }
-.chip-a { border-color: rgba(43, 232, 107, 0.5); color: var(--a); }
+.chip-a { border-color: rgba(18, 254, 126, 0.5); color: var(--a); }
 .chip-b { border-color: rgba(255, 255, 255, 0.5); color: var(--b); }
 .chip-prize { border-color: rgba(255, 229, 0, 0.5); color: var(--prize); }
 
@@ -292,7 +292,7 @@ button:disabled { cursor: not-allowed; }
   color: transparent; -webkit-text-stroke: 2px var(--line);
   pointer-events: none; user-select: none;
 }
-.bignum.on-a { -webkit-text-stroke-color: rgba(43, 232, 107, 0.5); }
+.bignum.on-a { -webkit-text-stroke-color: rgba(18, 254, 126, 0.5); }
 .bignum.on-b { -webkit-text-stroke-color: rgba(255, 255, 255, 0.5); }
 .bignum.on-c { -webkit-text-stroke-color: rgba(198, 255, 77, 0.5); }
 
