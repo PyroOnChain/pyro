@@ -12,6 +12,7 @@ Formerly Stock Wars. The contracts are unchanged; the rebrand is front-end only.
 | | |
 | --- | --- |
 | Site | https://brawlzz.com |
+| X | https://x.com/BrawlzCrypto |
 | Chain | Robinhood Chain, 4663 |
 | BattleFactory | `0x0Be67889010dd3C21F75b49fEBC421e2556433bD` |
 
@@ -59,7 +60,8 @@ and the wordmark has to match the site exactly.
 The avatar is deliberately a baseline PNG with no metadata. The source logo is a
 progressive JPEG, which some upload forms reject outright.
 
-## Still to do
+## Links
 
-`LINKS.x` is empty, so the header and footer render no X link. Empty links are
-not rendered at all, so nothing is broken until it is filled in.
+`lib/links.ts` holds the X account (`@BrawlzCrypto`) and the domain. Anything
+left empty there is not rendered at all, so the site never shows a dead
+placeholder.
