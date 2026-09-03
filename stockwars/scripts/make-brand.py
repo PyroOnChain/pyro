@@ -65,9 +65,42 @@ def corner_glow(size, colour, alpha):
     return Image.new('RGB', (size, size), colour), g
 
 
+def avatar(src, size=1024, fill=0.58, bg=(13, 13, 13)):
+    """A clean square avatar for social profiles.
+
+    Rebuilt from a hard mask rather than resized from the source, because the
+    supplied logo is a JPEG and its edges carry compression mush that shows badly
+    once a profile crops it to a circle. Threshold at 4x then come back down, so
+    the edges are cleanly anti-aliased instead of noisy.
+
+    `fill` keeps the mark well inside the inscribed circle: profiles crop avatars
+    to a circle, and the source frames the mark close enough to the corners to
+    look cramped once they do.
+    """
+    big = size * 4
+    g = src.split()[1].resize((big, big), Image.LANCZOS)
+    hard = g.point(lambda v: 255 if v > 110 else 0)
+    bb = hard.getbbox()
+    hard = hard.crop(bb)
+
+    target = int(size * fill)
+    scale = target / max(hard.width, hard.height)
+    hard = hard.resize((max(1, int(hard.width * scale)), max(1, int(hard.height * scale))),
+                       Image.LANCZOS)
+
+    out = Image.new('RGB', (size, size), bg)
+    shape = Image.new('RGB', hard.size, A)
+    out.paste(shape, ((size - hard.width) // 2, (size - hard.height) // 2), hard)
+    return out
+
+
 def main():
     src = load()
     mark = keyed_mark(src)
+
+    # Social profile picture. Baseline PNG, no metadata, no progressive encoding:
+    # the source is a progressive JPEG, which some upload forms reject outright.
+    avatar(src).save('../brand/brawlz-avatar.png', optimize=True)
 
     hm = mark.copy()
     hm.thumbnail((256, 256), Image.LANCZOS)
@@ -121,7 +154,8 @@ def main():
 
     card.save('app/opengraph-image.png')
 
-    for f in ('public/brawlz-mark.png', 'app/icon.png', 'app/apple-icon.png', 'app/opengraph-image.png'):
+    for f in ('../brand/brawlz-avatar.png', 'public/brawlz-mark.png', 'app/icon.png',
+              'app/apple-icon.png', 'app/opengraph-image.png'):
         print(f'  wrote {f}  {Image.open(f).size}  {os.path.getsize(f)//1024}KB')
 
 
