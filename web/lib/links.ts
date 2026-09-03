@@ -10,5 +10,5 @@ type Links = { x: string; handle: string; website: string };
 export const LINKS: Links = {
   x: '',
   handle: '',
-  website: '',
+  website: 'brawlzz.com',
 };

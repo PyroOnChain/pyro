@@ -1,25 +1,32 @@
-import { BRAND } from '@/lib/config';
+import { LINKS } from '@/lib/links';
 
 export function Footer() {
   return (
-    <footer className="ftr">
-      <div className="shell spread" style={{ gap: 20, flexWrap: 'wrap' }}>
-        <div className="label">
-          {BRAND.name} · {BRAND.tagline}
+    <footer style={{ borderTop: '1px solid var(--line)', marginTop: 80 }}>
+      <div className="shell" style={{ padding: '38px 36px 52px' }}>
+        <div className="between" style={{ marginBottom: 26, flexWrap: 'wrap', gap: 20 }}>
+          <span className="row" style={{ gap: 10 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brawlz-mark.png" alt="" style={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.85 }} />
+            <span className="display" style={{ fontSize: 19, color: 'var(--muted)' }}>
+              BR<span style={{ color: 'var(--a)' }}>A</span>WLZ
+            </span>
+          </span>
+          <span className="row" style={{ gap: 16 }}>
+            {LINKS.x && (
+              <a href={LINKS.x} target="_blank" rel="noreferrer noopener" className="chip">
+                {LINKS.handle}
+              </a>
+            )}
+            <span className="label">Robinhood Chain · 4663</span>
+          </span>
         </div>
-        <div className="row" style={{ gap: 22 }}>
-          {BRAND.x && (
-            <a className="label" href={BRAND.x} target="_blank" rel="noreferrer" style={{ color: 'var(--body)' }}>X</a>
-          )}
-          <span className="label">Robinhood Chain · 4663</span>
-        </div>
-      </div>
-      <div className="shell" style={{ marginTop: 22 }}>
-        <p style={{ fontSize: 12.5, lineHeight: 1.7, color: 'var(--dim)', margin: 0, maxWidth: 780 }}>
-          {BRAND.ticker} is a memecoin. It is not a fund, a share, or a claim on anything, and holding it
-          entitles you to nothing. The treasury is a wallet this project controls; nobody can redeem against
-          it. Every figure on this site is read live from Robinhood Chain and can be checked against the
-          addresses published on the treasury page.
+        <p className="mono" style={{ fontSize: 11.5, lineHeight: 1.8, color: 'var(--dim)', margin: 0, maxWidth: 940 }}>
+          Tokenized stocks on Robinhood Chain are issued by Robinhood Assets (Jersey) Limited and are debt securities
+          tracking the underlying. They do not grant ownership or voting rights. They may not be offered, sold or
+          delivered to US persons, and are additionally restricted in the United Kingdom, Canada, Switzerland and the
+          UAE. Memecoins launched here are worth nothing by design and most will go to zero. Brawlz is unaudited
+          software and you should treat it that way. Nothing here is investment advice.
         </p>
       </div>
     </footer>

@@ -1,42 +1,64 @@
 import type { Metadata } from 'next';
-import { Anton, Inter, IBM_Plex_Mono } from 'next/font/google';
-import './globals.css';
+import { Archivo_Black, Barlow, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
-import { BRAND } from '@/lib/config';
+import { LINKS } from '@/lib/links';
+import { CursorGlow } from '@/components/CursorGlow';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import './globals.css';
 
-// Self-hosted at build time by next/font. A <link> to Google Fonts would add a
-// render-blocking request to a third party on every first paint.
-const display = Anton({ subsets: ['latin'], weight: '400', variable: '--font-display', display: 'swap' });
-const sans = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' });
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono', display: 'swap' });
+// Archivo Black is the wide, heavy poster face the whole layout hangs off. Barlow
+// keeps copy readable while a clock is running; JetBrains carries every figure.
+const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--font-display' });
+const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
+const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
 
+const SITE = 'https://brawlzz.com';
 const DESCRIPTION =
-  'A memecoin whose creator fees are collected in ETH and spent on whole shares of tokenized NVDA. '
-  + 'The treasury is one public address, so every share it owns can be checked on-chain.';
-
-const TITLE = `${BRAND.name}: the treasury climbs up`;
+  'Two memecoins launch at the same second, priced in the same tokenized stock. '
+  + 'One hour later the side that hit the higher market cap takes both tokens’ creator fees, paid in stock.';
 
 export const metadata: Metadata = {
-  title: { default: BRAND.name, template: `%s · ${BRAND.name}` },
+  title: { default: 'Brawlz', template: '%s · Brawlz' },
   description: DESCRIPTION,
-  applicationName: BRAND.name,
-  metadataBase: new URL(BRAND.site),
-  alternates: { canonical: '/' },
-  openGraph: { title: TITLE, description: DESCRIPTION, siteName: BRAND.name, type: 'website', url: BRAND.site },
+  applicationName: 'Brawlz',
+  ...(SITE ? { metadataBase: new URL(SITE) } : {}),
+  // './' resolves per route, so every page declares itself canonical rather
+  // than every page claiming to be the home page.
+  alternates: { canonical: './' },
+  openGraph: { title: 'Brawlz: two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Brawlz', type: 'website', ...(SITE ? { url: SITE } : {}) },
   twitter: {
     card: 'summary_large_image',
-    title: TITLE,
-    description: DESCRIPTION,
-    ...(BRAND.x ? { site: `@${BRAND.x.split('/').pop()}`, creator: `@${BRAND.x.split('/').pop()}` } : {}),
+    ...(LINKS.handle ? { site: LINKS.handle, creator: LINKS.handle } : {}),
+    title: 'Brawlz: two coins enter, one gets paid', description: DESCRIPTION,
   },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#08090B' };
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#000000' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    // The head script adds `motion` to <html> before React hydrates, so the
+    // server HTML and the client tree legitimately differ on className. The class
+    // is a no-JS guard rather than a motion preference: without it, reveal
+    // animations would leave content at opacity 0 for anyone whose JS failed.
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)"
+              + "document.documentElement.classList.add('motion')}catch(e){}",
+          }}
+        />
+      </head>
       <body>
+        <div className="arena" aria-hidden="true" />
+        <ScrollProgress />
+        <CursorGlow />
         <Providers>{children}</Providers>
       </body>
     </html>

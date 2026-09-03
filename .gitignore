@@ -22,13 +22,13 @@ LAUNCH.md
 .DS_Store
 *.log
 
-# whichever app lives at web/ (currently LADDER, the path Pages builds)
+# whichever app lives at web/ (currently BRAWLZ, the path Pages builds)
 /web/node_modules/
 /web/.next/
 /web/out/
 /web/.env.local
 
-# stock wars, kept for reference after the ladder took over web/
-stockwars/node_modules/
-stockwars/.next/
-stockwars/out/
+# ladder capital, parked here after brawlz took over web/
+ladder/node_modules/
+ladder/.next/
+ladder/out/

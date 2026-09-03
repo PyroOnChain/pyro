@@ -89,7 +89,14 @@ yet" state instead of a zero it cannot source.
 
 ## Publishing
 
-Static export, no server. `npm run build` in `web/` writes `out/`.
+**Not currently deployed.** The app lives at `ladder/`. Brawlz took over `web/`,
+which is the path the Cloudflare Pages project builds, so `platform-ladder.com`
+serves Brawlz until the directories are swapped back. LADR is still live on
+Pons and the treasury is untouched; only the website is down.
+
+To put it back: swap the `web/` and `ladder/` directory names and push.
+
+Static export, no server. `npm run build` writes `out/`.
 
 The app lives at `web/` rather than a directory named after itself, because the
 Cloudflare Pages project is wired to the GitHub repo with `web` as its root and
@@ -101,7 +108,7 @@ Cloudflare Pages:
 
 | Setting | Value |
 | --- | --- |
-| Root directory | `web` |
+| Root directory | `web` (whichever app occupies it) |
 | Build command | `npm run build` |
 | Output directory | `out` |
 
