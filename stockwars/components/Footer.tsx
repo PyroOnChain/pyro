@@ -7,9 +7,9 @@ export function Footer() {
         <div className="between" style={{ marginBottom: 26, flexWrap: 'wrap', gap: 20 }}>
           <span className="row" style={{ gap: 10 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/stockwars-mark.png" alt="" style={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.85 }} />
+            <img src="/brawlz-mark.png" alt="" style={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.85 }} />
             <span className="display" style={{ fontSize: 19, color: 'var(--muted)' }}>
-              STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+              BR<span style={{ color: 'var(--a)' }}>A</span>WLZ
             </span>
           </span>
           <span className="row" style={{ gap: 16 }}>
@@ -25,7 +25,7 @@ export function Footer() {
           Tokenized stocks on Robinhood Chain are issued by Robinhood Assets (Jersey) Limited and are debt securities
           tracking the underlying. They do not grant ownership or voting rights. They may not be offered, sold or
           delivered to US persons, and are additionally restricted in the United Kingdom, Canada, Switzerland and the
-          UAE. Memecoins launched here are worth nothing by design and most will go to zero. Stock Wars is unaudited
+          UAE. Memecoins launched here are worth nothing by design and most will go to zero. Brawlz is unaudited
           software and you should treat it that way. Nothing here is investment advice.
         </p>
       </div>

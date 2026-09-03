@@ -32,7 +32,7 @@ export function ShareCoin({
   const clock = minsLeft && minsLeft > 0 ? ` ${minsLeft} min left.` : '';
 
   const text =
-    `${me} vs ${them} on Stock Wars.${clock} `
+    `${me} vs ${them} on Brawlz.${clock} `
     + `Whichever side peaks higher takes the creator fees from BOTH coins. `
     + `I'm on ${me}.`;
 
@@ -61,7 +61,7 @@ export function ShareCoin({
     window.open(xUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const c = side === 'a' ? 'var(--red)' : 'var(--blue)';
+  const c = side === 'a' ? 'var(--a)' : 'var(--b)';
 
   return (
     <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>

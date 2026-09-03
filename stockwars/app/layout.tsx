@@ -12,20 +12,23 @@ const display = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--
 const body = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500', '700'], variable: '--font-mono' });
 
-const SITE = 'https://stockswars.com';
+/** Set once Brawlz has its own domain. Empty means the cards use relative URLs
+ *  rather than pointing at a domain this project does not own. */
+const SITE = '';
 const DESCRIPTION =
   'Two memecoins launch at the same second, priced in the same tokenized stock. '
   + 'One hour later the side that hit the higher market cap takes both tokens’ creator fees, paid in stock.';
 
 export const metadata: Metadata = {
-  title: { default: 'Stock Wars', template: '%s · Stock Wars' },
+  title: { default: 'Brawlz', template: '%s · Brawlz' },
   description: DESCRIPTION,
-  applicationName: 'Stock Wars',
-  metadataBase: new URL(SITE),
-  openGraph: { title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Stock Wars', type: 'website', url: SITE },
+  applicationName: 'Brawlz',
+  ...(SITE ? { metadataBase: new URL(SITE) } : {}),
+  openGraph: { title: 'Brawlz: two coins enter, one gets paid', description: DESCRIPTION, siteName: 'Brawlz', type: 'website', ...(SITE ? { url: SITE } : {}) },
   twitter: {
-    card: 'summary_large_image', site: LINKS.handle, creator: LINKS.handle,
-    title: 'Stock Wars: two coins enter, one gets paid', description: DESCRIPTION,
+    card: 'summary_large_image',
+    ...(LINKS.handle ? { site: LINKS.handle, creator: LINKS.handle } : {}),
+    title: 'Brawlz: two coins enter, one gets paid', description: DESCRIPTION,
   },
 };
 
@@ -33,7 +36,15 @@ export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    // The head script adds `motion` to <html> before React hydrates, so the
+    // server HTML and the client tree legitimately differ on className. The class
+    // is a no-JS guard rather than a motion preference: without it, reveal
+    // animations would leave content at opacity 0 for anyone whose JS failed.
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{

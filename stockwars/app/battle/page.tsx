@@ -137,7 +137,7 @@ function BattlePage() {
         <Header />
         <div className="shell" style={{ padding: '90px 36px', textAlign: 'center' }}>
           <div className="display h-2" style={{ marginBottom: 14 }}>NO FIGHT SELECTED</div>
-          <Link href="/battles" className="btn btn-gold">See the fights</Link>
+          <Link href="/battles" className="btn btn-prize">See the fights</Link>
         </div>
         <Footer />
       </>
@@ -162,13 +162,13 @@ function BattlePage() {
 
           <div className="between" style={{ marginBottom: 22, flexWrap: 'wrap', gap: 14 }}>
             {phase === 'live' && <span className="chip chip-live"><span className="pulse-dot">●</span> LIVE</span>}
-            {phase === 'awaiting' && <span className="chip chip-gold">CLOCK STOPPED · NEEDS SETTLING</span>}
+            {phase === 'awaiting' && <span className="chip chip-prize">CLOCK STOPPED · NEEDS SETTLING</span>}
             {phase === 'settled' && (
-              <span className={`chip ${winA ? 'chip-red' : winB ? 'chip-blue' : 'chip-gold'}`}>
+              <span className={`chip ${winA ? 'chip-a' : winB ? 'chip-b' : 'chip-prize'}`}>
                 {winA ? 'SIDE A TOOK IT' : winB ? 'SIDE B TOOK IT' : 'DRAW · BOTH SIDES PAID'}
               </span>
             )}
-            <div className="display" style={{ fontSize: 34, color: phase === 'live' ? 'var(--gold)' : 'var(--muted)' }}>
+            <div className="display" style={{ fontSize: 34, color: phase === 'live' ? 'var(--prize)' : 'var(--muted)' }}>
               <Countdown endAt={battle.endAt} />
             </div>
           </div>
@@ -186,9 +186,9 @@ function BattlePage() {
             <div className="tug-b" style={{ width: `${pb}%` }} />
           </div>
           <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)' }}>
-            <span style={{ color: 'var(--red)' }}>{pa.toFixed(1)}%</span>
+            <span style={{ color: 'var(--a)' }}>{pa.toFixed(1)}%</span>
             <span>PEAK MARKET CAP · THE HIGH WATER MARK, NOT THE CLOSE</span>
-            <span style={{ color: 'var(--blue)' }}>{pb.toFixed(1)}%</span>
+            <span style={{ color: 'var(--b)' }}>{pb.toFixed(1)}%</span>
           </div>
         </div>
       </div>
@@ -220,10 +220,10 @@ function BattlePage() {
           {phase === 'live' && (
             <>
               <div className="grid-2" style={{ gap: 10, marginBottom: 18 }}>
-                <button className={`btn ${side === SIDE_A ? 'btn-red' : 'btn-ghost'}`} onClick={() => setSide(SIDE_A)}>
+                <button className={`btn ${side === SIDE_A ? 'btn-a' : 'btn-ghost'}`} onClick={() => setSide(SIDE_A)}>
                   {battle.symbolA ? `$${battle.symbolA}` : 'SIDE A'}
                 </button>
-                <button className={`btn ${side === SIDE_B ? 'btn-blue' : 'btn-ghost'}`} onClick={() => setSide(SIDE_B)}>
+                <button className={`btn ${side === SIDE_B ? 'btn-b' : 'btn-ghost'}`} onClick={() => setSide(SIDE_B)}>
                   {battle.symbolB ? `$${battle.symbolB}` : 'SIDE B'}
                 </button>
               </div>
@@ -244,11 +244,11 @@ function BattlePage() {
               </div>
 
               {wrongChain ? (
-                <button className="btn btn-gold" style={{ width: '100%' }} disabled={switching} onClick={switchChain}>
+                <button className="btn btn-prize" style={{ width: '100%' }} disabled={switching} onClick={switchChain}>
                   {switching ? 'Check your wallet…' : 'Switch network'}
                 </button>
               ) : (
-                <button className={`btn ${side === SIDE_A ? 'btn-red' : 'btn-blue'}`} style={{ width: '100%' }}
+                <button className={`btn ${side === SIDE_A ? 'btn-a' : 'btn-b'}`} style={{ width: '100%' }}
                   disabled={busy || parsed === 0n} onClick={enter}>
                   {busy ? 'Confirm in wallet…' : parsed === 0n ? 'Enter an amount' : `Back ${side === SIDE_A ? battle.symbolA ?? 'A' : battle.symbolB ?? 'B'}`}
                 </button>
@@ -265,7 +265,7 @@ function BattlePage() {
           )}
 
           {phase === 'awaiting' && (
-            <button className="btn btn-gold" style={{ width: '100%' }} disabled={busy} onClick={() => act('settle')}>
+            <button className="btn btn-prize" style={{ width: '100%' }} disabled={busy} onClick={() => act('settle')}>
               {busy ? 'Confirm in wallet…' : 'Settle the fight'}
             </button>
           )}
@@ -279,7 +279,7 @@ function BattlePage() {
                 const c = s === SIDE_A ? claimA : claimB;
                 if (!c || c === 0n) return null;
                 return (
-                  <button key={s} className={`btn ${s === SIDE_A ? 'btn-red' : 'btn-blue'}`} style={{ width: '100%', marginBottom: 10 }}
+                  <button key={s} className={`btn ${s === SIDE_A ? 'btn-a' : 'btn-b'}`} style={{ width: '100%', marginBottom: 10 }}
                     disabled={busy} onClick={() => claimSide(s)}>
                     Claim {fmt(c, 18, 4)} {sym}
                   </button>
@@ -296,7 +296,7 @@ function BattlePage() {
           {err && <div style={{ fontSize: 13, color: 'var(--loss)', marginTop: 12 }}>{err}</div>}
           {hash && (
             <div style={{ fontSize: 12.5, marginTop: 10 }}>
-              <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: 'var(--gold)' }}>
+              <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: 'var(--prize)' }}>
                 {receipt.isLoading ? 'Confirming…' : 'View transaction'}
               </a>
             </div>
@@ -316,7 +316,7 @@ function BattlePage() {
                 const w = s === SIDE_A ? myWeightA : myWeightB;
                 const tokens = pos?.[0] ?? 0n;
                 if (tokens === 0n && (w ?? 0n) === 0n) return null;
-                const c = s === SIDE_A ? 'var(--red)' : 'var(--blue)';
+                const c = s === SIDE_A ? 'var(--a)' : 'var(--b)';
                 const label = s === SIDE_A ? battle.symbolA : battle.symbolB;
                 return (
                   <div key={s} style={{ borderBottom: '1px solid var(--line)', paddingBottom: 16, marginBottom: 16 }}>
@@ -358,7 +358,7 @@ function Corner(p: {
   side: 'a' | 'b'; name?: string; sym?: string; peak?: bigint; won?: boolean; settled?: boolean;
   token?: string; other?: string; minsLeft?: number; align?: 'right';
 }) {
-  const c = p.side === 'a' ? 'var(--red)' : 'var(--blue)';
+  const c = p.side === 'a' ? 'var(--a)' : 'var(--b)';
   const dim = p.settled && !p.won;
   return (
     <div style={{ textAlign: p.align ?? 'left', opacity: dim ? 0.45 : 1 }}>
@@ -379,7 +379,7 @@ function Stat({ label, value, note, gold }: { label: string; value: string; note
   return (
     <div>
       <div className="label" style={{ marginBottom: 8 }}>{label}</div>
-      <div className="stat" style={{ fontSize: 21, color: gold ? 'var(--gold)' : 'var(--ink)' }}>{value}</div>
+      <div className="stat" style={{ fontSize: 21, color: gold ? 'var(--prize)' : 'var(--ink)' }}>{value}</div>
       {note && <div className="mono" style={{ fontSize: 11, color: 'var(--dim)', marginTop: 4 }}>{note}</div>}
     </div>
   );

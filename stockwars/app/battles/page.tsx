@@ -48,7 +48,7 @@ export default function BattlesPage() {
               Every match ever started. Pick a side while the clock is running, or watch one settle.
             </p>
           </div>
-          <Link href="/start" className="btn btn-gold" style={{ fontSize: 15, padding: '13px 22px' }}>Start a fight</Link>
+          <Link href="/start" className="btn btn-prize" style={{ fontSize: 15, padding: '13px 22px' }}>Start a fight</Link>
         </div>
 
         {/* one fight gets the spotlight; the rest sit underneath */}
@@ -65,7 +65,7 @@ export default function BattlesPage() {
           <div className="panel plate" style={{ padding: '52px 28px', textAlign: 'center' }}>
             <div className="display" style={{ fontSize: 26, marginBottom: 10 }}>NO FIGHTS YET</div>
             <p style={{ color: 'var(--muted)', margin: '0 0 22px' }}>Someone has to throw the first punch.</p>
-            <Link href="/start" className="btn btn-gold">Start the first one</Link>
+            <Link href="/start" className="btn btn-prize">Start the first one</Link>
           </div>
         )}
 
@@ -79,9 +79,9 @@ export default function BattlesPage() {
               <Link key={b.address} href={`/battle?a=${b.address}`} className="panel plate lift" style={{ padding: '22px 22px 20px', display: 'block' }}>
                 <div className="between" style={{ marginBottom: 18 }}>
                   {ph === 'live' && <span className="chip chip-live"><span className="pulse-dot">●</span> LIVE</span>}
-                  {ph === 'awaiting' && <span className="chip chip-gold">AWAITING BELL</span>}
+                  {ph === 'awaiting' && <span className="chip chip-prize">AWAITING BELL</span>}
                   {ph === 'settled' && (
-                    <span className={`chip ${winA ? 'chip-red' : winB ? 'chip-blue' : ''}`}>
+                    <span className={`chip ${winA ? 'chip-a' : winB ? 'chip-b' : ''}`}>
                       {winA ? 'SIDE A WON' : winB ? 'SIDE B WON' : 'DRAW'}
                     </span>
                   )}
@@ -92,15 +92,15 @@ export default function BattlesPage() {
 
                 <div className="versus" style={{ marginBottom: 16, gap: 14 }}>
                   <div>
-                    <div className="label" style={{ color: 'var(--red)', marginBottom: 6 }}>SIDE A</div>
+                    <div className="label" style={{ color: 'var(--a)', marginBottom: 6 }}>SIDE A</div>
                     <div className="display" style={{ fontSize: 18, lineHeight: 1.15 }}>{b.nameA ?? '—'}</div>
-                    <div className="mono" style={{ fontSize: 12, color: 'var(--red)' }}>${b.symbolA ?? '…'}</div>
+                    <div className="mono" style={{ fontSize: 12, color: 'var(--a)' }}>${b.symbolA ?? '…'}</div>
                   </div>
                   <div className="vs" style={{ width: 46, height: 46, fontSize: 17 }}><span>VS</span></div>
                   <div style={{ textAlign: 'right' }}>
-                    <div className="label" style={{ color: 'var(--blue)', marginBottom: 6 }}>SIDE B</div>
+                    <div className="label" style={{ color: 'var(--b)', marginBottom: 6 }}>SIDE B</div>
                     <div className="display" style={{ fontSize: 18, lineHeight: 1.15 }}>{b.nameB ?? '—'}</div>
-                    <div className="mono" style={{ fontSize: 12, color: 'var(--blue)' }}>${b.symbolB ?? '…'}</div>
+                    <div className="mono" style={{ fontSize: 12, color: 'var(--b)' }}>${b.symbolB ?? '…'}</div>
                   </div>
                 </div>
 
@@ -109,15 +109,15 @@ export default function BattlesPage() {
                   <div className="tug-b" style={{ width: `${pb}%` }} />
                 </div>
                 <div className="between mono" style={{ fontSize: 11.5, color: 'var(--dim)' }}>
-                  <span style={{ color: 'var(--red)' }}>{fmt(b.peakA, 18, 2)}</span>
+                  <span style={{ color: 'var(--a)' }}>{fmt(b.peakA, 18, 2)}</span>
                   <span>PEAK</span>
-                  <span style={{ color: 'var(--blue)' }}>{fmt(b.peakB, 18, 2)}</span>
+                  <span style={{ color: 'var(--b)' }}>{fmt(b.peakB, 18, 2)}</span>
                 </div>
 
                 {b.totalHarvested !== undefined && b.totalHarvested > 0n && (
                   <div style={{ borderTop: '1px solid var(--line)', marginTop: 16, paddingTop: 14 }} className="between">
                     <span className="label">PURSE PAID</span>
-                    <span className="stat" style={{ color: 'var(--gold)', fontSize: 15 }}>{fmt(b.totalHarvested, 18, 4)}</span>
+                    <span className="stat" style={{ color: 'var(--prize)', fontSize: 15 }}>{fmt(b.totalHarvested, 18, 4)}</span>
                   </div>
                 )}
               </Link>

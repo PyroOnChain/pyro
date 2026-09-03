@@ -43,9 +43,9 @@ export function Header() {
         <div className={`island${stuck ? ' stuck' : ''}`}>
           <Link href="/" className="row" style={{ gap: 9, whiteSpace: 'nowrap' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/stockwars-mark.png" alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+            <img src="/brawlz-mark.png" alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
             <span className="display" style={{ fontSize: 17, letterSpacing: '-0.02em' }}>
-              STOCK<span style={{ color: 'var(--red)' }}>W</span><span style={{ color: 'var(--blue)' }}>A</span>RS
+              BR<span style={{ color: 'var(--a)' }}>A</span>WLZ
             </span>
           </Link>
 
@@ -62,7 +62,7 @@ export function Header() {
 
           {LINKS.x && (
             <a href={LINKS.x} target="_blank" rel="noreferrer noopener"
-              className="island-link" aria-label="Stock Wars on X" title="Stock Wars on X"
+              className="island-link" aria-label="Brawlz on X" title="Brawlz on X"
               style={{ display: 'grid', placeItems: 'center', padding: '9px 11px' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M18.9 2H22l-7 8 8.2 12h-6.4l-5-7.3L5.9 22H2.8l7.5-8.6L2.4 2h6.6l4.5 6.7L18.9 2Zm-1.1 18.1h1.7L7.3 3.8H5.5l12.3 16.3Z"/>
@@ -71,7 +71,7 @@ export function Header() {
           )}
 
           {wrongChain ? (
-            <button className="btn btn-gold" style={{ padding: '9px 16px', fontSize: 13 }}
+            <button className="btn btn-prize" style={{ padding: '9px 16px', fontSize: 13 }}
               disabled={switching} onClick={switchChain}>
               {switching ? 'Check wallet' : 'Wrong network'}
             </button>
@@ -83,7 +83,7 @@ export function Header() {
           ) : (
             <WalletPicker>
               {(open) => (
-                <button className="btn btn-gold" style={{ padding: '9px 18px', fontSize: 13 }} onClick={open}>
+                <button className="btn btn-prize" style={{ padding: '9px 18px', fontSize: 13 }} onClick={open}>
                   Connect
                 </button>
               )}

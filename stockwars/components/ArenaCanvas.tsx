@@ -74,18 +74,18 @@ export function ArenaCanvas() {
       const breath = Math.sin(t * 0.006) * 0.06;
 
       const left = ctx.createRadialGradient(seam * 0.35, h * 0.34, 0, seam * 0.35, h * 0.34, w * (0.62 + breath));
-      left.addColorStop(0, 'rgba(255, 79, 216, 0.30)');
-      left.addColorStop(0.45, 'rgba(255, 79, 216, 0.09)');
-      left.addColorStop(1, 'rgba(255, 79, 216, 0)');
+      left.addColorStop(0, 'rgba(43, 232, 107, 0.30)');
+      left.addColorStop(0.45, 'rgba(43, 232, 107, 0.09)');
+      left.addColorStop(1, 'rgba(43, 232, 107, 0)');
       ctx.fillStyle = left;
       ctx.fillRect(0, 0, w, h);
 
       const right = ctx.createRadialGradient(
         seam + (w - seam) * 0.65, h * 0.34, 0, seam + (w - seam) * 0.65, h * 0.34, w * (0.62 - breath)
       );
-      right.addColorStop(0, 'rgba(47, 128, 255, 0.30)');
-      right.addColorStop(0.45, 'rgba(47, 128, 255, 0.09)');
-      right.addColorStop(1, 'rgba(47, 128, 255, 0)');
+      right.addColorStop(0, 'rgba(255, 255, 255, 0.30)');
+      right.addColorStop(0.45, 'rgba(255, 255, 255, 0.09)');
+      right.addColorStop(1, 'rgba(255, 255, 255, 0)');
       ctx.fillStyle = right;
       ctx.fillRect(0, 0, w, h);
 
@@ -139,7 +139,7 @@ export function ArenaCanvas() {
         const px = m.side === 0 ? m.x * seam : seam + m.x * (w - seam);
         const py = m.y * h;
         const a = 0.14 + Math.abs(Math.sin(t * 0.02 + m.p)) * 0.3;
-        ctx.fillStyle = m.side === 0 ? `rgba(255, 79, 216, ${a})` : `rgba(47, 128, 255, ${a})`;
+        ctx.fillStyle = m.side === 0 ? `rgba(43, 232, 107, ${a})` : `rgba(255, 255, 255, ${a})`;
         ctx.beginPath();
         ctx.arc(px, py, m.r, 0, Math.PI * 2);
         ctx.fill();

@@ -40,7 +40,7 @@ function LiveCard({ b }: { b: BattleSummary }) {
     <div className="panel plate" style={{ padding: '26px 26px 24px' }}>
       <div className="between" style={{ marginBottom: 22 }}>
         <span className="chip chip-live"><span className="pulse-dot">●</span> LIVE NOW</span>
-        <span className="display" style={{ fontSize: 26, color: 'var(--gold)' }}>
+        <span className="display" style={{ fontSize: 26, color: 'var(--prize)' }}>
           <Countdown endAt={b.endAt} />
         </span>
       </div>
@@ -56,19 +56,19 @@ function LiveCard({ b }: { b: BattleSummary }) {
         <div className="tug-b" style={{ width: `${pb}%` }} />
       </div>
       <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 22 }}>
-        <span style={{ color: 'var(--red)' }}>{pa.toFixed(1)}%</span>
+        <span style={{ color: 'var(--a)' }}>{pa.toFixed(1)}%</span>
         <span>PEAK MARKET CAP</span>
-        <span style={{ color: 'var(--blue)' }}>{pb.toFixed(1)}%</span>
+        <span style={{ color: 'var(--b)' }}>{pb.toFixed(1)}%</span>
       </div>
 
       <div style={{ borderTop: '1px solid var(--line)', paddingTop: 18 }} className="between">
         <div>
           <div className="label" style={{ marginBottom: 6 }}>PURSE SO FAR</div>
-          <div className="stat" style={{ fontSize: 25, color: 'var(--gold)' }}>
+          <div className="stat" style={{ fontSize: 25, color: 'var(--prize)' }}>
             {fmt(b.totalHarvested, 18, 4)} <span style={{ fontSize: 13, color: 'var(--muted)' }}>{sym}</span>
           </div>
         </div>
-        <Link href={`/battle?a=${b.address}`} className="btn btn-gold" style={{ fontSize: 15, padding: '13px 22px' }}>
+        <Link href={`/battle?a=${b.address}`} className="btn btn-prize" style={{ fontSize: 15, padding: '13px 22px' }}>
           Pick a corner
         </Link>
       </div>
@@ -81,7 +81,7 @@ function SampleCard() {
   return (
     <div className="panel plate" style={{ padding: '26px 26px 24px' }}>
       <div className="between" style={{ marginBottom: 22 }}>
-        <span className="chip chip-gold">WHAT A FIGHT LOOKS LIKE</span>
+        <span className="chip chip-prize">WHAT A FIGHT LOOKS LIKE</span>
         <span className="mono" style={{ fontSize: 13, color: 'var(--muted)' }}>41:07 LEFT</span>
       </div>
 
@@ -96,15 +96,15 @@ function SampleCard() {
         <div className="tug-b" style={{ width: '40.5%' }} />
       </div>
       <div className="between mono" style={{ fontSize: 12, color: 'var(--dim)', marginBottom: 22 }}>
-        <span style={{ color: 'var(--red)' }}>59.5%</span>
+        <span style={{ color: 'var(--a)' }}>59.5%</span>
         <span>PEAK MARKET CAP</span>
-        <span style={{ color: 'var(--blue)' }}>40.5%</span>
+        <span style={{ color: 'var(--b)' }}>40.5%</span>
       </div>
 
       <div style={{ borderTop: '1px solid var(--line)', paddingTop: 18 }} className="between">
         <div>
           <div className="label" style={{ marginBottom: 6 }}>PURSE SO FAR</div>
-          <div className="stat" style={{ fontSize: 25, color: 'var(--gold)' }}>
+          <div className="stat" style={{ fontSize: 25, color: 'var(--prize)' }}>
             <CountUp value={12.84} /> <span style={{ fontSize: 13, color: 'var(--muted)' }}>NVDA</span>
           </div>
         </div>
@@ -117,7 +117,7 @@ function SampleCard() {
 }
 
 function Corner(p: { side: 'a' | 'b'; name?: string; sym?: string; peak?: bigint; align?: 'right' }) {
-  const c = p.side === 'a' ? 'var(--red)' : 'var(--blue)';
+  const c = p.side === 'a' ? 'var(--a)' : 'var(--b)';
   return (
     <div style={{ textAlign: p.align ?? 'left' }}>
       <div className="label" style={{ color: c, marginBottom: 8 }}>{p.side === 'a' ? 'SIDE A' : 'SIDE B'}</div>

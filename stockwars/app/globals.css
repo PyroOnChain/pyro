@@ -1,5 +1,5 @@
 /* ============================================================================
-   Stock Wars design system.
+   Brawlz design system.
 
    A versus screen on pure black: hot pink against electric blue, fighting over an
    acid yellow pot. Poster typography, stadium pills and rings carry the identity;
@@ -19,25 +19,22 @@
   --muted: #8B8B97;
   --dim: #5A5A66;
 
-  /* the two corners. Kept as --red/--blue names so nothing else has to move,
-     but side A is now hot pink: it reads hotter than red against pure black. */
-  --red: #FF4FD8;
-  --red-dim: #B02C93;
-  --red-wash: rgba(255, 79, 216, 0.14);
-  --blue: #2F80FF;
-  --blue-dim: #1B52A8;
-  --blue-wash: rgba(47, 128, 255, 0.14);
+  /* The two corners. Green and white rather than two hues, because on pure black
+     they carry equal weight: neither corner looks like the underdog before a
+     punch is thrown. Grey is never a side; it is structure and defeat. */
+  --a: #2BE86B;
+  --a-dim: #179242;
+  --a-wash: rgba(43, 232, 107, 0.14);
+  --b: #FFFFFF;
+  --b-dim: #9A9AA6;
+  --b-wash: rgba(255, 255, 255, 0.12);
 
-  /* the pot */
-  --gold: #FFE500;
-  --gold-dim: #B39F00;
+  /* The pot. Yellower than side A so a purse never reads as a corner. */
+  --prize: #C6FF4D;
+  --prize-dim: #8AB230;
 
-  /* the rest of the poster palette, used to colour-cycle lists */
-  --lime: #7CFF3F;
-  --violet: #8B5CFF;
-
-  --live: #7CFF3F;
-  --loss: #FF4F6E;
+  --live: #2BE86B;
+  --loss: #6B6B78;
 
   --ease-out: cubic-bezier(0.16, 0.84, 0.28, 1);
   --ease-snap: cubic-bezier(0.22, 1.2, 0.36, 1);
@@ -63,8 +60,8 @@ body {
 .arena {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(66% 52% at 0% 20%, rgba(255, 79, 216, 0.20), transparent 62%),
-    radial-gradient(66% 52% at 100% 20%, rgba(47, 128, 255, 0.20), transparent 62%),
+    radial-gradient(66% 52% at 0% 20%, rgba(43, 232, 107, 0.20), transparent 62%),
+    radial-gradient(66% 52% at 100% 20%, rgba(255, 255, 255, 0.20), transparent 62%),
     linear-gradient(180deg, #08080B 0%, var(--bg) 55%);
 }
 .arena::after {
@@ -123,12 +120,12 @@ button:disabled { cursor: not-allowed; }
   transition: transform 0.16s var(--ease-snap), box-shadow 0.16s var(--ease-out),
               background-color 0.16s linear, border-color 0.16s linear;
 }
-.btn-gold { background: var(--gold); color: #000; }
-.btn-gold:hover:not(:disabled) { background: #FFF04D; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 229, 0, 0.30); }
-.btn-red { background: var(--red); color: #000; }
-.btn-red:hover:not(:disabled) { background: #FF74E1; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 79, 216, 0.34); }
-.btn-blue { background: var(--blue); color: #fff; }
-.btn-blue:hover:not(:disabled) { background: #5798FF; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(47, 128, 255, 0.34); }
+.btn-prize { background: var(--prize); color: #000; }
+.btn-prize:hover:not(:disabled) { background: #FFF04D; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 229, 0, 0.30); }
+.btn-a { background: var(--a); color: #000; }
+.btn-a:hover:not(:disabled) { background: #4CF287; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(43, 232, 107, 0.34); }
+.btn-b { background: var(--b); color: #000; }   /* side B is white now, so the label must be dark */
+.btn-b:hover:not(:disabled) { background: #E8E8EE; transform: translateY(-2px); box-shadow: 0 10px 34px rgba(255, 255, 255, 0.34); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn-ghost:hover:not(:disabled) { border-color: var(--muted); background: rgba(255,255,255,0.03); }
 .btn:disabled { opacity: 0.4; transform: none !important; box-shadow: none !important; }
@@ -139,10 +136,10 @@ button:disabled { cursor: not-allowed; }
   padding: 7px 14px; border: 2px solid var(--line); background: var(--surface-2);
   text-transform: uppercase; border-radius: 999px;
 }
-.chip-live { border-color: rgba(124, 255, 63, 0.5); color: var(--live); }
-.chip-red { border-color: rgba(255, 79, 216, 0.5); color: var(--red); }
-.chip-blue { border-color: rgba(47, 128, 255, 0.5); color: var(--blue); }
-.chip-gold { border-color: rgba(255, 229, 0, 0.5); color: var(--gold); }
+.chip-live { border-color: rgba(198, 255, 77, 0.5); color: var(--live); }
+.chip-a { border-color: rgba(43, 232, 107, 0.5); color: var(--a); }
+.chip-b { border-color: rgba(255, 255, 255, 0.5); color: var(--b); }
+.chip-prize { border-color: rgba(255, 229, 0, 0.5); color: var(--prize); }
 
 /* ---------------------------------------------------------------- the VS badge */
 /* A ring, not a diamond: the reference language is circles inside stadiums. */
@@ -151,7 +148,7 @@ button:disabled { cursor: not-allowed; }
   width: 78px; height: 78px; border-radius: 999px;
   font-family: var(--font-display), sans-serif; font-size: 25px; letter-spacing: 0.01em;
   color: var(--ink); background: var(--bg);
-  border: 3px solid var(--gold);
+  border: 3px solid var(--prize);
   box-shadow: 0 0 0 7px var(--bg), 0 0 46px rgba(255, 229, 0, 0.22);
 }
 
@@ -162,8 +159,8 @@ button:disabled { cursor: not-allowed; }
   display: flex; height: 26px; width: 100%; overflow: hidden;
   border: 2px solid var(--line); background: var(--surface-2); border-radius: 999px;
 }
-.tug-a { background: linear-gradient(90deg, var(--red-dim), var(--red)); transition: width 0.6s var(--ease-out); }
-.tug-b { background: linear-gradient(90deg, var(--blue), var(--blue-dim)); transition: width 0.6s var(--ease-out); margin-left: auto; }
+.tug-a { background: linear-gradient(90deg, var(--a-dim), var(--a)); transition: width 0.6s var(--ease-out); }
+.tug-b { background: linear-gradient(90deg, var(--b), var(--b-dim)); transition: width 0.6s var(--ease-out); margin-left: auto; }
 
 .bar { height: 10px; background: var(--surface-2); border: 2px solid var(--line); overflow: hidden; border-radius: 999px; }
 .bar > i { display: block; height: 100%; transition: width 0.6s var(--ease-out); }
@@ -245,7 +242,7 @@ button:disabled { cursor: not-allowed; }
   width: 100%; background: var(--bg); border: 2px solid var(--line); border-radius: 12px;
   padding: 14px 15px; font-size: 15px; color: var(--ink); font-family: inherit;
 }
-.field:focus { outline: none; border-color: var(--gold); }
+.field:focus { outline: none; border-color: var(--prize); }
 .field-amount {
   font-family: var(--font-mono), monospace; font-weight: 700; font-size: 26px;
   border: none; background: transparent; width: 100%; padding: 0; color: var(--ink);
@@ -278,10 +275,10 @@ button:disabled { cursor: not-allowed; }
   position: relative; z-index: 2;
   transform: rotate(-2.2deg) scale(1.05);
   border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
-  background: var(--gold); color: #000;
+  background: var(--prize); color: #000;
   padding: 13px 0; overflow: hidden;
 }
-.skew-strip.alt { transform: rotate(1.6deg) scale(1.05); background: var(--red); color: #000; }
+.skew-strip.alt { transform: rotate(1.6deg) scale(1.05); background: var(--a); color: #000; }
 .skew-strip .marquee-track { animation-duration: 26s; }
 .skew-item {
   display: flex; align-items: center; gap: 18px; padding: 0 22px; white-space: nowrap;
@@ -295,9 +292,9 @@ button:disabled { cursor: not-allowed; }
   color: transparent; -webkit-text-stroke: 2px var(--line);
   pointer-events: none; user-select: none;
 }
-.bignum.on-a { -webkit-text-stroke-color: rgba(255, 79, 216, 0.5); }
-.bignum.on-b { -webkit-text-stroke-color: rgba(47, 128, 255, 0.5); }
-.bignum.on-c { -webkit-text-stroke-color: rgba(124, 255, 63, 0.5); }
+.bignum.on-a { -webkit-text-stroke-color: rgba(43, 232, 107, 0.5); }
+.bignum.on-b { -webkit-text-stroke-color: rgba(255, 255, 255, 0.5); }
+.bignum.on-c { -webkit-text-stroke-color: rgba(198, 255, 77, 0.5); }
 
 /* outlined display type, for headings that should feel printed rather than typed */
 .outline {

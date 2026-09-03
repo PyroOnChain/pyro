@@ -8,7 +8,7 @@ import { ArenaCanvas } from '@/components/ArenaCanvas';
 import { FeaturedFight } from '@/components/FeaturedFight';
 import { STOCKS } from '@/lib/addresses';
 
-const ACCENTS = ['var(--red)', 'var(--blue)', 'var(--lime)'];
+const ACCENTS = ['var(--a)', 'var(--b)', 'var(--live)'];
 
 const BEATS = [
   {
@@ -35,10 +35,10 @@ const BEATS = [
 ];
 
 const RULES = [
-  { t: 'The peak is what counts.', b: 'A late buy cannot flip a match it never led. Leading early is worth something.', c: 'var(--red)' },
-  { t: 'Time held decides your cut.', b: 'How much, multiplied by how long. Minute-59 money earns minute-59 money.', c: 'var(--blue)' },
-  { t: 'Winners take both fee streams.', b: 'Every creator fee from both coins, the loser’s included, in the stock they were priced in.', c: 'var(--gold)' },
-  { t: 'Losing is not liquidation.', b: 'You keep every token you bought and can pull it out whenever. You forfeit the purse, not the bag.', c: 'var(--violet)' },
+  { t: 'The peak is what counts.', b: 'A late buy cannot flip a match it never led. Leading early is worth something.', c: 'var(--a)' },
+  { t: 'Time held decides your cut.', b: 'How much, multiplied by how long. Minute-59 money earns minute-59 money.', c: 'var(--b)' },
+  { t: 'Winners take both fee streams.', b: 'Every creator fee from both coins, the loser’s included, in the stock they were priced in.', c: 'var(--prize)' },
+  { t: 'Losing is not liquidation.', b: 'You keep every token you bought and can pull it out whenever. You forfeit the purse, not the bag.', c: 'var(--prize)' },
 ];
 
 export default function LandingPage() {
@@ -50,14 +50,14 @@ export default function LandingPage() {
       {/* ------------------------------------------------------------ hero */}
       <section className="shell hero-full" style={{ padding: '10px 36px 60px' }}>
         <Reveal className="row" style={{ gap: 10, marginBottom: 22 }}>
-          <span className="pulse-dot" style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--lime)', display: 'block' }} />
+          <span className="pulse-dot" style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--live)', display: 'block' }} />
           <span className="label blink" style={{ color: 'var(--muted)' }}>LIVE ON ROBINHOOD CHAIN · 4663</span>
         </Reveal>
 
         <h1 className="display h-hero" style={{ margin: '0 0 26px' }}>
           <Reveal as="span" variant="wipe" className="line l1" style={{ display: 'block' }}>TWO COINS ENTER.</Reveal>
           <Reveal as="span" variant="wipe" delay={150} className="line l2" style={{ display: 'block' }}>
-            ONE GETS <span style={{ color: 'var(--gold)' }}>PAID.</span>
+            ONE GETS <span style={{ color: 'var(--prize)' }}>PAID.</span>
           </Reveal>
         </h1>
 
@@ -72,7 +72,7 @@ export default function LandingPage() {
             </Reveal>
 
             <Reveal className="row" delay={420} style={{ gap: 12, flexWrap: 'wrap' }}>
-              <Magnetic><Link href="/battles" className="btn btn-gold">See the fights</Link></Magnetic>
+              <Magnetic><Link href="/battles" className="btn btn-prize">See the fights</Link></Magnetic>
               <Magnetic><Link href="/start" className="btn btn-ghost">Start one</Link></Magnetic>
             </Reveal>
           </div>
@@ -143,7 +143,7 @@ export default function LandingPage() {
           <div className="grid-2" style={{ gap: 52, alignItems: 'center' }}>
             <div>
               <Reveal as="h2" variant="wipe" className="display h-1" style={{ margin: '0 0 20px', lineHeight: 0.92 }}>
-                THE LOSER<br /><span className="outline">PAYS THE</span><br /><span style={{ color: 'var(--gold)' }}>WINNER.</span>
+                THE LOSER<br /><span className="outline">PAYS THE</span><br /><span style={{ color: 'var(--prize)' }}>WINNER.</span>
               </Reveal>
               <Reveal as="p" delay={140} style={{ fontSize: 17, lineHeight: 1.65, color: 'var(--body)', margin: 0, maxWidth: 460 }}>
                 Every trade of either coin charges a creator fee. Both streams point at the arena, and when the
@@ -155,9 +155,9 @@ export default function LandingPage() {
             <Reveal variant="rise" delay={120} className="panel plate slam mono"
               style={{ padding: '24px 26px', fontSize: 13.5, lineHeight: 1.95, color: 'var(--muted)' }}>
               <div><span style={{ color: 'var(--dim)' }}>$</span> settle()</div>
-              <div><span style={{ color: 'var(--dim)' }}>→</span> peak <span style={{ color: 'var(--red)' }}>A 38.40</span> vs <span style={{ color: 'var(--blue)' }}>B 26.10</span></div>
-              <div><span style={{ color: 'var(--dim)' }}>→</span> winner <span style={{ color: 'var(--red)' }}>SIDE A</span></div>
-              <div><span style={{ color: 'var(--dim)' }}>→</span> streams <span style={{ color: 'var(--gold)' }}>A + B</span> → side A</div>
+              <div><span style={{ color: 'var(--dim)' }}>→</span> peak <span style={{ color: 'var(--a)' }}>A 38.40</span> vs <span style={{ color: 'var(--b)' }}>B 26.10</span></div>
+              <div><span style={{ color: 'var(--dim)' }}>→</span> winner <span style={{ color: 'var(--a)' }}>SIDE A</span></div>
+              <div><span style={{ color: 'var(--dim)' }}>→</span> streams <span style={{ color: 'var(--prize)' }}>A + B</span> → side A</div>
               <div style={{ color: 'var(--dim)', marginTop: 8 }}>{'// weighted by how much, and how long'}</div>
             </Reveal>
           </div>
@@ -201,13 +201,13 @@ export default function LandingPage() {
       <section style={{ position: 'relative', zIndex: 2, padding: '104px 0 96px', textAlign: 'center' }}>
         <div className="shell" style={{ padding: '0 36px' }}>
           <Reveal as="h2" variant="wipe" className="display" style={{ fontSize: 'clamp(44px, 9vw, 108px)', lineHeight: 0.9, margin: '0 0 20px', letterSpacing: '-0.035em' }}>
-            PICK A <span style={{ color: 'var(--red)' }}>CORNER.</span>
+            PICK A <span style={{ color: 'var(--a)' }}>CORNER.</span>
           </Reveal>
           <Reveal as="p" delay={130} style={{ fontSize: 17.5, color: 'var(--muted)', margin: '0 auto 34px', maxWidth: 480 }}>
             Anyone can start a fight. Anyone can join one. One transaction and an hour of your attention.
           </Reveal>
           <Reveal className="row" delay={220} style={{ justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <Magnetic><Link href="/battles" className="btn btn-gold">See the fights</Link></Magnetic>
+            <Magnetic><Link href="/battles" className="btn btn-prize">See the fights</Link></Magnetic>
             <Magnetic><Link href="/start" className="btn btn-ghost">Start one</Link></Magnetic>
           </Reveal>
         </div>

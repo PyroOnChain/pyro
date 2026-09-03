@@ -129,7 +129,7 @@ export default function StartPage() {
         </p>
 
         {paused && (
-          <div className="panel plate" style={{ padding: '16px 20px', marginBottom: 22, borderColor: 'var(--gold)', color: 'var(--gold)' }}>
+          <div className="panel plate" style={{ padding: '16px 20px', marginBottom: 22, borderColor: 'var(--prize)', color: 'var(--prize)' }}>
             New fights are paused right now.
           </div>
         )}
@@ -143,8 +143,8 @@ export default function StartPage() {
                   <button key={s.address} onClick={() => setStock(s.address)}
                     className="chip" style={{
                       justifyContent: 'center', padding: '14px 8px', flexDirection: 'column', gap: 3,
-                      borderColor: s.address === stock ? 'var(--gold)' : 'var(--line)',
-                      color: s.address === stock ? 'var(--gold)' : 'var(--muted)',
+                      borderColor: s.address === stock ? 'var(--prize)' : 'var(--line)',
+                      color: s.address === stock ? 'var(--prize)' : 'var(--muted)',
                     }}>
                     <span className="display" style={{ fontSize: 16 }}>{s.symbol}</span>
                     <span style={{ fontSize: 10 }}>{s.name}</span>
@@ -156,16 +156,16 @@ export default function StartPage() {
             <div className="panel plate" style={{ padding: '24px 24px' }}>
               <div className="label" style={{ marginBottom: 16 }}>02 · THE TWO CORNERS</div>
 
-              <div style={{ borderLeft: '3px solid var(--red)', paddingLeft: 14, marginBottom: 18 }}>
-                <div className="label" style={{ color: 'var(--red)', marginBottom: 10 }}>SIDE A</div>
+              <div style={{ borderLeft: '3px solid var(--a)', paddingLeft: 14, marginBottom: 18 }}>
+                <div className="label" style={{ color: 'var(--a)', marginBottom: 10 }}>SIDE A</div>
                 <div className="grid-2" style={{ gap: 10 }}>
                   <input className="field" placeholder="Jensen’s Jacket" value={aName} onChange={(e) => setAName(e.target.value)} maxLength={32} />
                   <input className="field mono" placeholder="JACKET" value={aSym} onChange={(e) => setASym(e.target.value.toUpperCase())} maxLength={10} />
                 </div>
               </div>
 
-              <div style={{ borderLeft: '3px solid var(--blue)', paddingLeft: 14 }}>
-                <div className="label" style={{ color: 'var(--blue)', marginBottom: 10 }}>SIDE B</div>
+              <div style={{ borderLeft: '3px solid var(--b)', paddingLeft: 14 }}>
+                <div className="label" style={{ color: 'var(--b)', marginBottom: 10 }}>SIDE B</div>
                 <div className="grid-2" style={{ gap: 10 }}>
                   <input className="field" placeholder="Cook’s Turtleneck" value={bName} onChange={(e) => setBName(e.target.value)} maxLength={32} />
                   <input className="field mono" placeholder="NECK" value={bSym} onChange={(e) => setBSym(e.target.value.toUpperCase())} maxLength={10} />
@@ -214,11 +214,11 @@ export default function StartPage() {
 
             <div style={{ marginTop: 20 }}>
               {wrongChain ? (
-                <button className="btn btn-gold" style={{ width: '100%' }} disabled={switching} onClick={switchChain}>
+                <button className="btn btn-prize" style={{ width: '100%' }} disabled={switching} onClick={switchChain}>
                   {switching ? 'Check your wallet…' : 'Switch network'}
                 </button>
               ) : (
-                <button className="btn btn-gold" style={{ width: '100%' }} disabled={busy || !ready} onClick={start}>
+                <button className="btn btn-prize" style={{ width: '100%' }} disabled={busy || !ready} onClick={start}>
                   {busy ? 'Confirm in wallet…' : !ready ? 'Fill in both corners' : 'Ring the bell'}
                 </button>
               )}
@@ -227,7 +227,7 @@ export default function StartPage() {
             {err && <div style={{ fontSize: 13, color: 'var(--loss)', marginTop: 12 }}>{err}</div>}
             {hash && (
               <div style={{ fontSize: 12.5, marginTop: 10 }}>
-                <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: 'var(--gold)' }}>
+                <a href={explorerTx(hash)} target="_blank" rel="noreferrer" style={{ color: 'var(--prize)' }}>
                   {receipt.isLoading ? 'Confirming…' : 'View transaction'}
                 </a>
               </div>
@@ -249,7 +249,7 @@ function Row({ k, v, gold }: { k: string; v: string; gold?: boolean }) {
   return (
     <div className="between" style={{ padding: '6px 0', fontSize: 13.5 }}>
       <span style={{ color: 'var(--muted)' }}>{k}</span>
-      <span className="mono" style={{ color: gold ? 'var(--gold)' : 'var(--ink)' }}>{v}</span>
+      <span className="mono" style={{ color: gold ? 'var(--prize)' : 'var(--ink)' }}>{v}</span>
     </div>
   );
 }
