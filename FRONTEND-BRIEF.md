@@ -122,10 +122,11 @@ directory swap.
 
 ---
 
-## Restored app (no Emergent)
+## Restored app, now Totem
 
 The original front end is restored at `clubs/`, recovered from git at
-`f60d001^`. Same visuals as before; only name, logo and palette change.
+`f60d001^`, and renamed to **Totem**. Same visuals; logo and palette still to
+change.
 
 The live factory address is now baked into `lib/addresses.ts` instead of being
 read from an env var, so a fresh clone builds into a working site. It reads the
@@ -135,7 +136,7 @@ three live clubs correctly: Jimothy ($JMT), Sneaky Snake ($SNK) and tripi tropa
 ### This app is not purely static
 
 Unlike the other two sites, it ships Cloudflare Pages Functions under
-`functions/api/`, which need a **KV namespace bound as `IMAGES`**:
+`functions/api/`, which need an **R2 bucket bound as `IMAGES`** (typed `R2Bucket`, not KV):
 
 | Route | Purpose |
 | --- | --- |
@@ -150,9 +151,19 @@ else still works, because all vault state comes from the chain.
 They 404 in `next dev` too; that is expected, since Pages Functions do not run
 under it.
 
+### Fixed on the way through
+
+The metadata signing message disagreed between client and server: the client
+signed `VaultTube club metadata` while the function verified `Pyro club
+metadata`, left over from the first rebrand. `recoverMessageAddress` does not
+fail on a wrong message, it returns a different address, so uploads returned 200,
+records were filed under a bogus signer, and the client only ever displays
+records whose signer matches `creator()`. Mascot metadata could never appear.
+Both strings are now `Totem club metadata`.
+
 ### What is left
 
-The rebrand itself: name, logo and palette. The palette lives entirely in the
+Logo and palette. The palette lives entirely in the
 `:root` block of `app/globals.css` (a warm pastel set: cream `#FFF3E4` ground,
 purple `#7C5BC7` accent, five-stop sunset gradient), and the name appears in
 about 19 places across `app/layout.tsx`, `app/page.tsx`, the components and

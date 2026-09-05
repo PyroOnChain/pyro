@@ -60,7 +60,7 @@ function InvalidClub({ value }: { value: string }) {
 
 function ClubBody({ v }: { v: Address }) {
   const { address: user } = useAccount();
-  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
+  const { wrongChain, switching, switchToRobinhood } = useCorrectChain();
   const { club, pendingFees, position, isLoading, refetch } = useClub(v, user);
   const sym = club.assetSymbol ?? stockByAddress(club.asset)?.symbol ?? 'STOCK';
   const meta = useClubMeta(v, club.creator);
@@ -270,7 +270,7 @@ function ClubBody({ v }: { v: Address }) {
             </div>
             <button className="btn btn-primary" style={{ width: '100%', padding: 14, textAlign: 'center', fontSize: 14 }}
               disabled={wrongChain ? switching : (isPending || !pendingFees || pendingFees === 0n)}
-              onClick={wrongChain ? switchToVaultTube : harvest}>
+              onClick={wrongChain ? switchToRobinhood : harvest}>
               {wrongChain ? (switching ? 'CHECK YOUR WALLET…' : 'SWITCH NETWORK')
                 : isPending ? 'HARVESTING…'
                 : pendingFees && pendingFees > 0n ? `HARVEST · KEEP ${fmt(bounty)}` : 'NOTHING TO HARVEST'}

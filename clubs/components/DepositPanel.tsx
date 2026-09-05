@@ -29,7 +29,7 @@ export function DepositPanel(p: Props) {
 
   const { address } = useAccount();
   const chainId = useChainId();
-  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
+  const { wrongChain, switching, switchToRobinhood } = useCorrectChain();
   const { signTypedDataAsync } = useSignTypedData();
   const { writeContractAsync, data: hash, reset } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
@@ -183,7 +183,7 @@ export function DepositPanel(p: Props) {
 
       {wrongChain ? (
         <button className="btn btn-primary" style={{ width: '100%', padding: 16, textAlign: 'center' }}
-          disabled={switching} onClick={switchToVaultTube}>
+          disabled={switching} onClick={switchToRobinhood}>
           {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
         </button>
       ) : (
@@ -196,7 +196,7 @@ export function DepositPanel(p: Props) {
       )}
       {wrongChain && (
         <div style={{ fontSize: 12, color: 'var(--loss)', marginTop: 10, lineHeight: 1.5 }}>
-          Your wallet is on another network. VaultTube only exists on Robinhood Chain.
+          Your wallet is on another network. Totem only exists on Robinhood Chain.
         </div>
       )}
 
@@ -211,7 +211,7 @@ export function DepositPanel(p: Props) {
 
       {tab === 'deposit' && !err && (
         <div style={{ fontSize: 12, color: 'var(--dim)', marginTop: 12, lineHeight: 1.55 }}>
-          One signature. VaultTube uses the token&apos;s permit, so there is no separate approval transaction.
+          One signature. Totem uses the token&apos;s permit, so there is no separate approval transaction.
         </div>
       )}
     </div>

@@ -13,29 +13,29 @@ const body = Nunito({ subsets: ['latin'], weight: ['400', '600', '700', '800'], 
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-mono' });
 
 /** The live host. Absolute URLs in the social card are built from this. */
-const SITE = 'https://vaulttube.fun';
+/** Set once Totem has its own domain. Empty means the cards use relative URLs
+ *  rather than pointing at a domain this project no longer owns. */
+const SITE = '';
 
 const DESCRIPTION =
-  'Put tokenized stock in the vault. VaultTube launches one mascot coin per club, priced in the stock ' +
+  'Put tokenized stock in the vault. Totem launches one mascot coin per club, priced in the stock ' +
   'itself, so every trade of it sends fees back to the vault as more stock.';
 
 export const metadata: Metadata = {
-  title: { default: 'VaultTube', template: '%s · VaultTube' },
+  title: { default: 'Totem', template: '%s · Totem' },
   description: DESCRIPTION,
-  applicationName: 'VaultTube',
-  metadataBase: new URL(SITE),
+  applicationName: 'Totem',
+  ...(SITE ? { metadataBase: new URL(SITE) } : {}),
   openGraph: {
-    title: 'VaultTube — your meme buys your stock',
+    title: 'Totem — your meme buys your stock',
     description: DESCRIPTION,
-    siteName: 'VaultTube',
+    siteName: 'Totem',
     type: 'website',
-    url: SITE,
+    ...(SITE ? { url: SITE } : {}),
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@VaultTube',
-    creator: '@VaultTube',
-    title: 'VaultTube — your meme buys your stock',
+    title: 'Totem — your meme buys your stock',
     description: DESCRIPTION,
   },
 };

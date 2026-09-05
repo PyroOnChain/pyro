@@ -12,7 +12,7 @@ export function Header() {
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { wrongChain, switching, switchToVaultTube, walletChainId } = useCorrectChain();
+  const { wrongChain, switching, switchToRobinhood, walletChainId } = useCorrectChain();
 
   const nav = [
     { href: '/clubs', label: 'Clubs' },
@@ -24,9 +24,9 @@ export function Header() {
       <div className="shell between" style={{ padding: '18px 40px' }}>
         <div className="row" style={{ gap: 34 }}>
           <Link href="/" className="row" style={{ gap: 10, color: 'var(--ink)' }}>
-            <Image src="/vaulttube-mark.png" alt="VaultTube" width={128} height={128}
+            <Image src="/totem-mark.png" alt="Totem" width={128} height={128}
               style={{ height: 30, width: 30, border: '2px solid var(--ink)', boxShadow: '3px 3px 0 var(--gold)' }} priority />
-            <span className="display" style={{ fontSize: 20, letterSpacing: '0.06em' }}>VaultTube</span>
+            <span className="display" style={{ fontSize: 20, letterSpacing: '0.06em' }}>Totem</span>
           </Link>
           <nav className="row hide-sm" style={{ gap: 24, fontSize: 14, fontWeight: 500 }}>
             {nav.map((n) => {
@@ -51,7 +51,7 @@ export function Header() {
         <div className="row" style={{ gap: 10 }}>
           {wrongChain ? (
             <button className="chip btn-primary" style={{ padding: '10px 16px', fontSize: 13 }}
-              disabled={switching} onClick={switchToVaultTube}>
+              disabled={switching} onClick={switchToRobinhood}>
               {switching ? 'CHECK WALLET…' : 'WRONG NETWORK — SWITCH'}
             </button>
           ) : (

@@ -21,7 +21,7 @@ const PONS_LAUNCH_FEE = parseEther('0.0005'); // launchFee() on the Pons factory
 export default function CreatePage() {
   const router = useRouter();
   const { address } = useAccount();
-  const { wrongChain, switching, switchToVaultTube } = useCorrectChain();
+  const { wrongChain, switching, switchToRobinhood } = useCorrectChain();
   const [stock, setStock] = useState(STOCKS[0]);
   const [mascotName, setMascotName] = useState('');
   const [mascotSymbol, setMascotSymbol] = useState('');
@@ -262,7 +262,7 @@ export default function CreatePage() {
                 <div style={{ height: 1, background: 'var(--line-soft)' }} />
                 <Row k="Pons launch fee" v="0.0005 ETH" />
                 <Row k="Seed deposit" v={`${seed || '0'} ${stock.symbol}`} />
-                <Row k="VaultTube fee" v="0.00" />
+                <Row k="Totem fee" v="0.00" />
                 <Row
                   k="Transactions"
                   v={((allowance.data as bigint | undefined) ?? 0n) >= seedWei && seedWei > 0n ? '1' : '2 (approve, then open)'}
@@ -270,7 +270,7 @@ export default function CreatePage() {
               </div>
               {wrongChain ? (
                 <button className="btn btn-primary" style={{ width: '100%', padding: 16, marginTop: 24, textAlign: 'center' }}
-                  disabled={switching} onClick={switchToVaultTube}>
+                  disabled={switching} onClick={switchToRobinhood}>
                   {switching ? 'CHECK YOUR WALLET…' : 'SWITCH TO ROBINHOOD CHAIN'}
                 </button>
               ) : (

@@ -5,8 +5,8 @@
 type Links = { x: string; website: string };
 
 export const LINKS: Links = {
-  x: 'https://x.com/VaultTube',
-  website: 'vaulttube.fun',
+  x: '',
+  website: '',
 };
 
 const bare = (u: string) => u.replace(/^https?:\/\//, '');

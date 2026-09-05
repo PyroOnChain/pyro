@@ -62,7 +62,7 @@ export default function LandingPage() {
           </h1>
 
           <Reveal as="p" delay={360} style={{ fontSize: 19, lineHeight: 1.55, color: 'var(--body)', margin: '0 auto 16px', maxWidth: 660, textWrap: 'pretty' }}>
-            Put tokenized NVDA in the vault. VaultTube launches one mascot coin for the club, priced in NVDA
+            Put tokenized NVDA in the vault. Totem launches one mascot coin for the club, priced in NVDA
             instead of ETH. Every trade of that mascot sends the creator fee back to the vault as more NVDA.
           </Reveal>
           <Reveal as="p" delay={440} style={{ fontSize: 19, color: 'var(--ink)', margin: '0 auto 36px', fontWeight: 700 }}>
@@ -182,7 +182,7 @@ export default function LandingPage() {
               a DEX route, a price oracle, slippage, and a sandwich bot sitting on every harvest you ever call.
             </Reveal>
             <Reveal as="p" delay={130} style={{ fontSize: 17.5, lineHeight: 1.62, margin: 0, color: 'var(--on-ink)', fontWeight: 700, textWrap: 'pretty' }}>
-              VaultTube prices the mascot against NVDA itself. The fees arrive as NVDA already. Nothing to swap
+              Totem prices the mascot against NVDA itself. The fees arrive as NVDA already. Nothing to swap
               means nothing to skim.
             </Reveal>
           </div>

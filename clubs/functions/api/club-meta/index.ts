@@ -25,7 +25,7 @@ interface Env {
 }
 
 export function metaMessage(vault: string, logo: string) {
-  return `Pyro club metadata\nvault: ${vault.toLowerCase()}\nlogo: ${logo}`;
+  return `Totem club metadata\nvault: ${vault.toLowerCase()}\nlogo: ${logo}`;
 }
 
 export const onRequestPost: PagesFunction<Env> = async (ctx) => {
