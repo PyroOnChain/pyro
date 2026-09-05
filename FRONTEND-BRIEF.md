@@ -119,3 +119,41 @@ above, replacing the mock file.
 Static export to Cloudflare Pages, same as the other sites. The Pages project
 builds whichever app occupies `web/`, so this needs either its own project or a
 directory swap.
+
+---
+
+## Restored app (no Emergent)
+
+The original front end is restored at `clubs/`, recovered from git at
+`f60d001^`. Same visuals as before; only name, logo and palette change.
+
+The live factory address is now baked into `lib/addresses.ts` instead of being
+read from an env var, so a fresh clone builds into a working site. It reads the
+three live clubs correctly: Jimothy ($JMT), Sneaky Snake ($SNK) and tripi tropa
+($TRIPPI), 0.01 NVDA each.
+
+### This app is not purely static
+
+Unlike the other two sites, it ships Cloudflare Pages Functions under
+`functions/api/`, which need a **KV namespace bound as `IMAGES`**:
+
+| Route | Purpose |
+| --- | --- |
+| `POST /api/upload` | mascot images, since the launchpad caps its logo field at 512 chars |
+| `/api/club-meta` | mascot picture and links, which Pons stores off-chain with no getter |
+| `/api/club-meta/[vault]` | every record filed for a club, keyed by signer |
+| `/api/img/[name]` | serves an uploaded image |
+
+Without that binding those routes 404 and mascot images do not render. Everything
+else still works, because all vault state comes from the chain.
+
+They 404 in `next dev` too; that is expected, since Pages Functions do not run
+under it.
+
+### What is left
+
+The rebrand itself: name, logo and palette. The palette lives entirely in the
+`:root` block of `app/globals.css` (a warm pastel set: cream `#FFF3E4` ground,
+purple `#7C5BC7` accent, five-stop sunset gradient), and the name appears in
+about 19 places across `app/layout.tsx`, `app/page.tsx`, the components and
+`lib/addresses.ts`, plus a `switchToVaultTube` helper in `lib/useCorrectChain.ts`.
