@@ -25,6 +25,6 @@ export function useCorrectChain() {
     walletChainId,
     wrongChain,
     switching: isPending,
-    switchToVaultTube: () => switchChain({ chainId: robinhoodChain.id }),
+    switchToRobinhood: () => switchChain({ chainId: robinhoodChain.id }),
   };
 }

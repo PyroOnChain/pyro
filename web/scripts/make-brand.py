@@ -1,31 +1,38 @@
 #!/usr/bin/env python3
 """
-Builds every brand asset from brand/brawlz-logo.jpg.
+Builds Totem's brand assets from brand/totem-logo.jpg.
 
-Run from the stockwars/ directory:
+Run from the clubs/ directory:
 
     python3 scripts/make-brand.py
 
-Produces the header mark, the favicon and apple icon, and the Open Graph card.
-The supplied logo is a green mark on near-black. The header sits on the site's
-own black, so it needs the ground keyed out; the tiles keep a solid ground so
-they have something to sit on in a browser tab.
+The logo is a pixel-art scene: a 3D "T" over a sunset sky and water. The full
+scene is beautiful at size and mush at 26px, so the header mark and the icons
+crop tight to the glyph and keep only enough sky to sit on. The Open Graph card
+uses the whole scene, where there is room for it.
+
+Everything is resampled with NEAREST, never LANCZOS. This is pixel art: smooth
+interpolation turns crisp blocks into grey soup, which is the one thing that
+would make it look cheap.
 """
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import os
 
-SRC   = '../brand/brawlz-logo.jpg'
-BG    = (0, 0, 0)
-A     = (18, 254, 126)     # side A, taken from the logo itself
-B     = (255, 255, 255)    # side B
-PRIZE = (198, 255, 77)     # the purse
-BODY  = (201, 201, 211)
-DIM   = (139, 139, 151)
-LINE  = (42, 42, 51)
+SRC = '../brand/totem-logo.jpg'
+
+# Sampled from the logo itself so the site and the mark cannot drift apart.
+INK    = (52, 31, 30)       # the T's outline
+CREAM  = (254, 234, 199)    # the T's lit face
+SKY_HI = (162, 147, 212)    # sky, top
+SKY_MID= (216, 158, 196)    # sky, middle
+SUN    = (251, 254, 201)    # the sun
+WATER  = (112, 103, 146)
+
+# The glyph sits here in the source, measured rather than guessed.
+GLYPH = (0.26, 0.18, 0.74, 0.71)
 
 HEAVY = '/System/Library/Fonts/Supplemental/Arial Black.ttf'
 PLAIN = '/System/Library/Fonts/Supplemental/Arial.ttf'
-MONO  = '/System/Library/Fonts/Menlo.ttc'
 
 
 def load():
@@ -34,128 +41,64 @@ def load():
     return Image.open(SRC).convert('RGB')
 
 
-def keyed_mark(src):
-    """Key the near-black ground out. The ground sits at green ~13 and the mark
-       at ~254, so the green channel separates them on its own. The hole in the
-       middle of the mark is ground too, and correctly comes out transparent."""
-    green = src.split()[1]
-    LO, HI = 45, 200
-    alpha = green.point(lambda v: 0 if v <= LO else (255 if v >= HI else int((v - LO) * 255 / (HI - LO))))
-    mark = src.copy().convert('RGBA')
-    mark.putalpha(alpha)
-    return mark.crop(mark.getbbox())
-
-
-def tile(src, size, pad=0.13):
-    """Square tile on solid black, cropped tighter than the source so the mark
-       fills the frame at the sizes a tab actually renders."""
-    m = keyed_mark(src)
-    side = max(m.width, m.height)
-    canvas = int(side * (1 + pad * 2))
-    out = Image.new('RGB', (canvas, canvas), BG)
-    out.paste(m, ((canvas - m.width) // 2, (canvas - m.height) // 2), m)
-    return out.resize((size, size), Image.LANCZOS)
-
-
-def corner_glow(size, colour, alpha):
-    g = Image.new('L', (size, size), 0)
-    inset = size * 0.22
-    ImageDraw.Draw(g).ellipse([inset, inset, size - inset, size - inset], fill=alpha)
-    g = g.filter(ImageFilter.GaussianBlur(size // 6))
-    return Image.new('RGB', (size, size), colour), g
-
-
-def avatar(src, size=1024, fill=0.58, bg=(13, 13, 13)):
-    """A clean square avatar for social profiles.
-
-    Rebuilt from a hard mask rather than resized from the source, because the
-    supplied logo is a JPEG and its edges carry compression mush that shows badly
-    once a profile crops it to a circle. Threshold at 4x then come back down, so
-    the edges are cleanly anti-aliased instead of noisy.
-
-    `fill` keeps the mark well inside the inscribed circle: profiles crop avatars
-    to a circle, and the source frames the mark close enough to the corners to
-    look cramped once they do.
-    """
-    big = size * 4
-    g = src.split()[1].resize((big, big), Image.LANCZOS)
-    hard = g.point(lambda v: 255 if v > 110 else 0)
-    bb = hard.getbbox()
-    hard = hard.crop(bb)
-
-    target = int(size * fill)
-    scale = target / max(hard.width, hard.height)
-    hard = hard.resize((max(1, int(hard.width * scale)), max(1, int(hard.height * scale))),
-                       Image.LANCZOS)
-
-    out = Image.new('RGB', (size, size), bg)
-    shape = Image.new('RGB', hard.size, A)
-    out.paste(shape, ((size - hard.width) // 2, (size - hard.height) // 2), hard)
-    return out
+def glyph_tile(src, size, pad=0.10):
+    """Square crop centred on the T, with a little sky around it."""
+    w, h = src.size
+    x0, y0, x1, y1 = (GLYPH[0]*w, GLYPH[1]*h, GLYPH[2]*w, GLYPH[3]*h)
+    cx, cy = (x0+x1)/2, (y0+y1)/2
+    side = max(x1-x0, y1-y0) * (1 + pad*2)
+    half = side/2
+    box = (max(0, cx-half), max(0, cy-half), min(w, cx+half), min(h, cy+half))
+    # NEAREST on the way down keeps the pixel grid hard.
+    return src.crop(box).resize((size, size), Image.NEAREST)
 
 
 def main():
     src = load()
-    mark = keyed_mark(src)
 
-    # Social profile picture. Baseline PNG, no metadata, no progressive encoding:
-    # the source is a progressive JPEG, which some upload forms reject outright.
-    avatar(src).save('../brand/brawlz-avatar.png', optimize=True)
+    glyph_tile(src, 256).save('public/totem-mark.png')
+    src.resize((512, 512), Image.NEAREST).save('public/totem-logo.png')
+    glyph_tile(src, 512).save('app/icon.png')
+    glyph_tile(src, 180).save('app/apple-icon.png')
 
-    hm = mark.copy()
-    hm.thumbnail((256, 256), Image.LANCZOS)
-    hm.save('public/brawlz-mark.png')
-
-    # A flat two-colour mark quantizes to almost nothing.
-    for size, path in ((512, 'app/icon.png'), (180, 'app/apple-icon.png')):
-        tile(src, size).quantize(colors=64, method=Image.MEDIANCUT).save(path, optimize=True)
-
+    # ---- open graph card: the whole scene, with room for type ----
     W, H = 1200, 630
-    card = Image.new('RGB', (W, H), BG)
-    for colour, cx in ((A, 0), (B, W)):
-        s = 1250
-        tint, msk = corner_glow(s, colour, 58)
-        card.paste(tint, (cx - s // 2, (H - s) // 2), msk)
+    card = Image.new('RGB', (W, H), SKY_MID)
 
+    # Scene panel on the right. Narrower than the card is tall, so the headline
+    # has room to finish before it; a centre crop keeps the T in frame.
+    SCENE_W = 520
+    scene = src.resize((H, H), Image.NEAREST)
+    left = (H - SCENE_W) // 2
+    card.paste(scene.crop((left, 0, left + SCENE_W, H)), (W - SCENE_W, 0))
+
+    # Flat sky wash on the left so type has a clean ground.
     d = ImageDraw.Draw(card)
-    for x in range(0, W, 60):
-        d.line([(x, 0), (x, H)], fill=(14, 14, 18))
-    for y in range(0, H, 60):
-        d.line([(0, y), (W, y)], fill=(14, 14, 18))
+    for y in range(H):
+        t = y / H
+        col = tuple(int(SKY_HI[i] + (SKY_MID[i]-SKY_HI[i]) * t) for i in range(3))
+        d.rectangle([0, y, W - SCENE_W, y+1], fill=col)
 
-    m = mark.copy()
-    m.thumbnail((84, 84), Image.LANCZOS)
-    card.paste(m, (72, 108), m)
+    mark = glyph_tile(src, 132)
+    card.paste(mark, (74, 108))
 
-    f_word = ImageFont.truetype(HEAVY, 46)
-    x = 176
-    for ch, col in (('BR', B), ('A', A), ('WLZ', B)):
-        d.text((x, 118), ch, font=f_word, fill=col)
-        x += int(d.textlength(ch, font=f_word))
-
-    f_head = ImageFont.truetype(HEAVY, 92)
-    d.text((72, 205), 'TWO COINS ENTER.', font=f_head, fill=B)
-    x = 72
-    for ch, col in (('ONE GETS ', B), ('PAID.', PRIZE)):
-        d.text((x, 292), ch, font=f_head, fill=col)
-        x += int(d.textlength(ch, font=f_head))
-
-    f_sub = ImageFont.truetype(PLAIN, 30)
-    d.text((74, 418), 'Two memecoins, one hour, same stock. The higher peak takes the', font=f_sub, fill=BODY)
-    d.text((74, 458), 'creator fees from both.', font=f_sub, fill=BODY)
-
-    f_chip = ImageFont.truetype(MONO, 20)
-    cx = 74
-    for label in ('NO SNIPE WINS', 'TIME-WEIGHTED', 'ROBINHOOD CHAIN'):
-        tw = int(d.textlength(label, font=f_chip))
-        d.rounded_rectangle([cx, 522, cx + tw + 44, 570], radius=24, outline=LINE, width=2)
-        d.text((cx + 22, 536), label, font=f_chip, fill=DIM)
-        cx += tw + 60
+    d.text((228, 142), 'TOTEM', font=ImageFont.truetype(HEAVY, 70), fill=INK)
+    d.text((78, 296), 'Your meme buys',
+           font=ImageFont.truetype(HEAVY, 48), fill=INK)
+    d.text((78, 348), 'your stock.',
+           font=ImageFont.truetype(HEAVY, 48), fill=INK)
+    d.text((80, 424), 'One mascot coin per club, priced in the',
+           font=ImageFont.truetype(PLAIN, 24), fill=INK)
+    d.text((80, 456), 'stock itself. Every trade sends the fee',
+           font=ImageFont.truetype(PLAIN, 24), fill=INK)
+    d.text((80, 488), 'back to the vault as more stock.',
+           font=ImageFont.truetype(PLAIN, 24), fill=INK)
+    d.rectangle([80, 540, 152, 548], fill=INK)
 
     card.save('app/opengraph-image.png')
 
-    for f in ('../brand/brawlz-avatar.png', 'public/brawlz-mark.png', 'app/icon.png',
-              'app/apple-icon.png', 'app/opengraph-image.png'):
+    for f in ('public/totem-mark.png', 'public/totem-logo.png',
+              'app/icon.png', 'app/apple-icon.png', 'app/opengraph-image.png'):
         print(f'  wrote {f}  {Image.open(f).size}  {os.path.getsize(f)//1024}KB')
 
 

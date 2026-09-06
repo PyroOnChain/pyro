@@ -22,13 +22,16 @@ LAUNCH.md
 .DS_Store
 *.log
 
-# whichever app lives at web/ (currently BRAWLZ, the path Pages builds)
+# whichever app lives at web/ (currently TOTEM, the path Pages builds)
 /web/node_modules/
 /web/.next/
 /web/out/
 /web/.env.local
 
-# ladder capital, parked here after brawlz took over web/
+# parked apps, not currently deployed
 ladder/node_modules/
 ladder/.next/
 ladder/out/
+brawlz/node_modules/
+brawlz/.next/
+brawlz/out/
