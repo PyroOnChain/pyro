@@ -161,9 +161,27 @@ records were filed under a bogus signer, and the client only ever displays
 records whose signer matches `creator()`. Mascot metadata could never appear.
 Both strings are now `Totem club metadata`.
 
-### What is left
+### Deploy readiness
 
-Logo and palette. The palette lives entirely in the
+Builds clean, brand assets generated from `brand/totem-logo.jpg` by
+`scripts/make-brand.py`, factory address baked in, security headers added.
+
+Two things are still needed and neither is code:
+
+**A domain.** `SITE` in `app/layout.tsx` is empty, so canonical and card URLs
+are relative. One edit once it exists.
+
+**An R2 bucket bound as `IMAGES`** on the Pages project. Without it the four
+`/api/*` routes return 501 `not_configured` and mascot pictures do not render.
+Vault state is unaffected: it all comes from the chain.
+
+**And one conflict.** The Pages project builds whichever app occupies `web/`,
+and that is currently Brawlz, live on brawlzz.com. Totem cannot go there without
+taking Brawlz down. Three sites now exist against one project, so this needs a
+second Pages project rather than another directory swap.
+
+Assets are resampled with NEAREST throughout, never LANCZOS. The logo is pixel
+art and smooth interpolation turns it to grey soup at icon sizes. The palette lives entirely in the
 `:root` block of `app/globals.css` (a warm pastel set: cream `#FFF3E4` ground,
 purple `#7C5BC7` accent, five-stop sunset gradient), and the name appears in
 about 19 places across `app/layout.tsx`, `app/page.tsx`, the components and
